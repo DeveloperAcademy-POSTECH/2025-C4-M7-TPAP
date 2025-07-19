@@ -1,0 +1,23 @@
+//
+//  Project.swift
+//  Rootrip
+//
+//  Created by POS on 7/18/25.
+//
+
+import Foundation
+import FirebaseFirestore
+
+enum TripType: String, Codable, CaseIterable {
+    case dayTrip
+    case overnightTrip
+}
+
+struct Project: Identifiable, Codable {
+    @DocumentID var id: String?
+    var title: String
+    var createdDate: Date
+    var startDate: Date
+    var endDate: Date?
+    var tripType: TripType
+}
