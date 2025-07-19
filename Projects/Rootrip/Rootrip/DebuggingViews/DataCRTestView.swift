@@ -20,12 +20,10 @@ struct DataCRTestView: View {
                     VStack(spacing: 16) {
                         Button("➕ Add Dummy Project") {
                             let newProject = Project(
-                                id: UUID().uuidString,
                                 title: "Summer Trip",
-                                createdDate: Date(),
+                                tripType: .overnightTrip,
                                 startDate: Date(),
                                 endDate: nil,
-                                tripType: .overnightTrip
                             )
                             projects.append(newProject)
                         }
@@ -38,10 +36,8 @@ struct DataCRTestView: View {
                                 longitude: 127.0
                             )
                             let newPlan = Plan(
-                                id: UUID().uuidString,
+                                projectID: UUID().uuidString,
                                 title: "Day 1 Plan",
-                                mapDetails: [detail],
-                                strokes: []
                             )
                             plans.append(newPlan)
                         }
@@ -54,9 +50,8 @@ struct DataCRTestView: View {
                                 longitude: 128.0
                             )
                             let newBookmark = Bookmark(
-                                id: UUID().uuidString,
+                                projectID: UUID().uuidString,
                                 title: "Scenic Spot",
-                                mapDetails: [detail]
                             )
                             bookmarks.append(newBookmark)
                         }
@@ -90,17 +85,17 @@ struct DataCRTestView: View {
                         }
                     }
 
-                    Section(header: Text("Plans")) {
-                        ForEach(plans) { plan in
-                            PlanView(plan: plan)
-                        }
-                    }
-
-                    Section(header: Text("Bookmarks")) {
-                        ForEach(bookmarks) { bm in
-                            BookmarkView(bookmark: bm)
-                        }
-                    }
+//                    Section(header: Text("Plans")) {
+//                        ForEach(plans) { plan in
+//                            PlanView(plan: plan)
+//                        }
+//                    }
+//
+//                    Section(header: Text("Bookmarks")) {
+//                        ForEach(bookmarks) { bm in
+//                            BookmarkView(bookmark: bm)
+//                        }
+//                    }
 
                     Section(header: Text("Strokes")) {
                         ForEach(strokes) { stroke in
@@ -132,37 +127,37 @@ struct ProjectView: View {
     }
 }
 
-struct PlanView: View {
-    let plan: Plan
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("🗺️ Title: \(plan.title)")
-            Text("ID: \(plan.id ?? "nil")")
-            ForEach(plan.mapDetails) { detail in
-                Text(
-                    "- MapDetail: \(detail.name) (\(detail.latitude), \(detail.longitude))"
-                )
-            }
-            Text("Strokes: \(plan.strokes.count)")
-        }
-    }
-}
-
-struct BookmarkView: View {
-    let bookmark: Bookmark
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("🔖 Title: \(bookmark.title)")
-            ForEach(bookmark.mapDetails) { detail in
-                Text(
-                    "- MapDetail: \(detail.name) (\(detail.latitude), \(detail.longitude))"
-                )
-            }
-        }
-    }
-}
+//struct PlanView: View {
+//    let plan: Plan
+//
+//    var body: some View {
+//        VStack(alignment: .leading) {
+//            Text("🗺️ Title: \(plan.title)")
+//            Text("ID: \(plan.id ?? "nil")")
+//            ForEach(plan.mapDetails) { detail in
+//                Text(
+//                    "- MapDetail: \(detail.name) (\(detail.latitude), \(detail.longitude))"
+//                )
+//            }
+//            Text("Strokes: \(plan.strokes.count)")
+//        }
+//    }
+//}
+//
+//struct BookmarkView: View {
+//    let bookmark: Bookmark
+//
+//    var body: some View {
+//        VStack(alignment: .leading) {
+//            Text("🔖 Title: \(bookmark.title)")
+//            ForEach(bookmark.mapDetails) { detail in
+//                Text(
+//                    "- MapDetail: \(detail.name) (\(detail.latitude), \(detail.longitude))"
+//                )
+//            }
+//        }
+//    }
+//}
 
 struct StrokeView: View {
     let stroke: StrokeData
