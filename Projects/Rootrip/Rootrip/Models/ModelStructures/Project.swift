@@ -21,9 +21,6 @@ struct Project: Identifiable, Codable {
     var endDate: Date?
     var tripType: TripType
 
-    var plans: [Plan]
-    var bookmarks: [Bookmark]
-
     init(
         title: String,
         tripType: TripType,
@@ -36,8 +33,5 @@ struct Project: Identifiable, Codable {
         self.createdDate = Date()
         self.startDate = startDate
         self.endDate = endDate
-        
-        self.plans = []
-        self.bookmarks = []
     }
 }

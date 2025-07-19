@@ -12,13 +12,12 @@ struct Bookmark: Identifiable, Codable {
     @DocumentID var id: String?
     var projectID: String
     var title: String
-    var mapDetails: [MapDetail]
+    var isDefault: Bool = false
 
-    init(projectID: String, title: String) {
+    init(projectID: String, title: String, isDefault: Bool = false) {
         self.id = nil
         self.projectID = projectID
         self.title = title
-
-        self.mapDetails = []
+        self.isDefault = isDefault
     }
 }
