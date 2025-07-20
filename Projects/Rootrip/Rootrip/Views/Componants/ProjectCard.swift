@@ -1,10 +1,3 @@
-//
-//  ProjectCard.swift
-//  Rootrip
-//
-//  Created by Ella's Mac on 7/20/25.
-//
-
 import SwiftUI
 
 struct ProjectCard: View {
