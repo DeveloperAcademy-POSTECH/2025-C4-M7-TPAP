@@ -21,8 +21,8 @@ struct SidebarView: View {
             .padding(.top, 64)
             .padding(.trailing, 16)
             
-            //-TODO: #42이슈 브랜치에서 구현한거 연결필요
-            //SegmentedContolView()
+        
+            SegmentedContolView()
             Spacer()
         }
         .frame(width: 259)
