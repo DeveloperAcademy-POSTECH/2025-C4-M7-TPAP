@@ -2,6 +2,9 @@ import SwiftUI
 
 // MainViewToolBar: 상단 툴바
 struct MainViewToolBar: View {
+    
+    @State private var isShowingPopover:Bool = false
+    
     var body: some View {
         ZStack {
             HStack {
@@ -11,31 +14,35 @@ struct MainViewToolBar: View {
             }
             
             // 2. 버튼들 (오른쪽 정렬)
-            HStack(spacing: 20) {
+            HStack(spacing: 36) {
                 Spacer() // 왼쪽에 공간을 만들어 버튼들을 오른쪽으로 밉니다.
                 
                 Button(action: {
                     // 일기 추가 액션
                 }) {
                     Image(systemName: "plus")
-                        .font(.title2)
-                        .foregroundColor(.white)
+                        .font(.system(size: 24))
+                        .foregroundStyle(.white)
                 }
                 
                 Button(action: {
                     // 일기 수정 액션
                 }) {
                     Text("선택")
-                        .font(.headline)
-                        .foregroundColor(.white)
+                        .font(.system(size: 20))
+                        .foregroundStyle(.white)
                 }
                 
                 Button(action: {
-                    // 프로필 이동 액션
+                    isShowingPopover.toggle()
                 }) {
-                    Image(systemName: "person.circle.fill")
-                        .font(.title2)
-                        .foregroundColor(.white)
+                    //TODO: 프로필 사진 들어가도록 해야함
+                    Circle()
+                        .frame(width: 34, height: 34)
+                        .foregroundStyle(.white)
+                }
+                .popover(isPresented: $isShowingPopover, arrowEdge: .top) {
+                    ProfilePopover()
                 }
             }
             .padding(.horizontal) // 좌우 여백
@@ -47,5 +54,35 @@ struct MainViewToolBar: View {
             Color.point
                 .ignoresSafeArea(.container, edges: .top)
         )
+    }
+}
+
+// MARK: - 프로필 팝오버 뷰
+struct ProfilePopover: View {
+    var body: some View {
+        VStack {
+            Button {
+                // TODO: 로그아웃 기능 추가
+            } label: {
+                Text("로그아웃")
+                    .foregroundStyle(.red)
+                    .padding(.horizontal, 30)
+                    .padding(.top, 10)
+            }
+            .buttonStyle(.plain)
+            
+            Divider()
+                .padding(.horizontal, 12)
+            
+            Button {
+                // TODO: 탈퇴 기능 추가
+            } label: {
+                Text("탈퇴하기")
+                    .foregroundStyle(.gray)
+                    .padding(.horizontal, 30)
+                    .padding(.bottom, 10)
+            }
+            .buttonStyle(.plain)
+        }
     }
 }
