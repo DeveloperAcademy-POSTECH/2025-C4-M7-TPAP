@@ -19,3 +19,11 @@ struct Plan: Identifiable, Codable {
         self.title = title
     }
 }
+//테스트용
+extension Plan {
+    init(id: String?, projectID: String, title: String) {
+        self.id = id
+        self.projectID = projectID
+        self.title = title
+    }
+}

@@ -77,15 +77,16 @@ struct LargeCardView: View {
             }
             .buttonStyle(.plain)
         } else {
-            NavigationLink(destination: EmptyView()) {
-                ProjectCard(
-                    project: project,
-                    isHighlighted: true,
-                    isEditing: false,
-                    isSelected: false
-                )
-            }
-            .buttonStyle(.plain)
+            NavigationLink(destination:ProjectTestView()
+                .navigationBarHidden(true)) {
+                    ProjectCard(
+                        project: project,
+                        isHighlighted: true,
+                        isEditing: false,
+                        isSelected: false
+                    )
+                }
+                .buttonStyle(.plain)
         }
     }
 }
@@ -116,7 +117,9 @@ struct SmallCardRowView: View {
                         }
                         .buttonStyle(.plain)
                     } else {
-                        NavigationLink(destination: EmptyView()) {
+                        NavigationLink(destination: ProjectTestView()
+                            .navigationBarHidden(true)
+                        ) {
                             ProjectCard(
                                 project: project,
                                 isHighlighted: false,

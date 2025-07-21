@@ -67,4 +67,6 @@ var sampleProjects: [Project] = {
 
 #Preview(traits: .landscapeLeft) {
     MainView()
+        .environmentObject(PlanManager())
+        .environmentObject(RouteManager())
 }
