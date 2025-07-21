@@ -2,6 +2,9 @@ import SwiftUI
 
 struct ContentView: View {
     @State var isLoggedIn: Bool = false
+    @State private var projects: [Project] = []
+    @State private var selectedProjects: Set<String> = []
+    @State private var isEditing: Bool = false
     
     var body: some View {
         if !isLoggedIn{
@@ -27,10 +30,15 @@ struct ContentView: View {
                 
             }
             .ignoresSafeArea(.all)
-        }
-        else{
+        } else {
             MainView()
         }
+        /*ProjectListView(
+            projects: $projects,
+            selectedProjects: $selectedProjects,
+            isEditing: $isEditing
+        )*/
+        
     }
 }
 

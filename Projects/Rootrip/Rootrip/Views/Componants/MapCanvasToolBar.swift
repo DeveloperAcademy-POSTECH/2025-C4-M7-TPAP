@@ -1,8 +1,12 @@
 import SwiftUI
+import PencilKit
 
 //TODO: 툴바도 두개로 분리해 주어야 함
 struct MapCanvasToolBar: View {
     @Binding var showMapCanvas: Bool
+    @Binding var isDrawing: Bool
+    @Binding var showSidebar: Bool
+    var onSelectTool: (PKTool) -> Void
     
     var body: some View {
         VStack(spacing: 0){
@@ -43,8 +47,23 @@ struct MapCanvasToolBar: View {
                         .frame(width: 100)
                     
                     Image(systemName: "eraser")
+                        .onTapGesture {
+                            isDrawing = true
+                            onSelectTool(PKEraserTool(PKEraserTool.EraserType.vector))
+                        }
                     Image(systemName: "pencil.circle.fill")
+                        .onTapGesture {
+                            isDrawing = true
+                            
+                            let penTool = PKInkingTool(.pen, color: .black, width: 5)
+                            onSelectTool(penTool)
+                        }
                     Image(systemName: "pencil.tip.crop.circle.fill")
+                        .onTapGesture {
+                            isDrawing = true
+                            let penTool = PKInkingTool(.pen, color: .black, width: 5)
+                            onSelectTool(penTool)
+                        }
                     Image(systemName: "paintpalette")
                         .padding(.trailing, 50)
                 }
