@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 import CoreLocation
 
-struct ProjectTestView: View {
+struct ProjectView: View {
     @StateObject private var mapState = RouteManager()
     
     // MARK: - Body
@@ -26,7 +26,7 @@ struct ProjectTestView: View {
 
 
 #Preview(traits: .landscapeLeft) {
-    ProjectTestView()
+    ProjectView()
         .environmentObject(RouteManager())
         .environmentObject(PlanManager())
 }
