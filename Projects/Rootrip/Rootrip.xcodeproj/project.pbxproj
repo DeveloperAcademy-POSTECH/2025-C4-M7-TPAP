@@ -16,26 +16,9 @@
 		70C0F47D2E27F624001B81C0 /* Rootrip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rootrip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		60C606632E2BD1C0000D8936 /* Exceptions for "Rootrip" folder in "Rootrip" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Extensions/.gitkeep,
-				Models/.gitkeep,
-				UseCases/.gitkeep,
-				ViewModels/.gitkeep,
-				Views/ViewControllers/.gitkeep,
-			);
-			target = 70C0F47C2E27F624001B81C0 /* Rootrip */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		70C0F47F2E27F624001B81C0 /* Rootrip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				60C606632E2BD1C0000D8936 /* Exceptions for "Rootrip" folder in "Rootrip" target */,
-			);
 			path = Rootrip;
 			sourceTree = "<group>";
 		};

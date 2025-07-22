@@ -30,6 +30,8 @@ struct ContentView: View {
         }
         else{
             MainView()
+                .environmentObject(PlanManager())
+                .environmentObject(RouteManager())
         }
     }
 }
