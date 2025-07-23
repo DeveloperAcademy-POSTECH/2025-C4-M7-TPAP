@@ -21,14 +21,14 @@ struct SegmentedContolView: View {
                     //선택된 세그먼트
                     if selectedIndex == index {
                         RoundedRectangle(cornerRadius: 13)
-                            .fill(Color.white)
+                            .fill(Color.secondary4)
                             .matchedGeometryEffect(id: "background", in: animation)
                             .frame(width: 47, height: 21)
                     }
 
                     Text(segments[index])
                         .font(.system(size: 12))
-                        .foregroundColor(selectedIndex == index ? Color.purple : Color.gray)
+                        .foregroundColor(selectedIndex == index ? Color.accent3 : Color.secondary4.opacity(0.7))
                         .frame(height: 21)
                         .onTapGesture {
                             withAnimation(.default) {
@@ -42,7 +42,7 @@ struct SegmentedContolView: View {
         }
         //세그먼트 배경
         .frame(width: 151, height: 29)
-        .background(Color.gray.opacity(0.2))
+        .background(Color.primary1)
         .clipShape(RoundedRectangle(cornerRadius: 13))
         .padding(.vertical, 11)
 

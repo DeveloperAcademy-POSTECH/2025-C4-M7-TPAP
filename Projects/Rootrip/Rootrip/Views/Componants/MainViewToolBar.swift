@@ -34,7 +34,7 @@ struct MainViewToolBar: View {
             .background(
                 // 3. 배경색을 ZStack의 background 수정자로 이동시킵니다.
                 //    이렇게 하면 배경에만 ignoresSafeArea가 적용됩니다.
-                Color.point
+                Color.primary1
                     .ignoresSafeArea(.container, edges: .top)
             )
         }

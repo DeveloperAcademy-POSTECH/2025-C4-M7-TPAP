@@ -16,7 +16,7 @@ struct ProjectCard: View {
                 .overlay(
                     ZStack {
                         LinearGradient(
-                            gradient: Gradient(colors: [Color.point.opacity(0.7), .clear]),
+                            gradient: Gradient(colors: [Color.primary1.opacity(0.7), .clear]),
                             startPoint: .bottom,
                             endPoint: .center
                         )
