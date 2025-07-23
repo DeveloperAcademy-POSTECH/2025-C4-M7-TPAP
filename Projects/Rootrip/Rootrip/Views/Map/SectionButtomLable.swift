@@ -13,11 +13,11 @@ struct SectionButtomLable: View {
 
     var body: some View {
         Text(title)
-            .font(.system(size: 24))
-            .foregroundColor(isSelected ? .green : .gray)
+            .font(.presemi24)
+            .foregroundColor(isSelected ? .accent1 : .secondary2)
             .padding(.horizontal, 8)
             .frame(height: 45)
-            .background(Color.white)
+            .background(Color.secondary4)
             .clipShape(RoundedRectangle(cornerRadius: 32))
             .shadow(radius: 4)
     }

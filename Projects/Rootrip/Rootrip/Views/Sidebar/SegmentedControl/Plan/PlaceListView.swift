@@ -30,9 +30,9 @@ struct PlaceListView: View {
                             .frame(width: 48, height: 48)
                         
                         Text(detail.name)
-                            .font(.system(size: 16))
+                            .font(.prereg16)
                             .foregroundColor(
-                                (planManager.soloSelectedPlaceID == detail.id || planManager.selectedPlaceIDs.contains(detail.id ?? "")) ? .green : .primary
+                                (planManager.soloSelectedPlaceID == detail.id || planManager.selectedPlaceIDs.contains(detail.id ?? "")) ? Color.accent1 : Color.maintext
                             )
                             .padding(.vertical, 4)
                         
