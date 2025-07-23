@@ -12,6 +12,5 @@ struct StrokePointData: Identifiable, Codable {
     @DocumentID var id: String?
     var x: Double
     var y: Double
-    var sizeWidth: Double
-    var sizeHeight: Double
+    var lineWidth: Double //sizeWidth&sizeHeidht -> lineWidth 수정
 }
