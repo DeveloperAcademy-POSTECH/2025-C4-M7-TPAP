@@ -9,11 +9,7 @@ import Foundation
 import SwiftUI
 
 extension Font {
-<<<<<<< HEAD
     //MARK: 한글,영어,숫자
-=======
-    //MARK: 영어,숫자
->>>>>>> origin/feat/61-DesignComponent
     enum Pre {
         case bold
         case semibold
@@ -40,11 +36,7 @@ extension Font {
         return .custom(type.value, size: size)
     }
     
-<<<<<<< HEAD
     //MARK: Pretendard Compact 변수들
-=======
-    //MARK: SF Compact 변수들
->>>>>>> origin/feat/61-DesignComponent
     static var prebold32: Font {
         return .pre(type: .bold, size: 32)
     }
