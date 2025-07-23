@@ -4,8 +4,11 @@ import SwiftUI
 struct MainViewToolBar: View {
     
     @State private var isShowingPopover:Bool = false
+    @State private var isShowingLogoutAlert = false
+    @State private var showDeleteAccountAlert = false
     @Binding var isEditing: Bool
     @Binding var selectedProjects: Set<String>
+    
     
     var body: some View {
         GeometryReader { geometry in
@@ -37,6 +40,29 @@ struct MainViewToolBar: View {
                 Color.point
                     .ignoresSafeArea(.container, edges: .top)
             )
+        }
+        .overlay {
+            if isShowingLogoutAlert {
+                LogoutAlert(
+                    onCancel: {
+                        isShowingLogoutAlert = false
+                    },
+                    onConfirm: {
+                        isShowingLogoutAlert = false
+                        //TODO: 로그아웃 기능 추가
+                    }
+                )
+            } else if showDeleteAccountAlert {
+                DeleteAccountAlert (
+                    onCancel: {
+                        showDeleteAccountAlert = false
+                    },
+                    onConfirm: {
+                        showDeleteAccountAlert = false
+                        //TODO: 탈퇴 기능 추가
+                    }
+                )
+            }
         }
     }
     // MARK: - 선택 모드 버튼
@@ -94,7 +120,11 @@ struct MainViewToolBar: View {
                     .foregroundStyle(.white)
             }
             .popover(isPresented: $isShowingPopover, arrowEdge: .top) {
-                ProfilePopover()
+                ProfilePopover(
+                    isShowingLogoutAlert: $isShowingLogoutAlert,
+                    isShowingPopover: $isShowingPopover,
+                    showDeleteAccountAlert: $showDeleteAccountAlert
+                )
             }
         }
     }
@@ -104,10 +134,14 @@ struct MainViewToolBar: View {
 
 // MARK: - 프로필 팝오버 뷰
 struct ProfilePopover: View {
+    @Binding var isShowingLogoutAlert: Bool
+    @Binding var isShowingPopover: Bool
+    @Binding var showDeleteAccountAlert: Bool
     var body: some View {
         VStack {
             Button {
-                // TODO: 로그아웃 기능 추가
+                isShowingPopover = false
+                isShowingLogoutAlert = true
             } label: {
                 Text("로그아웃")
                     .foregroundStyle(.red)
@@ -120,7 +154,8 @@ struct ProfilePopover: View {
                 .padding(.horizontal, 12)
             
             Button {
-                // TODO: 탈퇴 기능 추가
+                isShowingPopover = false
+                showDeleteAccountAlert = true
             } label: {
                 Text("탈퇴하기")
                     .foregroundStyle(.gray)
