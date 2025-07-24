@@ -23,7 +23,7 @@ struct BlockView: View {
                             
                             Spacer()
                         }
-                        .padding(.horizontal, 60)
+                        .padding(.horizontal, 80)
                         .padding(.bottom, 10)
                         
                         
