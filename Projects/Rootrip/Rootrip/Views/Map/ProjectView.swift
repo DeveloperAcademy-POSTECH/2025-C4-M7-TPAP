@@ -25,6 +25,7 @@ struct ProjectView: View {
 }
 
 
+
 #Preview(traits: .landscapeLeft) {
     ProjectView()
         .environmentObject(RouteManager())

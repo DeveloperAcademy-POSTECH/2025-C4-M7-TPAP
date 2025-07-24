@@ -27,13 +27,8 @@ struct PlanButton: View {
             }
         }) {
             Text(plan.title)
-                .font(.system(size: 24))
-                .foregroundColor(planManager.selectedPlanID == plan.id ? .green : .gray)
-                .frame(width: 87, height: 45)
-                .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 32))
-                .shadow(radius: 4)
-        }
+                .sectionButtonLable(isSelected: planManager.selectedPlanID == plan.id)
+                    }
         .onAppear {
             planManager.configure(with: routeManager)
         }

@@ -6,7 +6,7 @@ struct ContentView: View {
     var body: some View {
         if !isLoggedIn{
             ZStack{
-                Color.point
+                Color.primary1
                 
                 
                 VStack {
