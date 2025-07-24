@@ -51,7 +51,7 @@ struct SegmentedContolView: View {
         Group {
             switch selectedIndex {
             case 0: PlanView()
-            case 1: EmptyView()// TODO: 북마크 뷰 구현 예정
+            case 1: BookmarkView()// TODO: 북마크 뷰 구현 예정
             case 2: EmptyView()// TODO: 참여자 뷰 구현 예정
             default: EmptyView()
             }

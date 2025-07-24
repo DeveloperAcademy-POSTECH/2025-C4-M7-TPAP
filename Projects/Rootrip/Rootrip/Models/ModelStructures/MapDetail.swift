@@ -31,6 +31,11 @@ let samplePlans: [Plan] = [
     Plan(id: "planB", projectID: "project1", title: "Plan B")
 ]
 
+let sampleBookMarks: [Bookmark] = [
+    Bookmark(id: "bookmarkA", projectID: "project1", title: "식당"),
+    Bookmark(id: "bookmarkB", projectID: "project1", title: "카페")
+]
+
 // MARK: - 샘플 장소들
 let sampleMapDetails: [MapDetail] = [
     MapDetail(id: "a1", planID: "planA", name: "밥집 A", latitude: 37.5665, longitude: 126.9780),
