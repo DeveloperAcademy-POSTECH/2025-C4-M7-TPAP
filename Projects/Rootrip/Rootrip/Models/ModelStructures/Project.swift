@@ -20,12 +20,14 @@ struct Project: Identifiable, Codable {
     var startDate: Date
     var endDate: Date?
     var tripType: TripType
+    var memberIDs: [String]        // 공동작업자들의 ID 리스트
 
     init(
         title: String,
         tripType: TripType,
         startDate: Date,
-        endDate: Date? = nil
+        endDate: Date? = nil,
+        memberIDs: [String] = []
     ) {
         self.id = nil
         self.title = title
@@ -33,5 +35,6 @@ struct Project: Identifiable, Codable {
         self.createdDate = Date()
         self.startDate = startDate
         self.endDate = endDate
+        self.memberIDs = memberIDs
     }
 }
