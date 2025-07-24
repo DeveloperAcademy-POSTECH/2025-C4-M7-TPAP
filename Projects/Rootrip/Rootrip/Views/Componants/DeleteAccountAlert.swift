@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DeleteAccountAlert: View {
+    //TODO: 글자 폰트 수정 필요
     
     var onCancel: () -> Void
     var onConfirm: () -> Void
@@ -20,6 +21,7 @@ struct DeleteAccountAlert: View {
                 Text("탈퇴 하시겠습니까?")
                     .font(.system(size: 17).bold())
                     .padding(.vertical, 20)
+                    .foregroundStyle(.maintext)
 
                 Rectangle()
                     .frame(height: 1)
@@ -31,7 +33,7 @@ struct DeleteAccountAlert: View {
                     Button(action: onCancel) {
                         Text("취소")
                             .font(.system(size: 17))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.maintext)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 100, height: 20)
@@ -47,7 +49,7 @@ struct DeleteAccountAlert: View {
                     Button(action: onConfirm) {
                         Text("탈퇴하기")
                             .font(.system(size: 17).bold())
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.accent2)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 100, height: 20)
@@ -56,7 +58,7 @@ struct DeleteAccountAlert: View {
                 }
             }
             .frame(width: 270, height: 105)
-            .background(.white)
+            .background(.secondary4)
             .cornerRadius(10)
         }
     }

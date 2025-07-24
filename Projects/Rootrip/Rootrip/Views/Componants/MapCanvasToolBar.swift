@@ -27,7 +27,7 @@ struct MapCanvasToolBar: View {
                     }
                         .padding(.trailing, 20)
                 }
-                .foregroundStyle(.white)
+                .foregroundStyle(.secondary4)
             }
             .frame(height: 50) // 툴바 콘텐츠의 높이 지정
             .background(
@@ -51,7 +51,7 @@ struct MapCanvasToolBar: View {
             }
             .frame(height: 50) // 툴바 콘텐츠의 높이 지정
             .background(
-                Color.white
+                Color.secondary4
             )
         }
     }

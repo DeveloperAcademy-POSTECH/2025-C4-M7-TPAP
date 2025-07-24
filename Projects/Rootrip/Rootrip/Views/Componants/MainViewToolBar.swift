@@ -18,7 +18,7 @@ struct MainViewToolBar: View {
                 HStack {
                     Text("Rootrip")
                         .fontWeight(.bold)
-                        .foregroundColor(.white)
+                        .foregroundColor(.secondary4)
                 }
                 
                 // 2. 버튼들 (오른쪽 정렬)
@@ -72,9 +72,8 @@ struct MainViewToolBar: View {
                 isEditing = false
             } label: {
                 Text("삭제")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.red)
-                    .bold()
+                    .font(.presemi20)
+                    .foregroundStyle(.accent2)
             }
             .disabled(selectedProjects.isEmpty)
             .opacity(selectedProjects.isEmpty ? 0.5 : 1.0)
@@ -84,9 +83,8 @@ struct MainViewToolBar: View {
                 selectedProjects.removeAll()
             } label: {
                 Text("완료")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
-                    .bold()
+                    .font(.presemi20)
+                    .foregroundStyle(.secondary4)
             }
         }
     }
@@ -99,8 +97,8 @@ struct MainViewToolBar: View {
                 EmptyView()
             } label: {
                 Image(systemName: "plus")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
+                    .font(.presemi20)
+                    .foregroundStyle(.secondary4)
             }
             
             Button {
@@ -108,8 +106,8 @@ struct MainViewToolBar: View {
                 selectedProjects.removeAll() //선택을 전부 해제
             } label: {
                 Text("선택")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
+                    .font(.presemi20)
+                    .foregroundStyle(.secondary4)
             }
             
             Button {
@@ -117,7 +115,7 @@ struct MainViewToolBar: View {
             } label: {
                 Circle()
                     .frame(width: 34, height: 34)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.secondary4)
             }
             .popover(isPresented: $isShowingPopover, arrowEdge: .top) {
                 ProfilePopover(

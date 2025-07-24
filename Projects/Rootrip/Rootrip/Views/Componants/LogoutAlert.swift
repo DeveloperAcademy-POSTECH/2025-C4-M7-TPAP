@@ -1,5 +1,6 @@
 import SwiftUI
 
+//TODO: 글자 폰트 수정 필요
 struct LogoutAlert: View {
     
     var onCancel: () -> Void
@@ -12,7 +13,9 @@ struct LogoutAlert: View {
             VStack(spacing: 0) {
                 Text("로그아웃 하시겠습니까?")
                     .font(.system(size: 17).bold())
+                    .foregroundStyle(.maintext)
                     .padding(.vertical, 20)
+                
 
                 Rectangle()
                     .frame(height: 1)
@@ -24,7 +27,7 @@ struct LogoutAlert: View {
                     Button(action: onCancel) {
                         Text("취소")
                             .font(.system(size: 17))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.maintext)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 100, height: 20)
@@ -40,7 +43,7 @@ struct LogoutAlert: View {
                     Button(action: onConfirm) {
                         Text("로그아웃")
                             .font(.system(size: 17).bold())
-                            .foregroundStyle(.red)
+                            .foregroundStyle(.maintext)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 100, height: 20)
@@ -49,7 +52,7 @@ struct LogoutAlert: View {
                 }
             }
             .frame(width: 270, height: 105)
-            .background(.white)
+            .background(.secondary4)
             .cornerRadius(10)
         }
     }

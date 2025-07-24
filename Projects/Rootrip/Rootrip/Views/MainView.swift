@@ -9,7 +9,7 @@ struct BlockView: View {
         NavigationStack {
             ZStack(alignment: .top) {
                 //TODO: backgroundColor 추가해야함
-                Color(red: 0.9608, green: 0.9608, blue: 0.9608)
+                Color.mainbackground
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
@@ -51,13 +51,13 @@ struct BlockView: View {
             isShowingCodeSheet = true
         } label: {
             Text("코드로 참여하기")
-                .foregroundStyle(.point)
+                .foregroundStyle(.primary1)
                 .bold()
         }
         .buttonStyle(.plain)
         .padding(.vertical, 15)
         .padding(.horizontal, 26)
-        .background(.white)
+        .background(.secondary4)
         .cornerRadius(36)
         .shadow(color: .gray.opacity(0.4),
                 radius: 6, x: 0, y: 0)

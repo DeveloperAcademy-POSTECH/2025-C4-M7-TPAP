@@ -1,5 +1,5 @@
 import SwiftUI
-
+//TODO: 글자 폰트 수정, 편집모드일때 어둡게 수정 필요
 struct ProjectCard: View {
     let project: Project
     var isHighlighted: Bool = false // 최신순으로 정렬
@@ -18,7 +18,7 @@ struct ProjectCard: View {
     // MARK: - Background Layer
     private var normalCardView: some View {
         Rectangle() //TODO: 지도 이미지 들어가도록 만들어야함
-            .foregroundStyle(.white)
+            .foregroundStyle(.secondary4)
             .frame(maxWidth: isHighlighted ? 1070 : 325,
                    maxHeight: isHighlighted ? 380 : 190)
             .clipped()
@@ -33,7 +33,7 @@ struct ProjectCard: View {
     private var cardContent: some View {
         ZStack {
             LinearGradient(
-                gradient: Gradient(colors: [Color.point.opacity(0.7), .clear]),
+                gradient: Gradient(colors: [Color.primary1.opacity(0.7), .clear]),
                 startPoint: .bottom,
                 endPoint: .center
             )
@@ -52,7 +52,7 @@ struct ProjectCard: View {
     private var titleText: some View {
         Text(project.title)
             .font(.system(size: isHighlighted ? 32 : 18, weight: .bold))
-            .foregroundColor(.white)
+            .foregroundColor(.secondary4)
             .multilineTextAlignment(.leading)
     }
 
@@ -62,7 +62,7 @@ struct ProjectCard: View {
                 VStack(spacing: 4) {
                     Text(formattedDate(project.startDate))
                     Rectangle()
-                        .fill(Color.white)
+                        .fill(Color.secondary4)
                         .frame(width: isHighlighted ? 20 : 14, height: 1)
                     Text(formattedDate(end))
                 }
@@ -71,7 +71,7 @@ struct ProjectCard: View {
             }
         }
         .font(.system(size: isHighlighted ? 20 : 12, weight: .bold))
-        .foregroundColor(.white.opacity(0.9))
+        .foregroundColor(.secondary4.opacity(0.9))
     }
 
     // MARK: - Checkmark Layer
@@ -82,14 +82,14 @@ struct ProjectCard: View {
 
         return ZStack {
             Circle()
-                .strokeBorder(Color.white, lineWidth: 3)
-                .background(Circle().fill(isSelected ? Color.green : Color.gray))
+                .strokeBorder(Color.secondary4, lineWidth: 3)
+                .background(Circle().fill(isSelected ? Color.accent1 : Color.secondary3))
                 .frame(width: size, height: size)
             
             if isSelected {
                 Image(systemName: "checkmark")
                     .font(.system(size: checkmarkSize, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundColor(.secondary4)
             }
         }
         .padding(padding)
