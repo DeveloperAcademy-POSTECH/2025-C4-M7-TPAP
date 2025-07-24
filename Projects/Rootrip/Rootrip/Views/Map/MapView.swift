@@ -9,9 +9,11 @@ import SwiftUI
 import MapKit
 
 // TODO: 임의로 넣어둔 view임. #112에 따라 수정 필요
-struct MapView: View {
-    var body: some View {
-        Map(position: .constant(.automatic))
-            .ignoresSafeArea()
+struct MapView: UIViewRepresentable {
+    @Binding var mapView: MKMapView
+
+    func makeUIView(context: Context) -> MKMapView {
+        mapView
     }
+    func updateUIView(_ uiView: MKMapView, context: Context) { }
 }
