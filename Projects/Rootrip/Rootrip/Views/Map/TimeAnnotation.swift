@@ -15,23 +15,23 @@ struct TimeAnnotation: View {
             //네모 모양안에 도보 표시
             ZStack{
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.gray)
+                    .fill(Color.white.opacity(0.3))
                     .frame(width: 108, height: 40)
                 HStack(spacing: 35) {
                     Image(systemName: "figure.walk")
-                        .foregroundColor(.black)
+                        .foregroundColor(.accent1)
                     Text(timeText)
-                        .font(.system(size: 12))
-                        .foregroundColor(.black)
+                        .font(.presemi12)
+                        .foregroundColor(.accent1)
                 }
-                .foregroundColor(.black)
+                .foregroundColor(.accent1)
                 .frame(width: 96, height: 29)
-                .background(.white)
+                .background(.secondary4)
                 .cornerRadius(8)
             }
             //역삼각형 합쳐서 말풍선 구현
             InvertedTriangle()
-                .fill(Color.gray)
+                .fill(Color.secondary4.opacity(0.3))
                 .frame(width: 18, height: 12)
             
         }

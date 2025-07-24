@@ -31,7 +31,7 @@ struct MapCanvasToolBar: View {
             }
             .frame(height: 50) // 툴바 콘텐츠의 높이 지정
             .background(
-                Color.point
+                Color.primary1
                     .ignoresSafeArea(.container, edges: .top)
             )
             

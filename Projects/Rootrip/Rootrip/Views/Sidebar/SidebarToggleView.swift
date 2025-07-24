@@ -25,7 +25,7 @@ struct SidebarToggleView: View {
                         }
                     }) {
                         Image(systemName: "sidebar.left")
-                            .foregroundColor(.white)
+                            .foregroundColor(.secondary4)
                             .padding()
                     }
                     Spacer()
@@ -33,7 +33,7 @@ struct SidebarToggleView: View {
                 //툴바 UI 확인상 넣어둠
                 .frame(height: 50)
                 .frame(maxWidth: .infinity)
-                .background(Color.purple)
+                .background(Color.primary1)
                 
                 Spacer()
             }

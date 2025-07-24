@@ -27,7 +27,7 @@ struct SidebarView: View {
         }
         .frame(width: 259)
         .frame(maxHeight: .infinity)
-        .background(.gray.opacity(0.1))
+        .background(.mainbackground)
         .transition(.move(edge: .leading))
     }
 }
