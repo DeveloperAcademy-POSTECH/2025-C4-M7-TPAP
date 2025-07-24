@@ -40,12 +40,17 @@ struct BlockView: View {
                     isEditing: $isEditing,
                     selectedProjects: $selectedProjects
                 )
+                
+                if isShowingCodeSheet {
+                        InviteCodeInputView(isShowingCodeSheet: $isShowingCodeSheet)
+                            .zIndex(1000) // 항상 위에 떠야 하므로 높은 zIndex
+                    }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden)
         }
     }
-    
+    //MARK: - 코드참여버튼
     private var codeInputButton: some View {
         Button {
             isShowingCodeSheet = true

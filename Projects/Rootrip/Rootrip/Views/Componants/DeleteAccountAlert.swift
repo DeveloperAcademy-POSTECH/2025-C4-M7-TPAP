@@ -15,7 +15,7 @@ struct DeleteAccountAlert: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.4).ignoresSafeArea()
+            Color.maintext.opacity(0.4).ignoresSafeArea()
 
             VStack(spacing: 0) {
                 Text("탈퇴 하시겠습니까?")

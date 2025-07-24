@@ -64,4 +64,8 @@ extension Font {
     static var presemi12: Font {
         return .pre(type: .semibold, size: 12)
     }
+    static var prereg14: Font {
+        return .pre(type: .regular, size: 14)
+    }
+    
 }
