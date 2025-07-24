@@ -7,8 +7,14 @@ struct LoginView: View {
         if !isLoggedIn{
             ZStack{
                 Color.primary1
-                Image("Login")
-                
+                Image("loginbackground")
+                VStack {
+                    Spacer()
+                    Text("Rootrip")
+                        .font(.draureg144)
+                        .foregroundColor(.primary1)
+                        .padding(.bottom, 386)
+                }
                 VStack {
                     Spacer()
                     Button(action: {
@@ -16,7 +22,7 @@ struct LoginView: View {
                             isLoggedIn.toggle()
                         }
                     }) {
-                        Image("appleid_button")
+                        Image("applebutton")
                     }
                     .padding(.bottom, 216)
                 }
