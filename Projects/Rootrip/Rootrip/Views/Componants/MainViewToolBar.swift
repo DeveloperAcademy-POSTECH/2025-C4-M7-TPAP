@@ -13,7 +13,7 @@ struct MainViewToolBar: View {
     var body: some View {
         GeometryReader { geometry in
             let screenWidth = UIScreen.main.bounds.width
-            let trailingPadding: CGFloat = screenWidth >= 1300 ? 20 : 60
+            let trailingPadding: CGFloat = screenWidth >= 1300 ? 20 : 70
             ZStack {
                 HStack {
                     Text("Rootrip")
@@ -71,9 +71,9 @@ struct MainViewToolBar: View {
             Button {
                 isEditing = false
             } label: {
-                Text("삭제")
+                Image(systemName: "trash")
                     .font(.presemi20)
-                    .foregroundStyle(.accent2)
+                    .foregroundStyle(.secondary4)
             }
             .disabled(selectedProjects.isEmpty)
             .opacity(selectedProjects.isEmpty ? 0.5 : 1.0)

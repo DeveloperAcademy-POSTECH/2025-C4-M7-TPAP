@@ -14,7 +14,7 @@ struct ProjectCard: View {
             }
         }
     }
-
+    
     // MARK: - Background Layer
     private var normalCardView: some View {
         Rectangle() //TODO: 지도 이미지 들어가도록 만들어야함
@@ -27,13 +27,16 @@ struct ProjectCard: View {
             .shadow(color: .gray.opacity(0.4),
                     radius: isHighlighted ? 8 : 4, x: 0, y: 2)
     }
-
+    
     // MARK: - Overlay Content
     @ViewBuilder
     private var cardContent: some View {
         ZStack {
+            if isEditing {
+                Color.black.opacity(0.2)
+            }
             LinearGradient(
-                gradient: Gradient(colors: [Color.primary1.opacity(0.7), .clear]),
+                gradient: Gradient(colors: [Color(red: 0.4941, green: 0.5569, blue: 0.902).opacity(0.7), .clear]),
                 startPoint: .bottom,
                 endPoint: .center
             )
@@ -48,14 +51,14 @@ struct ProjectCard: View {
             }
         }
     }
-
+    
     private var titleText: some View {
         Text(project.title)
             .font(.system(size: isHighlighted ? 32 : 18, weight: .bold))
             .foregroundColor(.secondary4)
             .multilineTextAlignment(.leading)
     }
-
+    
     private var dateView: some View {
         VStack(alignment: .trailing, spacing: 4) {
             if let end = project.endDate {
@@ -73,13 +76,13 @@ struct ProjectCard: View {
         .font(.system(size: isHighlighted ? 20 : 12, weight: .bold))
         .foregroundColor(.secondary4.opacity(0.9))
     }
-
+    
     // MARK: - Checkmark Layer
     private var editCardView: some View {
         let size: CGFloat = isHighlighted ? 39 : 33
         let checkmarkSize: CGFloat = isHighlighted ? 16 : 12
         let padding: CGFloat = isHighlighted ? 16 : 10
-
+        
         return ZStack {
             Circle()
                 .strokeBorder(Color.secondary4, lineWidth: 3)
@@ -94,7 +97,7 @@ struct ProjectCard: View {
         }
         .padding(padding)
     }
-
+    
     // MARK: - Date Formatter
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
