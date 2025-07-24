@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//TODO: -MainViewToolbar에 해당 버튼 포함시켜야함
+//TODO: -BlockViewToolbar에 해당 버튼 포함시켜야함
 ///사이드바 위에 툴바가 올라오도록 한 화면입니다.(사이드바는 기본 열림 상태)
 struct SidebarToggleView: View {
     @State private var showSidebar = true

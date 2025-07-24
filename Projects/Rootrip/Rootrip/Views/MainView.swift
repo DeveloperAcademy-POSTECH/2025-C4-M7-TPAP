@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MainView: View {
+struct BlockView: View {
     @State private var isEditing: Bool = false
     @State private var selectedProjects: Set<String> = []
 
@@ -23,7 +23,6 @@ struct MainView: View {
                         )
                     }
                 }
-
 
                 MainViewToolBar(
                     isEditing: $isEditing,
@@ -66,7 +65,7 @@ var sampleProjects: [Project] = {
 }()
 
 #Preview(traits: .landscapeLeft) {
-    MainView()
+    BlockView()
         .environmentObject(PlanManager())
         .environmentObject(RouteManager())
 }

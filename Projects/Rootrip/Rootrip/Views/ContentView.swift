@@ -29,7 +29,7 @@ struct ContentView: View {
             .ignoresSafeArea(.all)
         }
         else{
-            MainView()
+            BlockView()
                 .environmentObject(PlanManager())
                 .environmentObject(RouteManager())
         }
