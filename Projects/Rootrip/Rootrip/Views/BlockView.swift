@@ -24,6 +24,7 @@ struct BlockView: View {
                             Spacer()
                         }
                         .padding(.horizontal, 60)
+                        .padding(.bottom, 10)
                         
                         
                         ProjectListView(
