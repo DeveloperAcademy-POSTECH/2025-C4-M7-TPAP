@@ -17,21 +17,14 @@ struct BlockView: View {
                             .frame(height: 70)
                         
                         HStack {
-                            Spacer()
-                                .frame(width: 80)
-                            
-                            if isEditing {
-                                // 버튼 숨김: 같은 공간 차지하는 빈 뷰
-                                Color.clear
-                                    .frame(width: 162, height: 48) // 버튼 크기만큼
-                                    .padding(.bottom, 8)
-                            } else {
-                                codeInputButton
-                                    .padding(.bottom, 8)
-                            }
+                            codeInputButton
+                                .opacity(isEditing ? 0 : 1)
+                                .allowsHitTesting(!isEditing) // 편집 모드일 땐 터치 안 되게 막기
                             
                             Spacer()
                         }
+                        .padding(.horizontal, 60)
+                        
                         
                         ProjectListView(
                             projects: sampleProjects,
