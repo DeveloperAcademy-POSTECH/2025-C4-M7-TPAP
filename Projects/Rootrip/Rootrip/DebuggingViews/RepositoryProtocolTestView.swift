@@ -57,7 +57,7 @@ struct RepositoryProtocolTestView: View {
                                     tripType: tripType,
                                     startDate: startDate,
                                     endDate: includeEndDate ? endDate : nil
-                                ) { _ in }
+                                )
                             } catch {
                                 errorMessage = error.localizedDescription
                             }

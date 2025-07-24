@@ -2,12 +2,15 @@ import SwiftUI
 
 // MainViewToolBar: 상단 툴바
 struct MainViewToolBar: View {
+    @EnvironmentObject var viewModel: BlockViewModel
     
     @State private var isShowingPopover:Bool = false
     @State private var isShowingLogoutAlert = false
     @State private var showDeleteAccountAlert = false
     @Binding var isEditing: Bool
     @Binding var selectedProjects: Set<String>
+    
+    let onProjectCreated: (Project) -> Void
     
     
     var body: some View {
@@ -65,6 +68,8 @@ struct MainViewToolBar: View {
             }
         }
     }
+    
+    
     // MARK: - 선택 모드 버튼
     private var editingButtons: some View {
         Group {
@@ -92,14 +97,20 @@ struct MainViewToolBar: View {
     // MARK: - 기본 모드 버튼
     private var normalButtons: some View {
         Group {
-            NavigationLink {
-                // TODO: Plan 생성 화면으로 이동
-                EmptyView()
+            Button {
+                Task {
+                    await viewModel.createNewProject()
+                    if let project = viewModel.newProjectForNavigation {
+                        onProjectCreated(project)  // ✅ 트리거
+                        viewModel.newProjectForNavigation = nil
+                    }
+                }
             } label: {
                 Image(systemName: "plus")
                     .font(.presemi20)
                     .foregroundStyle(.secondary4)
             }
+            .buttonStyle(.plain)
             
             Button {
                 isEditing = true
@@ -109,6 +120,7 @@ struct MainViewToolBar: View {
                     .font(.presemi20)
                     .foregroundStyle(.secondary4)
             }
+            .buttonStyle(.plain)
             
             Button {
                 isShowingPopover.toggle()
@@ -117,6 +129,7 @@ struct MainViewToolBar: View {
                     .frame(width: 34, height: 34)
                     .foregroundStyle(.secondary4)
             }
+            .buttonStyle(.plain)
             .popover(isPresented: $isShowingPopover, arrowEdge: .top) {
                 ProfilePopover(
                     isShowingLogoutAlert: $isShowingLogoutAlert,

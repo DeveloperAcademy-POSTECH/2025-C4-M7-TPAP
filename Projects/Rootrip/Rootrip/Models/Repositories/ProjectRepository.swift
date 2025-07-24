@@ -24,24 +24,24 @@ final class ProjectRepository: ProjectRepositoryProtocol {
         self.planRepository = planRepository
         self.bookmarkRepository = bookmarkRepository
     }
-
+    // createProject 함수가 Project를 반환하도록 변경
     func createProject(
         title: String?,
         tripType: TripType,
         startDate: Date,
         endDate: Date?,
-        completion: @escaping (Project) -> Void
-    ) async throws {
+    ) async throws -> Project {
         /// if no 'endDate' though TripType == .overnightTrip
         guard !(tripType == .overnightTrip && endDate == nil) else {
             print("createProject Error - endDate required")
-            return
-        }
+            throw NSError(domain: "ProjectRepositoryError", code: 1, userInfo: [NSLocalizedDescriptionKey: "1박 이상 여행의 경우 종료일이 필요합니다."])
+        } // 반환 타입이 Project로 변경
         
         /// if no 'title' input, auto generate project title
         let title_ = try await (title != nil ? title! : genTitle(base: baseTitle))
 
-        let newProject = Project(
+        // newProject를 var로 선언하여 id를 설정할 수 있게 함
+        var newProject = Project(
             title: title_,
             tripType: tripType,
             startDate: startDate,
@@ -51,6 +51,8 @@ final class ProjectRepository: ProjectRepositoryProtocol {
         let projectReference = try db.collection(projectsCollection)
             .addDocument(from: newProject)
         let projectID = projectReference.documentID
+        
+        newProject.id = projectID
 
         // set default Plans
         var cnt = 0
@@ -63,7 +65,7 @@ final class ProjectRepository: ProjectRepositoryProtocol {
         case .overnightTrip:
             guard let endDate = newProject.endDate else {
                 ///error처리하는 부분
-                return
+                throw NSError(domain: "ProjectRepositoryError", code: 2, userInfo: [NSLocalizedDescriptionKey: "1박 이상 여행의 경우 플랜 계산을 위한 종료일이 누락되었습니다."])
             }
 
             let dayCount =
@@ -84,6 +86,8 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             title: defaultTitle,
             isDefault: true
         )
+        
+        return newProject
     }
     
     func genTitle(base: String) async throws -> String {
