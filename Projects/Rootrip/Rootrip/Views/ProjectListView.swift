@@ -77,8 +77,9 @@ struct LargeCardView: View {
             }
             .buttonStyle(.plain)
         } else {
-            NavigationLink(destination:ProjectView()
-                .navigationBarHidden(true)) {
+            NavigationLink(destination:ProjectDetailView(project: project)
+//                .navigationBarHidden(true)
+            ) {
                     ProjectCard(
                         project: project,
                         isHighlighted: true,
@@ -117,8 +118,8 @@ struct SmallCardRowView: View {
                         }
                         .buttonStyle(.plain)
                     } else {
-                        NavigationLink(destination: ProjectView()
-                            .navigationBarHidden(true)
+                        NavigationLink(destination: ProjectDetailView(project: project)
+//                            .navigationBarHidden(true)
                         ) {
                             ProjectCard(
                                 project: project,

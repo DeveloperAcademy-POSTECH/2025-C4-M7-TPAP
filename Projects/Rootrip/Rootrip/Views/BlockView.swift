@@ -6,8 +6,11 @@ struct BlockView: View {
     @State private var selectedProjects: Set<String> = []
     @State private var isShowingCodeSheet: Bool = false
     
+    @State private var navigateToProjectDetail = false
+    @State private var projectToNavigate: Project? = nil
     var body: some View {
         NavigationStack {
+            
             ZStack(alignment: .top) {
                 Color.mainbackground
                     .ignoresSafeArea()
@@ -26,7 +29,7 @@ struct BlockView: View {
                         }
                         .padding(.horizontal, 80)
                         .padding(.bottom, 10)
-                       
+                        
                         // 실제 프로젝트 리스트
                         ProjectListView(
                             projects: viewModel.projects,
@@ -41,8 +44,13 @@ struct BlockView: View {
                 
                 MainViewToolBar(
                     isEditing: $isEditing,
-                    selectedProjects: $selectedProjects
+                    selectedProjects: $selectedProjects,
+                    onProjectCreated: { project in
+                        self.projectToNavigate = project
+                        self.navigateToProjectDetail = true
+                    }
                 )
+                .environmentObject(viewModel)
                 
                 if isShowingCodeSheet {
                     InviteCodeInputView(isShowingCodeSheet: $isShowingCodeSheet)
@@ -54,6 +62,11 @@ struct BlockView: View {
             .onAppear {
                 Task {
                     await viewModel.fetchProjects()
+                }
+            }
+            .navigationDestination(isPresented: $navigateToProjectDetail) {
+                if let project = projectToNavigate {
+                    ProjectDetailView(project: project)
                 }
             }
         }

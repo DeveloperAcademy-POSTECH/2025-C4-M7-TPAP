@@ -9,7 +9,7 @@ import Foundation
 
 protocol ProjectRepositoryProtocol {
     /// create new empty project. containing default Plans and Bookmarks
-    func createProject(title: String?, tripType: TripType, startDate: Date, endDate: Date?, completion: @escaping (Project) -> Void) async throws
+    func createProject(title: String?, tripType: TripType, startDate: Date, endDate: Date?) async throws -> Project
     /// generate Project title automatically
     func genTitle(base: String) async throws -> String
     /// modifiy on existing project : especially about StrokeData
