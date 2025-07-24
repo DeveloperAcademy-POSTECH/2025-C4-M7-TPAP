@@ -12,6 +12,6 @@ struct StrokeData: Identifiable, Codable {
     @DocumentID var id: String?
     var isUtilPen: Bool
     var isDeleted: Bool
-    var inkColor: [Double]
+    var inkColor: Double // [Double] -> Double 수정
     var points: [StrokePointData]
 }
