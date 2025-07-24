@@ -8,7 +8,6 @@ struct BlockView: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .top) {
-                //TODO: backgroundColor 추가해야함
                 Color.mainbackground
                     .ignoresSafeArea()
                 

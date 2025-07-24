@@ -19,7 +19,7 @@ struct DeleteAccountAlert: View {
 
             VStack(spacing: 0) {
                 Text("탈퇴 하시겠습니까?")
-                    .font(.system(size: 17).bold())
+                    .font(.presemi16)
                     .padding(.vertical, 20)
                     .foregroundStyle(.maintext)
 
@@ -32,8 +32,8 @@ struct DeleteAccountAlert: View {
 
                     Button(action: onCancel) {
                         Text("취소")
-                            .font(.system(size: 17))
-                            .foregroundStyle(.maintext)
+                            .font(.presemi16)
+                            .foregroundStyle(.blue)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 100, height: 20)
@@ -47,9 +47,9 @@ struct DeleteAccountAlert: View {
                     Spacer()
 
                     Button(action: onConfirm) {
-                        Text("탈퇴하기")
-                            .font(.system(size: 17).bold())
-                            .foregroundStyle(.accent2)
+                        Text("확인")
+                            .font(.prereg16)
+                            .foregroundStyle(.blue)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 100, height: 20)
@@ -59,7 +59,7 @@ struct DeleteAccountAlert: View {
             }
             .frame(width: 270, height: 105)
             .background(.secondary4)
-            .cornerRadius(10)
+            .cornerRadius(14)
         }
     }
 }

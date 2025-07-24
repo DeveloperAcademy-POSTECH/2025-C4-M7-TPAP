@@ -12,7 +12,7 @@ struct LogoutAlert: View {
 
             VStack(spacing: 0) {
                 Text("로그아웃 하시겠습니까?")
-                    .font(.system(size: 17).bold())
+                    .font(.presemi16)
                     .foregroundStyle(.maintext)
                     .padding(.vertical, 20)
                 
@@ -26,8 +26,8 @@ struct LogoutAlert: View {
 
                     Button(action: onCancel) {
                         Text("취소")
-                            .font(.system(size: 17))
-                            .foregroundStyle(.maintext)
+                            .font(.presemi16)
+                            .foregroundStyle(.secondary1)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 100, height: 20)
@@ -42,8 +42,8 @@ struct LogoutAlert: View {
 
                     Button(action: onConfirm) {
                         Text("로그아웃")
-                            .font(.system(size: 17).bold())
-                            .foregroundStyle(.maintext)
+                            .font(.presemi16)
+                            .foregroundStyle(.accent2)
                     }
                     .buttonStyle(.plain)
                     .frame(width: 100, height: 20)
@@ -53,7 +53,7 @@ struct LogoutAlert: View {
             }
             .frame(width: 270, height: 105)
             .background(.secondary4)
-            .cornerRadius(10)
+            .cornerRadius(14)
         }
     }
 }
