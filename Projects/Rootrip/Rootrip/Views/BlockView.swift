@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct BlockView: View {
+    @StateObject private var viewModel = BlockViewModel()
     @State private var isEditing: Bool = false
     @State private var selectedProjects: Set<String> = []
     @State private var isShowingCodeSheet: Bool = false
@@ -19,19 +20,22 @@ struct BlockView: View {
                         HStack {
                             codeInputButton
                                 .opacity(isEditing ? 0 : 1)
-                                .allowsHitTesting(!isEditing) // 편집 모드일 땐 터치 안 되게 막기
+                                .allowsHitTesting(!isEditing)
                             
                             Spacer()
                         }
                         .padding(.horizontal, 80)
                         .padding(.bottom, 10)
-                        
-                        
+                       
+                        // 실제 프로젝트 리스트
                         ProjectListView(
-                            projects: sampleProjects,
+                            projects: viewModel.projects,
                             selectedProjects: $selectedProjects,
                             isEditing: $isEditing
                         )
+                    }
+                    .refreshable {
+                        await viewModel.fetchProjects()
                     }
                 }
                 
@@ -41,14 +45,20 @@ struct BlockView: View {
                 )
                 
                 if isShowingCodeSheet {
-                        InviteCodeInputView(isShowingCodeSheet: $isShowingCodeSheet)
-                            .zIndex(1000) // 항상 위에 떠야 하므로 높은 zIndex
-                    }
+                    InviteCodeInputView(isShowingCodeSheet: $isShowingCodeSheet)
+                        .zIndex(1000)
+                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden)
+            .onAppear {
+                Task {
+                    await viewModel.fetchProjects()
+                }
+            }
         }
     }
+    
     //MARK: - 코드참여버튼
     private var codeInputButton: some View {
         Button {
@@ -67,35 +77,6 @@ struct BlockView: View {
                 radius: 6, x: 0, y: 0)
     }
 }
-
-// 샘플 데이터용 ID를 String으로 변환
-var sampleProjects: [Project] = {
-    var p1 = Project(
-        title: "TPAP 우정 여행",
-        tripType: .overnightTrip,
-        startDate: Date(),
-        endDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())
-    )
-    p1.id = "sample-1"
-    
-    var p2 = Project(
-        title: "퍼스널 크루 여행",
-        tripType: .dayTrip,
-        startDate: Date(),
-        endDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())
-    )
-    p2.id = "sample-2"
-    
-    var p3 = Project(
-        title: "퍼스널 크루 여행",
-        tripType: .dayTrip,
-        startDate: Date(),
-        endDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())
-    )
-    p3.id = "sample-3"
-    
-    return [p1, p2, p3]
-}()
 
 #Preview(traits: .landscapeLeft) {
     BlockView()

@@ -20,5 +20,7 @@ protocol ProjectRepositoryProtocol {
     /// upload current instance data on firestore
     func saveProject() async throws
     
+    /// fetch all projects in Rootrip collection
+    func fetchAllProjects() async throws -> [Project] 
     
 }
