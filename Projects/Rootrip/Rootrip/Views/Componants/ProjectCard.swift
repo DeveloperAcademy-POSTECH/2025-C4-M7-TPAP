@@ -1,5 +1,5 @@
 import SwiftUI
-//TODO: 글자 폰트 수정, 편집모드일때 어둡게 수정 필요
+
 struct ProjectCard: View {
     let project: Project
     var isHighlighted: Bool = false // 최신순으로 정렬
