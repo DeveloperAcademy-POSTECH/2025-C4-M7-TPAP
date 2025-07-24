@@ -30,4 +30,5 @@ struct ProjectView: View {
     ProjectView()
         .environmentObject(RouteManager())
         .environmentObject(PlanManager())
+        .environmentObject(BookmarkManager())
 }
