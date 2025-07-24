@@ -74,6 +74,11 @@ struct MainViewToolBar: View {
     private var editingButtons: some View {
         Group {
             Button {
+                Task {
+                    await viewModel.deleteProjects(projectIDs: Array(selectedProjects))
+                    selectedProjects.removeAll()
+                    isEditing = false
+                }
                 isEditing = false
             } label: {
                 Image(systemName: "trash")

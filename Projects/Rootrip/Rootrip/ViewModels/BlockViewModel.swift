@@ -56,4 +56,16 @@ final class BlockViewModel: ObservableObject {
             await fetchProjects()
         }
     }
+    
+    func deleteProjects(projectIDs: [String]) async {
+        for id in projectIDs {
+            do {
+                try await repository.deleteProject(projectID: id)
+                print("🗑️ 삭제 완료: \(id)")
+            } catch {
+                print("❌ 삭제 실패: \(id) - \(error)")
+            }
+        }
+        await fetchProjects()
+    }
 }
