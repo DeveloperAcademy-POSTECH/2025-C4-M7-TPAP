@@ -7,12 +7,11 @@
 
 import SwiftUI
 
-struct SectionButtomLable: View {
-    let title: String
+struct SectionButtomLable: ViewModifier {
     let isSelected: Bool
 
-    var body: some View {
-        Text(title)
+    func body(content: Content) ->  some View {
+        content
             .font(.presemi24)
             .foregroundColor(isSelected ? .accent1 : .secondary2)
             .padding(.horizontal, 8)
@@ -22,7 +21,8 @@ struct SectionButtomLable: View {
             .shadow(radius: 4)
     }
 }
-
-#Preview {
-    SectionButtomLable(title: "Plan A", isSelected: false)
+extension View {
+    func sectionButtonLable(isSelected: Bool) -> some View {
+        self.modifier(SectionButtomLable(isSelected: isSelected))
+    }
 }

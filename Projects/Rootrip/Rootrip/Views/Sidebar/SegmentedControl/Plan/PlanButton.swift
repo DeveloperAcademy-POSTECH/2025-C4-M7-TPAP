@@ -26,11 +26,9 @@ struct PlanButton: View {
                 planManager.selectPlan(plan.id)
             }
         }) {
-            SectionButtomLable(
-                title: plan.title,
-                isSelected: planManager.selectedPlanID == plan.id
-            )
-        }
+            Text(plan.title)
+                .sectionButtonLable(isSelected: planManager.selectedPlanID == plan.id)
+                    }
         .onAppear {
             planManager.configure(with: routeManager)
         }
