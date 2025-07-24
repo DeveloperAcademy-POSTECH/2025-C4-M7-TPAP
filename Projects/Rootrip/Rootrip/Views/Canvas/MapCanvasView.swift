@@ -31,14 +31,17 @@ struct MapCanvasView: View {
         }
         .overlay(
             Button(action: {
+                if isCanvasActive {
+                    drawing = PKDrawing()
+                }
                 isCanvasActive.toggle()
-                print("[MapCanvasView] CanvasActive: \(isCanvasActive)")
             }) {
                 Text(isCanvasActive ? "TO MAP" : "TO CANVAS")
                     .padding()
                     .background(.ultraThinMaterial)
                     .cornerRadius(10)
             }
+
             .padding(),
             alignment: .topTrailing
         )
