@@ -18,7 +18,7 @@ struct LoginView: View {
                     }) {
                         Image("appleid_button")
                     }
-                    .padding(.bottom, 180) // 바닥에서 180 떨어지게
+                    .padding(.bottom, 216)
                 }
             }
             .ignoresSafeArea(.all)
