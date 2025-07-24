@@ -21,13 +21,15 @@ struct BookmarkView: View {
                         BookmarkButton(bookmark: bookmark)
                             .environmentObject(bookmarkManager)
                             .environmentObject(mapState)
-                            .padding(.leading, 16)
-                            .padding(.vertical, 3)
+                            .padding(.leading, 22)
 
                         // MARK: - 섹션별 장소 목록
-                        BookmarkListView(bookmark: bookmark)
-                            .environmentObject(bookmarkManager)
-                            .environmentObject(mapState)
+                        BookmarkCard(
+                            details: bookmarkManager.mapDetails(for: bookmark.id ?? "")
+                        )
+                        .environmentObject(bookmarkManager)
+                        .padding(.horizontal, 22)
+                        .padding(.vertical, 15)
                     }
                 }
                 Spacer()
@@ -39,4 +41,7 @@ struct BookmarkView: View {
 }
     #Preview {
         BookmarkView()
+            .environmentObject(BookmarkManager())
+            .environmentObject(RouteManager())
+            
     }

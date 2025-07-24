@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 
-/// 북마크 버튼 컴포넌트
+/// 북마크 버튼
 struct BookmarkButton: View {
     @EnvironmentObject var routeManager: RouteManager // 현재 지도 상태를 관리하는 객체
     @EnvironmentObject var bookmarkManager: BookmarkManager // 북마크 상태를 관리하는 객체
@@ -18,10 +18,7 @@ struct BookmarkButton: View {
     var body: some View {
         // MARK: - 북마크 버튼을 눌렀을 때의 동작
         Button(action: {
-            // 북마크에 해당하는 장소(MapDetail)를 찾아서 toggleBookmark 실행
-            if let detail = bookmarkManager.mapDetails.first(where: { $0.id == bookmark.id }) {
-                bookmarkManager.toggleBookmark(detail)
-            }
+            bookmarkManager.toggleSelectedBookmarkSection(bookmark.id)
         }) {
             // MARK: - 버튼 레이블 구성
             Text(bookmark.title)
