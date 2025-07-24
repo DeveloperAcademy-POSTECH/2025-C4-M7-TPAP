@@ -132,4 +132,30 @@ final class ProjectRepository: ProjectRepositoryProtocol {
     func saveProject() async throws {
 
     }
+    
+    func fetchAllProjects() async throws -> [Project] {
+        print("🔍 Firestore에서 프로젝트 불러오기 시작...")
+        
+        let snapshot = try await db.collection(projectsCollection).getDocuments()
+        print("🔍 Firestore 문서 개수: \(snapshot.documents.count)")
+        
+        var projects: [Project] = []
+        
+        for document in snapshot.documents {
+            do {
+                print("📄 문서 ID: \(document.documentID)")
+                print("📄 문서 데이터: \(document.data())")
+                
+                let project = try document.data(as: Project.self)
+                projects.append(project)
+                print("✅ 프로젝트 변환 성공: \(project.title)")
+            } catch {
+                print("❌ 문서 변환 실패 (ID: \(document.documentID)): \(error)")
+                continue
+            }
+        }
+        
+        print("🔍 총 변환된 프로젝트 수: \(projects.count)")
+        return projects
+    }
 }
