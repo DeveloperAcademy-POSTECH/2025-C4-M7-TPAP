@@ -64,4 +64,27 @@ extension Font {
     static var presemi12: Font {
         return .pre(type: .semibold, size: 12)
     }
+    
+    //MARK: 영어,숫자
+    enum Drau {
+        case regular
+        
+        var value: String {
+            switch self {
+                /// Drau
+            case .regular:
+                return "DarumadropOne-Regular"
+            }
+        }
+    }
+    
+    static func drau(type: Drau, size: CGFloat) -> Font {
+        return .custom(type.value, size: size)
+    }
+    
+    //MARK: DraumadroopOne 변수
+    static var draureg144: Font {
+        return .drau(type: .regular, size: 144)
+    }
+    
 }

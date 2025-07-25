@@ -170,6 +170,20 @@ class PlanManager: ObservableObject {
             addAnnotation(for: selectedDetails[1], to: mapView)
             routeManager.zoomToRegion(containing: [start, end])
         }
+        //선택이 전부 해제된 경우 → 전체 Plan 경로 다시 표시
+        if selectedDetails.isEmpty {
+            for detail in details {
+                addAnnotation(for: detail, to: mapView)
+            }
+
+            let coordinates = details.map { $0.coordinate }
+            if coordinates.count >= 2 {
+                for i in 0..<coordinates.count - 1 {
+                    routeManager.showRoute(from: coordinates[i], to: coordinates[i + 1], on: mapView) { _ in }
+                }
+            }
+            routeManager.zoomToRegion(containing: coordinates)
+        }
     }
     
     
