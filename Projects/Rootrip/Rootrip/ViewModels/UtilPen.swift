@@ -4,17 +4,12 @@
 //
 //  Created by POS on 7/12/25.
 //
-// TODO: PKStroke input에 따른 각 함수의 input값 수정(지금은 좌표의 개수로)
 
+import CoreLocation
 import Foundation
 import MapKit
-import CoreLocation
 
 class UtilPen: ObservableObject {
-    
-    // MARK: - Delegate (선택)
-    weak var delegate: UtilPenDelegate?
-    
     // MARK: - InputType 정의
     enum InputType {
         case line(start: CLLocationCoordinate2D, end: CLLocationCoordinate2D)
@@ -26,23 +21,22 @@ class UtilPen: ObservableObject {
     @Published var allInputs: [InputType] = []
 
     // MARK: - Input 처리
-    func inputHandler(_ coords: [CLLocationCoordinate2D]) {
-        guard let input = inputClassify(coords) else { return }
-        lastInput = input
-        allInputs.append(input)
+    func lineHandler(_ coords: [CLLocationCoordinate2D], mapView: MKMapView) {
+        guard coords.count >= 2 else { return }
+        lastInput = .line(start: coords.first!, end: coords.last!)
+        allInputs.append(lastInput!)
+        showRoute(from: coords.first!, to: coords.last!, on: mapView) { _ in }
     }
 
-    // MARK: - 선/영역 분류
-    private func inputClassify(_ coords: [CLLocationCoordinate2D]) -> InputType? {
-        guard coords.count >= 2 else { return nil }
-        if isClosedShape(first: coords.first!, last: coords.last!) {
-            return .area(points: coords)
-        } else {
-            return .line(start: coords.first!, end: coords.last!)
-        }
+    func areaHandler(_ coords: [CLLocationCoordinate2D], mapView: MKMapView) {
+        guard coords.count >= 3 else { return }
+        lastInput = .area(points: coords)
+        allInputs.append(lastInput!)
+        setArea(coords, in: mapView)
     }
 
     // MARK: - 지도 렌더링
+    // TODO: 데이터 저장 로직 구문 추가
     func showRoute(
         from start: CLLocationCoordinate2D,
         to end: CLLocationCoordinate2D,
@@ -62,22 +56,26 @@ class UtilPen: ObservableObject {
         let directions = MKDirections(request: request)
         directions.calculate { response, error in
             guard let route = response?.routes.first else {
-                print("utilPen error: \(error?.localizedDescription ?? "unknown error on showRoute function")")
+                print(
+                    "utilPen error: \(error?.localizedDescription ?? "unknown error on showRoute function")"
+                )
                 completion(nil)
                 return
             }
+            // 지도에 경로를 '그리는' 부분. 이거 삭제하면 그림 안뜸
             mapView.addOverlay(route.polyline)
-            
-            // 중간 지점 계산
-            let polylinePoints = route.polyline.points()
-            let midPoint = polylinePoints[route.polyline.pointCount / 2].coordinate
 
-            // 애노테이션 추가
+            // 어노테이션을 띄울 중간 지점 계산
+            let polylinePoints = route.polyline.points()
+            let midPoint = polylinePoints[route.polyline.pointCount / 2]
+                .coordinate
+
+            // TODO: 애노테이션 추가부분. 디자인 적용해야함
             let annotation = MKPointAnnotation()
             annotation.coordinate = midPoint
             annotation.title = "도보 \(Int(route.expectedTravelTime / 60))분"
             mapView.addAnnotation(annotation)
-            
+
             completion(route.expectedTravelTime)
         }
     }
@@ -87,30 +85,27 @@ class UtilPen: ObservableObject {
         guard points.count >= 3 else { return }
         let polygon = MKPolygon(coordinates: points, count: points.count)
         mapView.addOverlay(polygon)
-        mapView.setVisibleMapRect(
-            polygon.boundingMapRect,
-            animated: true
-        )
+        mapView.setVisibleMapRect(polygon.boundingMapRect, animated: true)
     }
 
-    // MARK: - 입력이 닫힌 영역인지 판별
-    private func isClosedShape(
-        first: CLLocationCoordinate2D,
-        last: CLLocationCoordinate2D
-    ) -> Bool {
-        let threshold: CLLocationDegrees = 0.0001
-        return (abs(first.latitude - last.latitude) < threshold)
-            && (abs(first.longitude - last.longitude) < threshold)
-    }
-    
     // MARK: - Zoom 등 추가 유틸(필요시)
-    func zoomToRegion(containing coordinates: [CLLocationCoordinate2D], in mapView: MKMapView, animated: Bool = true) {
+    func zoomToRegion(
+        containing coordinates: [CLLocationCoordinate2D],
+        in mapView: MKMapView,
+        animated: Bool = true
+    ) {
         guard !coordinates.isEmpty else { return }
         var rect = MKMapRect.null
         for coordinate in coordinates {
             let point = MKMapPoint(coordinate)
-            rect = rect.union(MKMapRect(origin: point, size: MKMapSize(width: 0, height: 0)))
+            rect = rect.union(
+                MKMapRect(origin: point, size: MKMapSize(width: 0, height: 0))
+            )
         }
-        mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 80, left: 40, bottom: 80, right: 40), animated: animated)
+        mapView.setVisibleMapRect(
+            rect,
+            edgePadding: UIEdgeInsets(top: 80, left: 40, bottom: 80, right: 40),
+            animated: animated
+        )
     }
 }
