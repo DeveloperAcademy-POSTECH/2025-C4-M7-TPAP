@@ -10,21 +10,24 @@ import Foundation
 
 final class ProjectRepository: ProjectRepositoryProtocol {
     private let db = Firestore.firestore()
-    private let projectsCollection = "Rootrip"  // DB name for firebase
+    private let projectsCollection = "Rootrip"
     
-    let baseTitle = "새 일정" // default 일정 이름. 다국어지원... 음.. 해야겠지?
+    let baseTitle = "새 일정"
 
     private let planRepository: PlanRepositoryProtocol
     private let bookmarkRepository: BookmarkRepositoryProtocol
+    private let inviteRepository: ProjectInvitationProtocol
 
     init(
         planRepository: PlanRepositoryProtocol = PlanRepository(),
-        bookmarkRepository: BookmarkRepositoryProtocol = BookmarkRepository()
+        bookmarkRepository: BookmarkRepositoryProtocol = BookmarkRepository(),
+        inviteRepository: ProjectInvitationProtocol = ProjectInvitationRepository()
     ) {
         self.planRepository = planRepository
         self.bookmarkRepository = bookmarkRepository
+        self.inviteRepository = inviteRepository
     }
-    // createProject 함수가 Project를 반환하도록 변경
+    
     func createProject(
         title: String?,
         tripType: TripType,
@@ -35,7 +38,7 @@ final class ProjectRepository: ProjectRepositoryProtocol {
         guard !(tripType == .overnightTrip && endDate == nil) else {
             print("createProject Error - endDate required")
             throw NSError(domain: "ProjectRepositoryError", code: 1, userInfo: [NSLocalizedDescriptionKey: "1박 이상 여행의 경우 종료일이 필요합니다."])
-        } // 반환 타입이 Project로 변경
+        } //반환타입이 Project가 되도록 수정
         
         /// if no 'title' input, auto generate project title
         let title_ = try await (title != nil ? title! : genTitle(base: baseTitle))
@@ -64,7 +67,6 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             }
         case .overnightTrip:
             guard let endDate = newProject.endDate else {
-                ///error처리하는 부분
                 throw NSError(domain: "ProjectRepositoryError", code: 2, userInfo: [NSLocalizedDescriptionKey: "1박 이상 여행의 경우 플랜 계산을 위한 종료일이 누락되었습니다."])
             }
 
@@ -80,12 +82,21 @@ final class ProjectRepository: ProjectRepositoryProtocol {
         }
 
         // set default Bookmark
-        let defaultTitle = "내 보관함"  // TODO: 임의로 넣어둔 이름이라 논의필요
+        let defaultTitle = "내 보관함"
         try await bookmarkRepository.createBookmark(
             projectID: projectID,
             title: defaultTitle,
             isDefault: true
         )
+        
+        // 🎯 초대 코드 생성 (프로젝트당 하나만 생성되도록 보장)
+        do {
+            let invitation = try await inviteRepository.createInvitation(for: projectID)
+            print("✅ 초대 코드 생성/확인 완료: \(invitation.id ?? "N/A") for project: \(projectID)")
+        } catch {
+            print("⚠️ 초대 코드 생성 실패: \(error.localizedDescription)")
+            // 초대 코드 생성 실패는 프로젝트 생성을 막지 않음
+        }
         
         return newProject
     }
@@ -105,7 +116,6 @@ final class ProjectRepository: ProjectRepositoryProtocol {
 
         return "\(base) (\(i))"
     }
-
 
     func updateProject(_ project: Project) async throws {
         // 1. 이름 수정
@@ -129,8 +139,23 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             try await doc.reference.delete()
         }
 
+        // 🎯 Delete Invitation Code (프로젝트 삭제 시 초대코드도 함께 삭제)
+        do {
+            let invitationsSnapshot = try await db.collection("ProjectInvitations")
+                .whereField("projectID", isEqualTo: projectID)
+                .getDocuments()
+            
+            for doc in invitationsSnapshot.documents {
+                try await doc.reference.delete()
+                print("🗑️ 초대 코드 삭제 완료: \(doc.documentID)")
+            }
+        } catch {
+            print("⚠️ 초대 코드 삭제 실패: \(error.localizedDescription)")
+        }
+
         // Delete Project
         try await projectRef.delete()
+        print("🗑️ 프로젝트 삭제 완료: \(projectID)")
     }
 
     func saveProject() async throws {

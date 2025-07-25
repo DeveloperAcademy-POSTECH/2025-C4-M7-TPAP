@@ -79,7 +79,6 @@ struct MainViewToolBar: View {
                     selectedProjects.removeAll()
                     isEditing = false
                 }
-                isEditing = false
             } label: {
                 Image(systemName: "trash")
                     .font(.presemi20)
@@ -106,7 +105,7 @@ struct MainViewToolBar: View {
                 Task {
                     await viewModel.createNewProject()
                     if let project = viewModel.newProjectForNavigation {
-                        onProjectCreated(project)  // ✅ 트리거
+                        onProjectCreated(project)
                         viewModel.newProjectForNavigation = nil
                     }
                 }
