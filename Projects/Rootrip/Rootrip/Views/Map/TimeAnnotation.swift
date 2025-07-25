@@ -15,9 +15,13 @@ struct TimeAnnotation: View {
             //네모 모양안에 도보 표시
             ZStack{
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.white.opacity(0.3))
-                    .frame(width: 108, height: 40)
-                HStack(spacing: 35) {
+                    .fill(Color.accent1.opacity(0.5))
+                    .frame(width: 100, height: 45)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.accent1, lineWidth: 1)
+                    )
+                HStack(spacing: 9) {
                     Image(systemName: "figure.walk")
                         .foregroundColor(.accent1)
                     Text(timeText)
@@ -25,28 +29,11 @@ struct TimeAnnotation: View {
                         .foregroundColor(.accent1)
                 }
                 .foregroundColor(.accent1)
-                .frame(width: 96, height: 29)
+                .frame(width: 78, height: 29)
                 .background(.secondary4)
                 .cornerRadius(8)
             }
-            //역삼각형 합쳐서 말풍선 구현
-            InvertedTriangle()
-                .fill(Color.secondary4.opacity(0.3))
-                .frame(width: 18, height: 12)
-            
         }
-    }
-}
-struct InvertedTriangle: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-
-        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
-
-        return path
     }
 }
 
