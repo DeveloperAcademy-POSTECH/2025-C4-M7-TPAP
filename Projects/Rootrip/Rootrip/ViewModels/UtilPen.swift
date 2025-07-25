@@ -10,10 +10,6 @@ import Foundation
 import MapKit
 
 class UtilPen: ObservableObject {
-
-    // MARK: - Delegate (선택)
-    weak var delegate: UtilPenDelegate?
-
     // MARK: - InputType 정의
     enum InputType {
         case line(start: CLLocationCoordinate2D, end: CLLocationCoordinate2D)
@@ -40,6 +36,7 @@ class UtilPen: ObservableObject {
     }
 
     // MARK: - 지도 렌더링
+    // TODO: 데이터 저장 로직 구문 추가
     func showRoute(
         from start: CLLocationCoordinate2D,
         to end: CLLocationCoordinate2D,
@@ -65,14 +62,10 @@ class UtilPen: ObservableObject {
                 completion(nil)
                 return
             }
-            // 기존 오버레이 제거 (showRoute 중복표시 막기)
-            mapView.overlays.filter { $0 is MKPolyline }.forEach {
-                mapView.removeOverlay($0)
-            }
-
+            // 지도에 경로를 '그리는' 부분. 이거 삭제하면 그림 안뜸
             mapView.addOverlay(route.polyline)
 
-            // 중간 지점 계산
+            // 어노테이션을 띄울 중간 지점 계산
             let polylinePoints = route.polyline.points()
             let midPoint = polylinePoints[route.polyline.pointCount / 2]
                 .coordinate

@@ -41,6 +41,5 @@ struct CanvasView: UIViewControllerRepresentable {
         uiViewController.drawing = drawing
         uiViewController.isUtilPen = isUtilPen
         uiViewController.updatePenModeButtons()
-        print("[CanvasView] updateUIViewController: isUtilPen = \(isUtilPen)")
     }
 }
