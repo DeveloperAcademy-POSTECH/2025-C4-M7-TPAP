@@ -27,7 +27,6 @@ struct BookmarkView: View {
                         BookmarkCard(
                             details: bookmarkManager.mapDetails(for: bookmark.id ?? "")
                         )
-                        .environmentObject(bookmarkManager)
                         .padding(.horizontal, 22)
                         .padding(.vertical, 15)
                     }

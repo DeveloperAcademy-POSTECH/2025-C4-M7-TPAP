@@ -16,7 +16,8 @@ struct BookmarkCard: View {
         VStack(spacing: 20){
             ForEach(details, id: \.id) { detail in
                 Button(action: {
-                    bookmarkManager.toggleBookmark(detail)                }) {
+                    bookmarkManager.toggleBookmark(detail)
+                }) {
                     MapDetailitem(
                         detail: detail,
                         isSelected: bookmarkManager.selectedBookmarkID == detail.id
