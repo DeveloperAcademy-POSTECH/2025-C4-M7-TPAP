@@ -55,14 +55,18 @@ class BookmarkManager: ObservableObject {
         routeManager.zoomToRegion(containing: details.map { $0.coordinate })
     }
     
+    // MARK: - 선택 상태 초기화
+    func resetSelection() {
+        selectedBookmarkID = nil
+        routeManager?.mapView.removeAnnotations(routeManager?.mapView.annotations ?? [])
+    }
+    
     // MARK: - 단일 장소 토글
     func toggleBookmark(_ detail: MapDetail) {
         guard let routeManager = routeManager else { return }
-        let mapView = routeManager.mapView
 
         if selectedBookmarkID == detail.id {
-            selectedBookmarkID = nil
-            mapView.removeAnnotations(mapView.annotations)
+            resetSelection()
         } else {
             selectedBookmarkID = detail.id
             addAnnotations(for: [detail])
@@ -77,8 +81,7 @@ class BookmarkManager: ObservableObject {
         let details = mapDetails.filter { $0.planID == planID }
 
         if selectedBookmarkID == sectionID {
-            selectedBookmarkID = nil
-            routeManager?.mapView.removeAnnotations(routeManager?.mapView.annotations ?? [])
+            resetSelection()
         } else {
             selectedBookmarkID = sectionID
             addAnnotations(for: details)
