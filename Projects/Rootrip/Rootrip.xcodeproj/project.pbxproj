@@ -37,6 +37,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		70C0F47F2E27F624001B81C0 /* Rootrip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				92CF20922E30CECB00391427 /* Exceptions for "Rootrip" folder in "Rootrip" target */,
+			);
 			path = Rootrip;
 			sourceTree = "<group>";
 		};
@@ -290,6 +293,8 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JKP8H87ADM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Rootrip/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "이 앱은 현재 위치를 표시하기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -329,6 +334,8 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JKP8H87ADM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Rootrip/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "이 앱은 현재 위치를 표시하기 위해 위치 접근이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -288,9 +288,7 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
             canvasView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
-    
-    //MARK: 임시 툴바와 관련된 부분. 수정 필요
-    // 툴바 아이콘들
+
     private func setupToolbar() {
         toolbar.axis = .horizontal
         toolbar.alignment = .center
@@ -328,9 +326,9 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
             toolbar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
-    // 툴바 버튼의 실제 로직
-    @objc func undoTapped() { canvasView.undoManager?.undo() } //동작안함
-    @objc func redoTapped() { canvasView.undoManager?.redo() } //동작안함
+
+    @objc func undoTapped() { canvasView.undoManager?.undo() }
+    @objc func redoTapped() { canvasView.undoManager?.redo() }
     @objc func eraserTapped() { canvasView.tool = PKEraserTool(.vector) }
     @objc func colorChanged() {
         if let selected = colorPicker.selectedColor {
@@ -340,7 +338,7 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
             }
         }
     }
-    @objc func penTapped() { // 드로잉펜 모드
+    @objc func penTapped() {
         if isUtilPen {
             saveDrawing(canvasView.drawing)
             clearCanvas()
@@ -350,7 +348,7 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
         canvasView.tool = PKInkingTool(.pen, color: penColor, width: 5)
         onUtilPenToggled?(isUtilPen)
     }
-    @objc func utilPenToggled() { // 유틸펜 모드
+    @objc func utilPenToggled() {
         if !isUtilPen {
             saveDrawing(canvasView.drawing)
             clearCanvas()
@@ -359,20 +357,17 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
         updatePenModeButtons()
         onUtilPenToggled?(isUtilPen)
     }
-    func updatePenModeButtons() { // 버튼 디자인관련된 부분
+    func updatePenModeButtons() {
         penButton.tintColor = isUtilPen ? .systemGray : .systemBlue
         utilPenButton.tintColor = isUtilPen ? .systemBlue : .systemGray
     }
-    
-    // MARK: 여기부터는 필요하다. 지도상 표시와 관련된 부분
     func clearCanvas() {
         DispatchQueue.main.async {
             self.drawing = PKDrawing()
             self.canvasView.drawing = PKDrawing()
         }
     }
-    
-    // TODO: 더 섬세하게 영역을 잡아내기 위한 고군분투 필요..
+
     // 드로잉 중 겹치는 점이 있는가. 근데 직선이랑 구분이 안됨 대체왜그러는거임 나한테
 //    func hasOverlappingPoint(_ points: [CGPoint]) -> Bool {
 //        let threshold: CGFloat = 3
@@ -409,8 +404,7 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
             let mapPoint = mapView.convert(point, from: canvasView)
             return mapView.convert(mapPoint, toCoordinateFrom: mapView)
         }
-        
-        // 입력받고있는 좌표를 표시하는 디버깅 구문
+
         print("PKStroke 입력됨 (utilPen: \(isUtilPen)) ---")
         for (ptIdx, pt) in stroke.path.enumerated() {
             print("   [\(ptIdx)] x:\(pt.location.x), y:\(pt.location.y)")
@@ -441,7 +435,7 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
         }
     }
 
-    // MARK: overlay 데이터 저장 함수
+    
     func saveDrawing(_ drawing: PKDrawing) {
         /// 디버깅용 콘솔에 좌표찍기
         for (idx, stroke) in drawing.strokes.enumerated() {
