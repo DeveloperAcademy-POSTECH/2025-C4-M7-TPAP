@@ -6,17 +6,19 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct ProjectDetailView: View {
     let project: Project
+    @State private var currentProject: Project?
     @State private var invitationCode: String = ""
     @State private var isLoading = false
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text("이건 프로젝트 상세 화면이야!")
-            Text("projectTitle: \(project.title)")
-            Text("projectID: \(project.id ?? "N/A")")
+            Text("projectTitle: \(currentProject?.title ?? project.title)")
+            Text("projectID: \(currentProject?.id ?? project.id ?? "N/A")")
             
             // 초대코드 표시
             VStack {
@@ -35,6 +37,7 @@ struct ProjectDetailView: View {
         .padding()
         .onAppear {
             loadInvitationCode()
+            observeProjectChanges()
         }
     }
     
@@ -50,23 +53,40 @@ struct ProjectDetailView: View {
                 let inviteRepository = ProjectInvitationRepository()
                 let invitation = try await inviteRepository.createInvitation(for: projectID)
                 let code = invitation.id ?? ""
-                
-                // 🎯 콘솔에 초대코드 출력
-                print("🎫 초대코드: \(code)")
-                print("📋 프로젝트: \(project.title) (ID: \(projectID))")
-                
                 await MainActor.run {
                     self.invitationCode = code
                     self.isLoading = false
                 }
             } catch {
-                print("❌ 초대코드 로드 실패: \(error.localizedDescription)")
                 await MainActor.run {
                     self.invitationCode = "로드 실패"
                     self.isLoading = false
                 }
             }
         }
+    }
+    
+    /// Firestore 실시간 리스너
+    private func observeProjectChanges() {
+        guard let projectID = project.id else { return }
+        Firestore.firestore()
+            .collection("Rootrip")
+            .document(projectID)
+            .addSnapshotListener { snapshot, error in
+                if let error = error {
+                    print("❌ 실시간 프로젝트 업데이트 실패: \(error.localizedDescription)")
+                    return
+                }
+                guard let snapshot = snapshot else { return }
+                do {
+                    if let updatedProject = try snapshot.data(as: Project?.self) {
+                        self.currentProject = updatedProject
+                        print("🔄 실시간 업데이트: \(updatedProject.title)")
+                    }
+                } catch {
+                    print("❌ 프로젝트 변환 실패: \(error.localizedDescription)")
+                }
+            }
     }
 }
 //#Preview {

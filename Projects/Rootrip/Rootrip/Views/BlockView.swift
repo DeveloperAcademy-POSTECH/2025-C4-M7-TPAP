@@ -8,15 +8,17 @@ struct BlockView: View {
     
     @State private var navigateToProjectDetail = false
     @State private var projectToNavigate: Project? = nil
+    
     var body: some View {
         NavigationStack {
-            
             ZStack(alignment: .top) {
                 Color.mainbackground
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
                     ScrollView {
+                        Text("📦 projects.count = \(viewModel.projects.count)")
+                            .foregroundStyle(.red)
                         Spacer()
                             .frame(height: 70)
                         
@@ -54,19 +56,29 @@ struct BlockView: View {
                 
                 if isShowingCodeSheet {
                     InviteCodeInputView(isShowingCodeSheet: $isShowingCodeSheet)
+                        .environmentObject(viewModel)
                         .zIndex(1000)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden)
             .onAppear {
-                Task {
-                    await viewModel.fetchProjects()
-                }
+                Task { await viewModel.fetchProjects() }
+            }
+            .onChange(of: viewModel.newProjectForNavigation) { _, newValue in
+                guard let project = newValue else { return }
+                self.projectToNavigate = project
+                self.navigateToProjectDetail = true
             }
             .navigationDestination(isPresented: $navigateToProjectDetail) {
                 if let project = projectToNavigate {
                     ProjectDetailView(project: project)
+                        .onDisappear {
+                            // detail에서 뒤로가기 시 초기화
+                            viewModel.newProjectForNavigation = nil
+                            projectToNavigate = nil
+                            navigateToProjectDetail = false
+                        }
                 }
             }
         }

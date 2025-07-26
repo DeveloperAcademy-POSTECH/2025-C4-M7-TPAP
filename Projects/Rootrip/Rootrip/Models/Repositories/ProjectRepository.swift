@@ -33,6 +33,7 @@ final class ProjectRepository: ProjectRepositoryProtocol {
         tripType: TripType,
         startDate: Date,
         endDate: Date?,
+        userID: String
     ) async throws -> Project {
         /// if no 'endDate' though TripType == .overnightTrip
         guard !(tripType == .overnightTrip && endDate == nil) else {
@@ -48,7 +49,8 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             title: title_,
             tripType: tripType,
             startDate: startDate,
-            endDate: endDate
+            endDate: endDate,
+            memberIDs: [userID]
         )
                     
         let projectReference = try db.collection(projectsCollection)
@@ -89,13 +91,11 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             isDefault: true
         )
         
-        // 🎯 초대 코드 생성 (프로젝트당 하나만 생성되도록 보장)
+        // 초대 코드 생성 (프로젝트당 하나만 생성되도록 보장)
         do {
             let invitation = try await inviteRepository.createInvitation(for: projectID)
-            print("✅ 초대 코드 생성/확인 완료: \(invitation.id ?? "N/A") for project: \(projectID)")
         } catch {
             print("⚠️ 초대 코드 생성 실패: \(error.localizedDescription)")
-            // 초대 코드 생성 실패는 프로젝트 생성을 막지 않음
         }
         
         return newProject
@@ -139,7 +139,7 @@ final class ProjectRepository: ProjectRepositoryProtocol {
             try await doc.reference.delete()
         }
 
-        // 🎯 Delete Invitation Code (프로젝트 삭제 시 초대코드도 함께 삭제)
+        // Delete Invitation Code (프로젝트 삭제 시 초대코드도 함께 삭제)
         do {
             let invitationsSnapshot = try await db.collection("ProjectInvitations")
                 .whereField("projectID", isEqualTo: projectID)
@@ -162,29 +162,58 @@ final class ProjectRepository: ProjectRepositoryProtocol {
 
     }
     
-    func fetchAllProjects() async throws -> [Project] {
-        print("🔍 Firestore에서 프로젝트 불러오기 시작...")
-        
-        let snapshot = try await db.collection(projectsCollection).getDocuments()
-        print("🔍 Firestore 문서 개수: \(snapshot.documents.count)")
-        
+//    func fetchAllProjects() async throws -> [Project] {
+//        print("🔍 Firestore에서 프로젝트 불러오기 시작...")
+//        
+//        let snapshot = try await db.collection(projectsCollection).getDocuments()
+//        print("🔍 Firestore 문서 개수: \(snapshot.documents.count)")
+//        
+//        var projects: [Project] = []
+//        
+//        for document in snapshot.documents {
+//            do {
+//                print("📄 문서 ID: \(document.documentID)")
+//                print("📄 문서 데이터: \(document.data())")
+//                
+//                let project = try document.data(as: Project.self)
+//                projects.append(project)
+//                print("✅ 프로젝트 변환 성공: \(project.title)")
+//            } catch {
+//                print("❌ 문서 변환 실패 (ID: \(document.documentID)): \(error)")
+//                continue
+//            }
+//        }
+//        print("🔍 총 변환된 프로젝트 수: \(projects.count)")
+//        return projects
+//    }
+    
+    func fetchUserProjects(userID: String) async throws -> [Project] {
+        print("📡 fetchUserProjects 호출 - userID = \(userID)")
+        let snapshot = try await db.collection(projectsCollection)
+            .whereField("memberIDs", arrayContains: userID)
+            .getDocuments()
+        print("📡 fetchUserProjects Firestore 문서 개수 = \(snapshot.documents.count)")
+
         var projects: [Project] = []
-        
         for document in snapshot.documents {
             do {
-                print("📄 문서 ID: \(document.documentID)")
-                print("📄 문서 데이터: \(document.data())")
-                
                 let project = try document.data(as: Project.self)
+                print("  ✅ 가져온 프로젝트: \(project.title), ID: \(document.documentID)")
                 projects.append(project)
-                print("✅ 프로젝트 변환 성공: \(project.title)")
             } catch {
-                print("❌ 문서 변환 실패 (ID: \(document.documentID)): \(error)")
-                continue
+                print("  ❌ 변환 실패 (ID: \(document.documentID)) - \(error)")
             }
         }
-        
-        print("🔍 총 변환된 프로젝트 수: \(projects.count)")
         return projects
     }
+    
+    
+    func addMember(to projectID: String, userID: String) async throws {
+           let projectRef = db.collection(projectsCollection).document(projectID)
+           try await projectRef.updateData([
+               "memberIDs": FieldValue.arrayUnion([userID])
+           ])
+           print("✅ 사용자 추가 완료: \(userID) -> \(projectID)")
+       }
+    
 }

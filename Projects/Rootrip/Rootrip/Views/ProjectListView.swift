@@ -5,7 +5,7 @@ import SwiftUI
 
 // MARK: - ProjectListView
 struct ProjectListView: View {
-    let projects: [Project]
+    var projects: [Project]
     @Binding var selectedProjects: Set<String> // Firebase용 id는 String
     @Binding var isEditing: Bool
     
