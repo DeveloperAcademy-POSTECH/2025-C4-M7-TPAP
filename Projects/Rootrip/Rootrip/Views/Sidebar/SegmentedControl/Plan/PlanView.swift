@@ -93,3 +93,9 @@ struct PlanView: View {
         }
     }
 }
+
+//#Preview(traits: .landscapeLeft) {
+//    PlanView()
+//        .environmentObject(PlanManager())
+//        .environmentObject(LocationManager())
+//}
