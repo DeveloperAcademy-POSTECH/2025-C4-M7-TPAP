@@ -42,6 +42,9 @@
 			);
 				05E3D9682E31BE20003D72FB /* Exceptions for "Rootrip" folder in "Rootrip" target */,
 			);
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		70C0F47F2E27F624001B81C0 /* Rootrip */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Rootrip;
 			sourceTree = "<group>";
 		};
