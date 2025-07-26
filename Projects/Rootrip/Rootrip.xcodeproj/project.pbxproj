@@ -45,6 +45,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		70C0F47F2E27F624001B81C0 /* Rootrip */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				92CF20922E30CECB00391427 /* Exceptions for "Rootrip" folder in "Rootrip" target */,
+			);
 			path = Rootrip;
 			sourceTree = "<group>";
 		};
