@@ -27,7 +27,7 @@ struct YourApp: App {
     @StateObject var planManager = PlanManager()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LoginView()
                 .environmentObject(locationManager)
                 .environmentObject(planManager)
         }

@@ -8,9 +8,9 @@ struct CenterLocationButton: View {
         Button(action: {
             onTap()
         }) {
-            Image(systemName: "location.fill")
+            Image(systemName: "location")
                 .padding()
-                .background(Circle().fill(Color.white))
+                .background(Circle().fill(Color.primary1))
                 .shadow(radius: 4)
         }
         .padding()
