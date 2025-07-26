@@ -62,7 +62,7 @@ import SwiftUI
 //}
 struct PlanView: View {
     @EnvironmentObject var planManager: PlanManager
-    @EnvironmentObject var mapState: RouteManager
+    @EnvironmentObject var mapState: LocationManager
     
     let projectID: String
 

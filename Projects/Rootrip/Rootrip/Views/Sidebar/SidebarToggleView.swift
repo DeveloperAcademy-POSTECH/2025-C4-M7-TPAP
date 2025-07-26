@@ -33,5 +33,5 @@ struct SidebarToggleView: View {
 //#Preview(traits: .landscapeLeft) {
 //    SidebarToggleView()
 //        .environmentObject(PlanManager())
-//        .environmentObject(RouteManager())
+//        .environmentObject(LocationManager())
 //}
