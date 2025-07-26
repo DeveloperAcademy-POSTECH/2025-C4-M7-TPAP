@@ -11,21 +11,4 @@ struct ProjectInvitation: Identifiable, Codable {
         self.projectID = projectID
         self.createdAt = createdAt
     }
-
-   
-    func toDictionary() -> [String: Any] {
-        return [
-            "projectID": projectID,
-            "createdAt": Timestamp(date: createdAt)
-        ]
-    }
-
-    static func from(document: DocumentSnapshot) -> ProjectInvitation? {
-        guard let data = document.data(),
-              let projectID = data["projectID"] as? String,
-              let createdAt = (data["createdAt"] as? Timestamp)?.dateValue() else {
-            return nil
-        }
-        return ProjectInvitation(id: document.documentID, projectID: projectID, createdAt: createdAt)
-    }
 }

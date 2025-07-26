@@ -2,20 +2,26 @@ import SwiftUI
 
 // MainViewToolBar: 상단 툴바
 struct MainViewToolBar: View {
+    @EnvironmentObject var viewModel: BlockViewModel
     
     @State private var isShowingPopover:Bool = false
+    @State private var isShowingLogoutAlert = false
+    @State private var showDeleteAccountAlert = false
     @Binding var isEditing: Bool
     @Binding var selectedProjects: Set<String>
+    
+    let onProjectCreated: (Project) -> Void
+    
     
     var body: some View {
         GeometryReader { geometry in
             let screenWidth = UIScreen.main.bounds.width
-            let trailingPadding: CGFloat = screenWidth >= 1300 ? 20 : 60
+            let trailingPadding: CGFloat = screenWidth >= 1300 ? 20 : 70
             ZStack {
                 HStack {
                     Text("Rootrip")
                         .fontWeight(.bold)
-                        .foregroundColor(.white)
+                        .foregroundColor(.secondary4)
                 }
                 
                 // 2. 버튼들 (오른쪽 정렬)
@@ -38,17 +44,45 @@ struct MainViewToolBar: View {
                     .ignoresSafeArea(.container, edges: .top)
             )
         }
+        .overlay {
+            if isShowingLogoutAlert {
+                LogoutAlert(
+                    onCancel: {
+                        isShowingLogoutAlert = false
+                    },
+                    onConfirm: {
+                        isShowingLogoutAlert = false
+                        //TODO: 로그아웃 기능 추가
+                    }
+                )
+            } else if showDeleteAccountAlert {
+                DeleteAccountAlert (
+                    onCancel: {
+                        showDeleteAccountAlert = false
+                    },
+                    onConfirm: {
+                        showDeleteAccountAlert = false
+                        //TODO: 탈퇴 기능 추가
+                    }
+                )
+            }
+        }
     }
+    
+    
     // MARK: - 선택 모드 버튼
     private var editingButtons: some View {
         Group {
             Button {
-                isEditing = false
+                Task {
+                    await viewModel.deleteProjects(projectIDs: Array(selectedProjects))
+                    selectedProjects.removeAll()
+                    isEditing = false
+                }
             } label: {
-                Text("삭제")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.red)
-                    .bold()
+                Image(systemName: "trash")
+                    .font(.presemi20)
+                    .foregroundStyle(.secondary4)
             }
             .disabled(selectedProjects.isEmpty)
             .opacity(selectedProjects.isEmpty ? 0.5 : 1.0)
@@ -58,9 +92,8 @@ struct MainViewToolBar: View {
                 selectedProjects.removeAll()
             } label: {
                 Text("완료")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
-                    .bold()
+                    .font(.presemi20)
+                    .foregroundStyle(.secondary4)
             }
         }
     }
@@ -68,33 +101,45 @@ struct MainViewToolBar: View {
     // MARK: - 기본 모드 버튼
     private var normalButtons: some View {
         Group {
-            NavigationLink {
-                // TODO: Plan 생성 화면으로 이동
-                EmptyView()
+            Button {
+                Task {
+                    await viewModel.createNewProject()
+                    if let project = viewModel.newProjectForNavigation {
+                        onProjectCreated(project)
+                        viewModel.newProjectForNavigation = nil
+                    }
+                }
             } label: {
                 Image(systemName: "plus")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
+                    .font(.presemi20)
+                    .foregroundStyle(.secondary4)
             }
+            .buttonStyle(.plain)
             
             Button {
                 isEditing = true
                 selectedProjects.removeAll() //선택을 전부 해제
             } label: {
                 Text("선택")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
+                    .font(.presemi20)
+                    .foregroundStyle(.secondary4)
             }
+            .buttonStyle(.plain)
             
             Button {
                 isShowingPopover.toggle()
             } label: {
                 Circle()
                     .frame(width: 34, height: 34)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.secondary4)
             }
+            .buttonStyle(.plain)
             .popover(isPresented: $isShowingPopover, arrowEdge: .top) {
-                ProfilePopover()
+                ProfilePopover(
+                    isShowingLogoutAlert: $isShowingLogoutAlert,
+                    isShowingPopover: $isShowingPopover,
+                    showDeleteAccountAlert: $showDeleteAccountAlert
+                )
             }
         }
     }
@@ -104,10 +149,14 @@ struct MainViewToolBar: View {
 
 // MARK: - 프로필 팝오버 뷰
 struct ProfilePopover: View {
+    @Binding var isShowingLogoutAlert: Bool
+    @Binding var isShowingPopover: Bool
+    @Binding var showDeleteAccountAlert: Bool
     var body: some View {
         VStack {
             Button {
-                // TODO: 로그아웃 기능 추가
+                isShowingPopover = false
+                isShowingLogoutAlert = true
             } label: {
                 Text("로그아웃")
                     .foregroundStyle(.red)
@@ -120,7 +169,8 @@ struct ProfilePopover: View {
                 .padding(.horizontal, 12)
             
             Button {
-                // TODO: 탈퇴 기능 추가
+                isShowingPopover = false
+                showDeleteAccountAlert = true
             } label: {
                 Text("탈퇴하기")
                     .foregroundStyle(.gray)

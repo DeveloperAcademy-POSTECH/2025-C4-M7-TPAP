@@ -14,12 +14,12 @@ struct PenThicknessSlider: View {
     var body: some View {
         ZStack(alignment: .leading) {
             PencilBarShape()
-                .fill(Color.gray) //TODO: 색상수정필요
+                .fill(Color.secondary1) //TODO: 색상수정필요
                 .frame(width: trackWidth, height: trackHeight)
 
             Circle()
-                .stroke(Color.black, lineWidth: 2)
-                .background(Circle().fill(Color.white))
+                .stroke(Color.maintext, lineWidth: 1)
+                .background(Circle().fill(Color.secondary4))
                 .frame(width: handleSize, height: handleSize)
                 .offset(x: handleOffset(for: thickness))
                 .gesture(
