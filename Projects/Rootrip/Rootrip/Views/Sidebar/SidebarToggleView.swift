@@ -6,35 +6,23 @@
 //
 
 import SwiftUI
-//TODO: -MainViewToolbar에 해당 버튼 포함시켜야함
-///사이드바 위에 툴바가 올라오도록 한 화면입니다.(사이드바는 기본 열림 상태)
+
+// 사이드바 위에 툴바가 올라오도록 한 화면입니다.(사이드바는 기본 열림 상태)
 struct SidebarToggleView: View {
     @State private var showSidebar = true
     
     var body: some View {
         ZStack(alignment: .topLeading) {
+            MapCanvasToolPicker()
+                .padding(.top, 50)
             
-            if showSidebar {
-                SidebarView()
-            }
-            VStack(spacing: 0) {
-                HStack {
-                    Button(action: {
-                        withAnimation {
-                            showSidebar.toggle()
-                        }
-                    }) {
-                        Image(systemName: "sidebar.left")
-                            .foregroundColor(.secondary4)
-                            .padding()
-                    }
-                    Spacer()
-                }
-                //툴바 UI 확인상 넣어둠
-                .frame(height: 50)
-                .frame(maxWidth: .infinity)
-                .background(Color.primary1)
+            VStack(alignment: .leading, spacing: 0) {
+                MapCanvasToolBar(isSidebarOpen: $showSidebar)
                 
+                if showSidebar {
+                    SidebarView()
+                        .ignoresSafeArea(edges: .bottom)
+                }
                 Spacer()
             }
         }
