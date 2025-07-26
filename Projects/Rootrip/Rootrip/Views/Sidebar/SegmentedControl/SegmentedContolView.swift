@@ -62,5 +62,5 @@ struct SegmentedContolView: View {
 #Preview {
     SegmentedContolView()
         .environmentObject(PlanManager())
-        .environmentObject(RouteManager())
+        .environmentObject(LocationManager())
 }

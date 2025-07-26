@@ -23,12 +23,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct YourApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var routeManager = RouteManager()
+    @StateObject var locationManager = LocationManager()
     @StateObject var planManager = PlanManager()
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(routeManager)
+                .environmentObject(locationManager)
                 .environmentObject(planManager)
         }
     }

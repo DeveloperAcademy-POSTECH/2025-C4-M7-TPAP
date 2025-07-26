@@ -11,7 +11,7 @@ import MapKit
 struct PlaceListView: View {
     let mapDetails: [MapDetail]
     @Binding var selectedPlanID: String?
-    @EnvironmentObject var mapState: RouteManager
+    @EnvironmentObject var mapState: LocationManager
     @EnvironmentObject var planManager: PlanManager
 
     var body: some View {
