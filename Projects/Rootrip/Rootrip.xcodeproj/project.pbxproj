@@ -34,6 +34,9 @@
 				92CF20922E30CECB00391427 /* Exceptions for "Rootrip" folder in "Rootrip" target */,
 				05E3D9682E31BE20003D72FB /* Exceptions for "Rootrip" folder in "Rootrip" target */,
 			);
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		70C0F47F2E27F624001B81C0 /* Rootrip */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Rootrip;
 			sourceTree = "<group>";
 		};
@@ -287,8 +290,6 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JKP8H87ADM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Rootrip/Info.plist;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치를 표기하기 위해 위치 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -328,8 +329,6 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JKP8H87ADM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Rootrip/Info.plist;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치를 표기하기 위해 위치 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

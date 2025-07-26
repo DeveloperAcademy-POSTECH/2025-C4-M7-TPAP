@@ -3,7 +3,8 @@ import UIKit
 import MapKit
 import CoreLocation
 
-
+// MARK: - MapCoordinator
+/// MKMapViewDelegate 구현 및 사용자 중심 초기화 상태 관리를 담당하는 Coordinator
 class MapCoordinator: NSObject, MKMapViewDelegate {
     var hasCenteredOnUser = false
     var parent: MapView?
@@ -13,7 +14,11 @@ class MapCoordinator: NSObject, MKMapViewDelegate {
         self.parent = parent
         self.viewModel = viewModel
     }
-
+    // MARK: - POI 어노테이션 선택 처리
+    
+    /// 어노테이션 뷰가 선택되었을 때 호출됩니다.
+    /// - 인커밍: 선택된 POIAnnotation
+    /// - 아웃고잉: CustomPOIDetailViewController를 팝오버로 표시
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let POIAnnotation = view.annotation as? POIAnnotation {
             let mapItem = POIAnnotation.mapItem
@@ -30,7 +35,11 @@ class MapCoordinator: NSObject, MKMapViewDelegate {
             }
         }
     }
-
+    // MARK: - 지도 영역 변경 처리
+    
+    /// 지도 영역이 변경될 때 호출되어 어노테이션을 다시 추가하고 POI를 재검색합니다.
+    /// - 인커밍: `mapView.region`
+    /// - 아웃고잉: `viewModel.searchCommonPOIs(in:)` 호출, 이후 어노테이션 배열 순회하여 추가
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         mapView.removeAnnotations(mapView.annotations)
         viewModel.searchCommonPOIs(in: mapView.region)
