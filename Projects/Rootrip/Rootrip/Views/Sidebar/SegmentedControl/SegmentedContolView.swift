@@ -9,7 +9,7 @@ import SwiftUI
 /// 상단 탭(일정, 보관함, 참여자)을 선택할 수 있는 세그먼트 뷰입니다.
 /// 선택된 탭에 따라 하위 콘텐츠 뷰가 전환됩니다.
 struct SegmentedContolView: View {
-    @State private var selectedIndex = 0
+    @Binding var selectedIndex: Int
     @Namespace private var animation
     private let segments = ["일정", "보관함", "참여자"]
 
@@ -51,17 +51,10 @@ struct SegmentedContolView: View {
         Group {
             switch selectedIndex {
             case 0: PlanView()
-            case 1: EmptyView()// TODO: 북마크 뷰 구현 예정
+            case 1: BookmarkView()// TODO: 북마크 뷰 구현 예정
             case 2: EmptyView()// TODO: 참여자 뷰 구현 예정
             default: EmptyView()
             }
         }
     }
-}
-
-
-#Preview {
-    SegmentedContolView()
-        .environmentObject(PlanManager())
-        .environmentObject(RouteManager())
 }

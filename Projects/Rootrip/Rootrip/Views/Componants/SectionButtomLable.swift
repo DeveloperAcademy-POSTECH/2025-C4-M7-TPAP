@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+///섹션버튼 Modifier
 struct SectionButtomLable: ViewModifier {
     let isSelected: Bool
 
@@ -16,9 +16,14 @@ struct SectionButtomLable: ViewModifier {
             .foregroundColor(isSelected ? .accent1 : .secondary2)
             .padding(.horizontal, 8)
             .frame(height: 45)
-            .background(Color.secondary4)
+            .background(Color.secondary5)
             .clipShape(RoundedRectangle(cornerRadius: 32))
-            .shadow(radius: 4)
+            .overlay(
+                    RoundedRectangle(cornerRadius: 32)
+                       .stroke(Color.white, lineWidth: 1)
+                    )
+            .shadow(color: Color.maintext.opacity(0.25), radius: 4)
+      
     }
 }
 extension View {

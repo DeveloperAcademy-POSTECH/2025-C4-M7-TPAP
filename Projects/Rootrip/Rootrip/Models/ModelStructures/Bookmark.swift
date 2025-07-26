@@ -21,3 +21,12 @@ struct Bookmark: Identifiable, Codable {
         self.isDefault = isDefault
     }
 }
+//테스트용
+extension Bookmark {
+    init(id: String?, projectID: String, title: String, isDefault: Bool = false) {
+        self.id = id
+        self.projectID = projectID
+        self.title = title
+        self.isDefault = isDefault
+    }
+}

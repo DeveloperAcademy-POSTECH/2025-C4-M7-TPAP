@@ -34,6 +34,7 @@ struct LoginView: View {
             MainView()
                 .environmentObject(PlanManager())
                 .environmentObject(RouteManager())
+                .environmentObject(BookmarkManager())
         }
     }
 }
