@@ -11,7 +11,7 @@ import MapKit
 
 struct PlanView: View {
     @EnvironmentObject var planManager: PlanManager
-    @EnvironmentObject var mapState: RouteManager
+    @EnvironmentObject var mapState: LocationManager
     
     @State private var selectedPlaceID: String? = nil
     var body: some View {
@@ -55,8 +55,8 @@ struct PlanView: View {
     }
 }
 
-#Preview(traits: .landscapeLeft) {
-    PlanView()
-        .environmentObject(PlanManager())
-        .environmentObject(RouteManager())
-}
+//#Preview(traits: .landscapeLeft) {
+//    PlanView()
+//        .environmentObject(PlanManager())
+//        .environmentObject(LocationManager())
+//}

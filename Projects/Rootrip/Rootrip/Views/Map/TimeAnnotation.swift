@@ -37,6 +37,6 @@ struct TimeAnnotation: View {
     }
 }
 
-#Preview {
-    TimeAnnotation(timeText: "2m")
-}
+//#Preview {
+//    TimeAnnotation(timeText: "2m")
+//}

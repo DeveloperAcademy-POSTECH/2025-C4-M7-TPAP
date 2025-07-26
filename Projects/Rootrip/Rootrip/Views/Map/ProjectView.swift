@@ -10,25 +10,38 @@ import MapKit
 import CoreLocation
 
 struct ProjectView: View {
-    @StateObject private var mapState = RouteManager()
+    @StateObject private var mapState = LocationManager()
+    @State private var shouldCenterOnUser = false
+    @StateObject private var viewModel = MapViewModel()
     
     // MARK: - Body
     var body: some View {
         ZStack {
-            /// 지도
-            RouteMapRepresentable(mapState: mapState)
-            // 사이드바 버튼 오버레이(추가함!)
-            SidebarToggleView().environmentObject(mapState)
+            ZStack {
+                /// 지도
+                MapView(viewModel: viewModel, shouldCenterOnUser: $shouldCenterOnUser)
+                // 사이드바 버튼 오버레이(추가함!)
+                SidebarToggleView().environmentObject(mapState)
+            }
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    CenterLocationButton {
+                        shouldCenterOnUser = true
+                    }
+                    .padding()
+                }
+            }
         }
         .edgesIgnoringSafeArea(.all)
     }
+    
 }
 
 
-
-#Preview(traits: .landscapeLeft) {
-    ProjectView()
-        .environmentObject(RouteManager())
-        .environmentObject(PlanManager())
-        .environmentObject(BookmarkManager())
-}
+//#Preview(traits: .landscapeLeft) {
+//    ProjectView()
+//        .environmentObject(LocationManager())
+//        .environmentObject(PlanManager())
+//}
