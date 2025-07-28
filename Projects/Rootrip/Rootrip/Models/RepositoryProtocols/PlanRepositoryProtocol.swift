@@ -14,6 +14,8 @@ protocol PlanRepositoryProtocol {
     func addMapDetail(projectID: String, plan: Plan) async throws
     func addStrokeData(projectID: String, planID: String) async throws
     
+    /// read 'plans' data from firestore
+    func loadPlan(projectID: String) async throws -> [Plan]
     /// modify MapDetails order and Plan title change
     func updatePlan(projectID: String, plan: Plan) async throws
     
