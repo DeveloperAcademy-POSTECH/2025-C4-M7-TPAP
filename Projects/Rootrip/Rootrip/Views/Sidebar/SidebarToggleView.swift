@@ -11,19 +11,36 @@ import SwiftUI
 struct SidebarToggleView: View {
     let project: Project
     @State private var showSidebar = true
-    
+    @State private var searchText = ""
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             MapCanvasToolPicker()
                 .padding(.top, 50)
             
+            /// 사이드바
             VStack(alignment: .leading, spacing: 0) {
-                MapCanvasToolBar(project:project, isSidebarOpen: $showSidebar)
-                
-                if showSidebar {
-                    SidebarView(projectID: project.id!)
-                        .ignoresSafeArea(edges: .bottom)
+                MapCanvasToolBar(project: project, isSidebarOpen: $showSidebar)
+
+                HStack {
+                    if showSidebar {
+                        SidebarView(projectID: project.id!)
+                            .ignoresSafeArea(edges: .bottom)
+                    }
+                    Spacer()
                 }
+            }
+            
+            /// 검색창
+            VStack(){
+                HStack {
+                    Spacer()
+                    searchBar(text: $searchText) {
+                        print("검색 실행: \(searchText)")
+                    }
+                    .padding(.trailing, 20)
+                }
+                .padding(.top, 120) // 최상단에서 숫자만큼 아래에 위치하도록(하드코딩,,)
                 Spacer()
             }
         }
