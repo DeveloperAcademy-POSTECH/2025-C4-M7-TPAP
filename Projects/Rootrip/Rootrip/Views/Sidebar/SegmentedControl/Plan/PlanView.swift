@@ -13,24 +13,26 @@ struct PlanView: View {
     @EnvironmentObject var planManager: PlanManager
     @EnvironmentObject var mapState: RouteManager
     
+    @State private var selectedPlaceID: String? = nil
     var body: some View {
         
         ScrollView {
             VStack(alignment: .leading) {
-                ForEach(planManager.plans, id: \.id) { plan in
+                ForEach(Array(planManager.plans.enumerated()), id: \.element.id) { index, plan in
                     VStack(alignment: .leading) {
                         // MARK: - 섹션별 Plan 버튼
                         PlanButton(plan: plan)
                             .environmentObject(planManager)
                             .environmentObject(mapState)
-                            .padding(.leading, 16)
-                            .padding(.vertical, 3)
+                            .padding(.leading, 22)
+                            
                         
                         // MARK: - 장소 목록
-                        PlaceListView(
-                            mapDetails: planManager.mapDetails(for: plan.id ?? ""),
-                            selectedPlanID: $planManager.selectedPlanID
+                        PlanCard(
+                            mapDetails: planManager.mapDetails(for: plan.id ?? "")
                         )
+                        .padding(.horizontal, 22)
+                            .padding(.vertical, 15)
                     }
                 }
 //                // MARK: - 섹션추가버튼
