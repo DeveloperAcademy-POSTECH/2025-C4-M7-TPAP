@@ -41,9 +41,9 @@ class PlanManager: ObservableObject {
             self.plans = fetched
             self.mapDetails = []
             for plan in fetched {
-                let details = try await mapDetailRepository.loadMapDetails(
+                let details = try await mapDetailRepository.loadMapDetailsFromPlan(
                     projectID: projectID,
-                    planID: plan.id ?? ""
+                    containerID: plan.id ?? ""
                 )
                 self.mapDetails.append(contentsOf: details)
             }

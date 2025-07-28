@@ -14,6 +14,8 @@ struct BookmarkView: View {
     
     let projectID: String
 
+    let projectID: String
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -38,6 +40,11 @@ struct BookmarkView: View {
                     }
                 }
                 Spacer()
+            }
+            .onAppear {
+                Task {
+                    await bookmarkManager.loadBookmarks(for: projectID)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, 8)

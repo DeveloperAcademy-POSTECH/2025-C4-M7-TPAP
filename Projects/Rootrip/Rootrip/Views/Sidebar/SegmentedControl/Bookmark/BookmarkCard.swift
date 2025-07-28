@@ -38,16 +38,18 @@ struct BookmarkCard: View {
     let projectID: String
     let bookmarkID: String
 
-    @State private var details: [MapDetail] = []
+    @State private var mapDetails: [MapDetail] = []
     @State private var isLoading = true
     @EnvironmentObject var bookmarkManager: BookmarkManager
 
     var body: some View {
-        VStack(spacing: 20){
+        VStack(spacing: 20) {
             if isLoading {
                 ProgressView("북마크 불러오는 중...")
             } else {
-                ForEach(details, id: \.id) { detail in
+                ForEach(mapDetails, id: \.id) { detail in
+                    let isSelected = bookmarkManager.selectedBookmarkID == detail.id
+
                     Button(action: {
                         bookmarkManager.toggleBookmark(detail)
                     }) {
@@ -55,7 +57,8 @@ struct BookmarkCard: View {
                             Text("위도: \(detail.latitude), 경도: \(detail.longitude)")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
-                            if bookmarkManager.selectedBookmarkID == detail.id {
+
+                            if isSelected {
                                 Text("선택됨")
                                     .font(.caption)
                                     .foregroundColor(.green)
@@ -83,11 +86,14 @@ struct BookmarkCard: View {
     @MainActor
     private func loadBookmarkDetails() async {
         do {
-            let repository = BookmarkRepository()
-            self.details = try await repository.loadBookmark(projectID: projectID, bookmarkID: bookmarkID)
+            let repository = MapDetailRepository()
+            self.mapDetails = try await repository.loadMapDetailsFromBook(
+                projectID: projectID,
+                containerID: bookmarkID
+            )
             self.isLoading = false
         } catch {
-            print("❌ BookmarkCard - details 로딩 실패: \(error.localizedDescription)")
+            print("BookmarkCard Error - details 로딩 실패: \(error.localizedDescription)")
         }
     }
 }

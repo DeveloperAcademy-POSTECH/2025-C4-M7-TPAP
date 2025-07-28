@@ -9,12 +9,17 @@ import Foundation
 
 protocol MapDetailRepositoryProtocol {
     /// convert coordinates into MKMapItem
-    func loadMapDetails(projectID: String, planID: String) async throws -> [MapDetail]
+    func loadMapDetailsFromPlan(projectID: String, containerID: String) async throws -> [MapDetail]
+    func loadMapDetailsFromBook(projectID: String, containerID: String) async throws -> [MapDetail]
+    
+    /// add new POI into plan/bookmark
+    func addMapDetailToPlan(projectID: String, planID: String, detail: MapDetail) async throws
+    func addMapDetailToBook(projectID: String, bookmarkID: String, detail: MapDetail) async throws
     
     /// add new POI into plan/bookmark
     func addMapDetailToPlan(projectID: String, planID: String, detail: MapDetail) async throws
     func addMapDetailToBook(projectID: String, bookmarkID: String, detail: MapDetail) async throws
     
     /// delete POI from plan/bookmark
-    func deleteMapDetail(projectID: String, planID: String, mapDetailID: String)async throws
+    func deleteMapDetail(projectID: String, containerID: String, mapDetailID: String)async throws
 }
