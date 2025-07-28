@@ -57,9 +57,9 @@ struct SidebarView: View {
 }
 
 
-//#Preview(traits: .landscapeLeft) {
-//    SidebarView()
-//        .environmentObject(PlanManager())
-//        .environmentObject(RouteManager())
-//        .environmentObject(BookmarkManager())
-//}
+#Preview(traits: .landscapeLeft) {
+    SidebarView()
+        .environmentObject(PlanManager())
+        .environmentObject(LocationManager())
+        .environmentObject(BookmarkManager())
+}

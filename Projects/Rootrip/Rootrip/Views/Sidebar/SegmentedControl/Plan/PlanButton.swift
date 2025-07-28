@@ -12,7 +12,7 @@ import MapKit
 /// 버튼을 누르면 해당 섹션의 장소들을 지도에 표시하고, 경로를 보여줍니다.
 struct PlanButton: View {
     /// 지도 관련 기능을 제공하는 객체입니다.
-    @EnvironmentObject var routeManager: RouteManager
+    @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var planManager: PlanManager
     var plan: Plan
     
@@ -30,7 +30,7 @@ struct PlanButton: View {
                 .sectionButtonLable(isSelected: planManager.selectedPlanID == plan.id)
                     }
         .onAppear {
-            planManager.configure(with: routeManager)
+            planManager.configure(with: locationManager)
         }
     }
 }

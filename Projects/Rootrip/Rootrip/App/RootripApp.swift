@@ -23,13 +23,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct YourApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var routeManager = RouteManager()
+    @StateObject var locationManager = LocationManager()
     @StateObject var planManager = PlanManager()
     @StateObject var bookmarkManager = BookmarkManager()
     var body: some Scene {
         WindowGroup {
             LoginView()
-                .environmentObject(routeManager)
+                .environmentObject(locationManager)
                 .environmentObject(planManager)
                 .environmentObject(bookmarkManager)
         }

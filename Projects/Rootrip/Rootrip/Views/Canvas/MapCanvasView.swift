@@ -9,14 +9,18 @@ import MapKit
 import PencilKit
 
 struct MapCanvasView: View {
+    @ObservedObject var viewModel: MapViewModel
+    @Binding var shouldCenterOnUser: Bool
+    
     @State private var isCanvasActive = false
     @State private var mapView = MKMapView()
     @State private var drawing = PKDrawing()
     @State private var isUtilPen = false
 
+
     var body: some View {
         ZStack {
-            MapView(mapView: $mapView)
+            MapView(viewModel: viewModel, shouldCenterOnUser: $shouldCenterOnUser)
                 .ignoresSafeArea()
 
             if isCanvasActive {
@@ -30,7 +34,6 @@ struct MapCanvasView: View {
             }
         }
         .overlay(
-            // TODO: 임시 입력변환 버튼
             Button(action: {
                 if isCanvasActive {
                     drawing = PKDrawing()
@@ -70,7 +73,7 @@ class MapDelegate: NSObject, MKMapViewDelegate {
     }
 }
 
-// TODO: Drawing Pen에게 색 할당(RGB)
+// Drawing Pen이 색을 유지할 수 있게
 extension UIColor {
     convenience init?(hexString: String) {
         var cString = hexString.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
