@@ -12,8 +12,11 @@ import MapKit
 class BookmarkManager: ObservableObject {
     @Published var selectedBookmarkID: String? = nil
     //TODO: -샘플 훗날제고
-    @Published var bookmarks: [Bookmark] = sampleBookMarks
-    @Published var mapDetails: [MapDetail] = sampleMapDetails
+//    @Published var bookmarks: [Bookmark] = sampleBookMarks
+//    @Published var mapDetails: [MapDetail] = sampleMapDetails
+    
+    @Published var bookmarks: [Bookmark] = []
+    @Published var mapDetails: [MapDetail] = []
 
     private var routeManager: RouteManager?
     
@@ -47,7 +50,6 @@ class BookmarkManager: ObservableObject {
         let annotations = details.map {
             let a = MKPointAnnotation()
             a.coordinate = $0.coordinate
-            a.title = $0.name
             return a
         }
 

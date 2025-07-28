@@ -21,7 +21,7 @@ struct SidebarToggleView: View {
                 MapCanvasToolBar(project:project, isSidebarOpen: $showSidebar)
                 
                 if showSidebar {
-                    SidebarView()
+                    SidebarView(projectID: project.id!)
                         .ignoresSafeArea(edges: .bottom)
                 }
                 Spacer()
