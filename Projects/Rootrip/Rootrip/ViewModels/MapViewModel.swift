@@ -52,15 +52,14 @@ class MapViewModel: ObservableObject {
     ///   - 인커밍: 각각의 키워드에 대해 검색된 `[MKMapItem]`을 POIAnnotation으로 변환
     /// - Parameter region: 검색을 제한할 지도 영역
     func searchCommonPOIs(in region: MKCoordinateRegion) {
-        let keywords = ["restaurant", "food", "hospital", "school", "bank",
-                        "shopping", "hotel", "park", "cafe", "bakery"]
+        let keywords = ["restaurant", "food", "cafe", "bakery"]
         
         for (index, keyword) in keywords.enumerated() {
             let delay = DispatchTime.now() + .milliseconds(index * 300)
             DispatchQueue.main.asyncAfter(deadline: delay) {
                 self.searchPOIs(keyword: keyword, in: region) { items in
                     // MKMapItem을 POIAnnotation으로 변환
-                    let newAnnotations = items.map { POIAnnotation(mapItem: $0) }
+                    let newAnnotations = items.map { POIAnnotation(mapItem: $0, keyword: keyword) }
                     DispatchQueue.main.async {
                         // 어노테이션 배열에 추가
                         self.poiAnnotations.append(contentsOf: newAnnotations)

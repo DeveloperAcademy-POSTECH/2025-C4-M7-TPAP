@@ -67,6 +67,35 @@ class MapCoordinator: NSObject, MKMapViewDelegate {
             return nil
         }
         
+        
+        // Handle custom POIAnnotation with keyword-based styling
+        if let poiAnnotation = annotation as? POIAnnotation {
+            let identifier = "POIAnnotationView"
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKAnnotationView
+
+            if annotationView == nil {
+                annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                annotationView?.canShowCallout = true
+            } else {
+                annotationView?.annotation = annotation
+            }
+
+            // Apply color based on keyword
+            switch poiAnnotation.keyword {
+            case "restaurant", "food":
+                annotationView?.image = UIImage(named: "PropertyRestaurant")?.withRenderingMode(.alwaysOriginal)
+//                annotationView?.glyphText = nil
+            case "cafe", "bakery":
+                annotationView?.image = UIImage(named: "PropertyCafe")?.withRenderingMode(.alwaysOriginal)
+//                annotationView?.glyphText = nil
+            default:
+                annotationView?.image = UIImage(systemName: "star.fill")
+                annotationView?.tintColor = .gray
+            }
+            return annotationView
+        }
+
+        
         let identifier = "WalkingTimeAnnotation"
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
         
