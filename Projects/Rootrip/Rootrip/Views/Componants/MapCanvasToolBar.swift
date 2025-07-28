@@ -66,8 +66,7 @@ struct MapCanvasToolBar: View {
                     }
                         .padding(.trailing, 30)
                 }
-                .foregroundStyle(.white)
-                
+                .foregroundStyle(.secondary4)
             }
             .frame(height: 50) // 툴바 콘텐츠의 높이 지정
             .background(
@@ -75,7 +74,24 @@ struct MapCanvasToolBar: View {
                     .ignoresSafeArea(.container, edges: .top)
             )
             
-            
+            ZStack {
+                HStack{
+                    Spacer()
+                    //커스텀 슬라이더 여기로 와야함
+                    Slider(value: .constant(0.5), in: 0...1)
+                        .frame(width: 100)
+                    
+                    Image(systemName: "eraser")
+                    Image(systemName: "pencil.circle.fill")
+                    Image(systemName: "pencil.tip.crop.circle.fill")
+                    Image(systemName: "paintpalette")
+                        .padding(.trailing, 50)
+                }
+            }
+            .frame(height: 50) // 툴바 콘텐츠의 높이 지정
+            .background(
+                Color.secondary4
+            )
         }
     }
 }

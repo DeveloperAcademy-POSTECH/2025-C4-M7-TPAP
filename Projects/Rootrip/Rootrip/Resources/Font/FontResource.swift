@@ -65,6 +65,10 @@ extension Font {
         return .pre(type: .semibold, size: 12)
     }
     
+    static var prereg14: Font {
+        return .pre(type: .regular, size: 14)
+    }
+    
     //MARK: 영어,숫자
     enum Drau {
         case regular

@@ -30,8 +30,7 @@ struct LoginView: View {
             .ignoresSafeArea(.all)
         }
         else{
-            //TODO: - 메인뷰 이름 변경(엘라)
-            MainView()
+            BlockView()
                 .environmentObject(PlanManager())
                 .environmentObject(RouteManager())
                 .environmentObject(BookmarkManager())

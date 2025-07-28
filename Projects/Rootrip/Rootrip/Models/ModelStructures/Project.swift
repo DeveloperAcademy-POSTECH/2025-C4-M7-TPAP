@@ -13,7 +13,7 @@ enum TripType: String, Codable, CaseIterable {
     case overnightTrip
 }
 
-struct Project: Identifiable, Codable {
+struct Project: Identifiable, Codable, Equatable {
     @DocumentID var id: String?
     var title: String
     var createdDate: Date

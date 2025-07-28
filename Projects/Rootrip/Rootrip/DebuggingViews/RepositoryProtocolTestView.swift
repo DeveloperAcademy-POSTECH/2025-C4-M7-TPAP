@@ -23,6 +23,9 @@ struct RepositoryProtocolTestView: View {
     let repository2: PlanRepository
     let repository3: BookmarkRepository
     let db = Firestore.firestore()
+    
+    // 추가: 테스트용 유저 ID
+      let userID = "testUser123"
 
     var body: some View {
         NavigationView {
@@ -56,8 +59,9 @@ struct RepositoryProtocolTestView: View {
                                     title: title.isEmpty ? nil : title,
                                     tripType: tripType,
                                     startDate: startDate,
-                                    endDate: includeEndDate ? endDate : nil
-                                ) { _ in }
+                                    endDate: includeEndDate ? endDate : nil,
+                                    userID: userID
+                                )
                             } catch {
                                 errorMessage = error.localizedDescription
                             }
