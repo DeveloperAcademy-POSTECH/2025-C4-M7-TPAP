@@ -9,12 +9,14 @@ import MapKit
 import PencilKit
 
 struct MapCanvasView: View {
+    @ObservedObject var viewModel: MapViewModel
+    @Binding var shouldCenterOnUser: Bool
+    
     @State private var isCanvasActive = false
     @State private var mapView = MKMapView()
     @State private var drawing = PKDrawing()
     @State private var isUtilPen = false
-    @State private var shouldCenterOnUser = false
-    @StateObject private var viewModel = MapViewModel()
+
 
     var body: some View {
         ZStack {

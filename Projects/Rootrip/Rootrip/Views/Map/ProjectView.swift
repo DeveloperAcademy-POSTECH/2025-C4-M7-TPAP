@@ -19,7 +19,7 @@ struct ProjectView: View {
         ZStack {
             ZStack {
                 /// 지도
-                MapView(viewModel: viewModel, shouldCenterOnUser: $shouldCenterOnUser)
+                MapCanvasView(viewModel: viewModel, shouldCenterOnUser: $shouldCenterOnUser)
                 // 사이드바 버튼 오버레이(추가함!)
                 SidebarToggleView().environmentObject(mapState)
             }
