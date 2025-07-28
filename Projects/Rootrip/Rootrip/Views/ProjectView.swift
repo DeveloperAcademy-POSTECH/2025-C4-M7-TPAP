@@ -11,16 +11,22 @@ import SwiftUI
 
 struct ProjectView: View {
     let project: Project
-    @StateObject private var mapState = RouteManager()
-
+    @StateObject private var mapState = LocationManager()
+    @StateObject private var viewModel = MapViewModel()
+    
     @EnvironmentObject var planManager: PlanManager
 
     @State private var hasLoadedPlans = false
+    @State private var shouldCenterOnUser = false
+    
 
     // MARK: - Body
     var body: some View {
         ZStack {
-            MapCanvasView()
+            MapCanvasView(
+                viewModel: viewModel,
+                shouldCenterOnUser: $shouldCenterOnUser
+            )
 
             // 사이드바 버튼 오버레이(추가함!)
             SidebarToggleView(project: project).environmentObject(mapState)
@@ -36,7 +42,7 @@ struct ProjectView: View {
             }
         }
 
-        .edgesIgnoringSafeArea(.all)
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 

@@ -60,9 +60,9 @@ struct SegmentedContolView: View {
     }
 }
 
-
-#Preview {
-    SegmentedContolView()
-        .environmentObject(PlanManager())
-        .environmentObject(LocationManager())
-}
+//
+//#Preview {
+//    SegmentedContolView()
+//        .environmentObject(PlanManager())
+//        .environmentObject(LocationManager())
+//}

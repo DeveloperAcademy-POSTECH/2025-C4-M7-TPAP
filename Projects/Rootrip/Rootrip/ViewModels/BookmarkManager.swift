@@ -15,11 +15,11 @@ class BookmarkManager: ObservableObject {
     @Published var mapDetails: [MapDetail] = []
     @Published var selectedBookmarkID: String? = nil
 
-    private var routeManager: RouteManager?
+    private var locationManager: LocationManager?
     private let repository = BookmarkRepository()
 
-    func configure(with routeManager: RouteManager) {
-        self.routeManager = routeManager
+    func configure(with locationManager: LocationManager) {
+        self.locationManager = locationManager
     }
 
     func loadBookmarks(for projectID: String) async {
@@ -68,7 +68,7 @@ class BookmarkManager: ObservableObject {
 
     // 단일 선택
     func toggleBookmark(_ detail: MapDetail) {
-        guard let routeManager = routeManager else { return }
+        guard let locationManager = locationManager else { return }
 
         if selectedBookmarkID == detail.id {
             resetSelection()
@@ -94,9 +94,9 @@ class BookmarkManager: ObservableObject {
 
     // annotation 표시
     private func addAnnotations(for details: [MapDetail]) {
-        guard let routeManager = routeManager else { return }
+        guard let locationManager = locationManager else { return }
 
-        let mapView = routeManager.mapView
+        let mapView = locationManager.mapView
         mapView.removeAnnotations(mapView.annotations)
 
         let annotations = details.map {
@@ -106,13 +106,13 @@ class BookmarkManager: ObservableObject {
         }
 
         mapView.addAnnotations(annotations)
-        routeManager.zoomToRegion(containing: details.map { $0.coordinate })
+        locationManager.zoomToRegion(containing: details.map { $0.coordinate })
     }
 
     func resetSelection() {
         selectedBookmarkID = nil
-        routeManager?.mapView.removeAnnotations(
-            routeManager?.mapView.annotations ?? []
+        locationManager?.mapView.removeAnnotations(
+            locationManager?.mapView.annotations ?? []
         )
     }
 }

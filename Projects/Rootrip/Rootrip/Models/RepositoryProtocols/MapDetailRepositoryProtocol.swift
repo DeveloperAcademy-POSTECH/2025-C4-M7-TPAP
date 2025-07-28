@@ -16,10 +16,6 @@ protocol MapDetailRepositoryProtocol {
     func addMapDetailToPlan(projectID: String, planID: String, detail: MapDetail) async throws
     func addMapDetailToBook(projectID: String, bookmarkID: String, detail: MapDetail) async throws
     
-    /// add new POI into plan/bookmark
-    func addMapDetailToPlan(projectID: String, planID: String, detail: MapDetail) async throws
-    func addMapDetailToBook(projectID: String, bookmarkID: String, detail: MapDetail) async throws
-    
     /// delete POI from plan/bookmark
     func deleteMapDetail(projectID: String, containerID: String, mapDetailID: String)async throws
 }
