@@ -7,11 +7,12 @@ class POIAnnotation: NSObject, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
     let title: String?
     let mapItem: MKMapItem
+    let keyword: String  // NEW: Store the keyword used for this annotation
 
-    init(mapItem: MKMapItem) {
+    init(mapItem: MKMapItem, keyword: String) {
         self.coordinate = mapItem.placemark.coordinate
         self.title = mapItem.name
         self.mapItem = mapItem
+        self.keyword = keyword  // NEW: Save keyword
     }
 }
-
