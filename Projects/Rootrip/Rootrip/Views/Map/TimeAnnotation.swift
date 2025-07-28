@@ -40,3 +40,11 @@ struct TimeAnnotation: View {
 //#Preview {
 //    TimeAnnotation(timeText: "2m")
 //}
+
+        return path
+    }
+}
+
+//#Preview {
+//    TimeAnnotation(timeText: "2m")
+//}
