@@ -11,8 +11,8 @@ import CoreLocation
 
 struct WriteMapDetailView: View {
     enum TargetType: String, CaseIterable, Identifiable {
-        case plan = "플랜"
         case bookmark = "북마크"
+        case plan = "플랜"
         var id: String { rawValue }
     }
 

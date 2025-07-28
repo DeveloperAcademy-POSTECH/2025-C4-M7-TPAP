@@ -11,6 +11,8 @@ import SwiftUI
 struct BookmarkView: View {
     @EnvironmentObject var bookmarkManager: BookmarkManager
     @EnvironmentObject var mapState: RouteManager
+    
+    let projectID: String
 
     let projectID: String
 
