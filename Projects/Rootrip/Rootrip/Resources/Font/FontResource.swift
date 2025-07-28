@@ -91,4 +91,27 @@ extension Font {
         return .drau(type: .regular, size: 144)
     }
     
+    //MARK: -Suez
+    enum Sue {
+        case regular
+        
+        var value: String {
+            switch self {
+                /// Sue
+            case .regular:
+                return "SuezOne-Regular"
+            }
+        }
+    }
+    
+    static func sue(type: Sue, size: CGFloat) -> Font {
+        return .custom(type.value, size: size)
+    }
+    
+    
+    static var suereg24: Font {
+        return .sue(type: .regular, size: 24)
+    }
+    
+
 }

@@ -10,10 +10,14 @@ struct LoginView: View {
                 Image("loginbackground")
                 VStack {
                     Spacer()
-                    Text("Rootrip")
-                        .font(.draureg144)
-                        .foregroundColor(.primary1)
-                        .padding(.bottom, 386)
+                    
+                        Image("R")
+                            
+                        Text("ROOTRIP")
+                            .font(.suereg24)
+                            .foregroundColor(.primary1)
+                            .padding(.bottom, 310)
+                    
                 }
                 VStack {
                     Spacer()
