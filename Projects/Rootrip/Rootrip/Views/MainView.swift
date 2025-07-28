@@ -69,4 +69,5 @@ var sampleProjects: [Project] = {
     MainView()
         .environmentObject(PlanManager())
         .environmentObject(RouteManager())
+        .environmentObject(BookmarkManager())
 }
