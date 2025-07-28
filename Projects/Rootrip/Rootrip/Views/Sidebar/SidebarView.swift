@@ -57,6 +57,6 @@ struct SidebarView: View {
 #Preview(traits: .landscapeLeft) {
     SidebarView()
         .environmentObject(PlanManager())
-        .environmentObject(RouteManager())
+        .environmentObject(LocationManager())
         .environmentObject(BookmarkManager())
 }
