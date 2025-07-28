@@ -7,21 +7,25 @@
 
 import SwiftUI
 
+
 struct SidebarView: View {
     @State private var selectedIndex = 0
     @EnvironmentObject var planManager: PlanManager
     @EnvironmentObject var bookmarkManager: BookmarkManager
     var body: some View {
-        VStack{
+        ScrollView{
             HStack{
                 Spacer()
-                //-TODO: 편집 버튼으로 바꿔야함(섹션추가,삭제,순서변경 기능)
-                //UI확인상 넣어둠
-                Text("편집")
-                    .foregroundColor(.purple)
-                    .font(.system(size: 16))
+                //MARK: - TODO: 편집 버튼 기능 연결 필요
+                Button(action:{
+                    
+                }){
+                    Text("편집")
+                        .foregroundColor(.purple)
+                        .font(.system(size: 16))
+                }
             }
-            .padding(.top, 64)
+            .padding(.top, 10)
             .padding(.trailing, 16)
             
         //-MARK: SegmentedContolView의 선택된 탭 인덱스 변경될 때
@@ -48,6 +52,7 @@ struct SidebarView: View {
         .transition(.move(edge: .leading))
     }
 }
+
 
 #Preview(traits: .landscapeLeft) {
     SidebarView()

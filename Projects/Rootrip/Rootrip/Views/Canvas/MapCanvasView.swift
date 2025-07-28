@@ -30,6 +30,7 @@ struct MapCanvasView: View {
             }
         }
         .overlay(
+            // TODO: 임시 입력변환 버튼
             Button(action: {
                 if isCanvasActive {
                     drawing = PKDrawing()
@@ -69,7 +70,7 @@ class MapDelegate: NSObject, MKMapViewDelegate {
     }
 }
 
-// Drawing Pen이 색을 유지할 수 있게
+// TODO: Drawing Pen에게 색 할당(RGB)
 extension UIColor {
     convenience init?(hexString: String) {
         var cString = hexString.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
