@@ -13,6 +13,8 @@ protocol BookmarkRepositoryProtocol {
     /// add MapDetail in existing bookmark
     func addMapDetail(projectID: String, bookmarkID: String) async throws
     
+    /// read data from firestore
+    func loadBookmark(projectID: String, bookmarkID: String) async throws -> [MapDetail]
     /// change MapDetails order or Bookmark title
     func updateBookmark(projectID: String, bookmark: Bookmark) async throws
     

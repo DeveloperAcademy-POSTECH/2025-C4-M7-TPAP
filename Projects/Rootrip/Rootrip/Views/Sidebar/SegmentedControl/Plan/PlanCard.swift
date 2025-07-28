@@ -87,10 +87,10 @@ struct PlanCard: View {
     private func loadMapDetails() async {
         do {
             let repository = MapDetailRepository()
-            self.mapDetails = try await repository.loadMapDetails(projectID: projectID, planID: planID)
+            self.mapDetails = try await repository.loadMapDetailsFromPlan(projectID: projectID, containerID: planID)
             self.isLoading = false
         } catch {
-            print("❌ PlanCard - mapDetails 로딩 실패: \(error.localizedDescription)")
+            print("PlanCard Error - mapDetails 로딩 실패: \(error.localizedDescription)")
         }
     }
 }

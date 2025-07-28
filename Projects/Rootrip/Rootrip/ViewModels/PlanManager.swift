@@ -41,9 +41,9 @@ class PlanManager: ObservableObject {
             self.plans = fetched
             self.mapDetails = []
             for plan in fetched {
-                let details = try await mapDetailRepository.loadMapDetails(
+                let details = try await mapDetailRepository.loadMapDetailsFromPlan(
                     projectID: projectID,
-                    planID: plan.id ?? ""
+                    containerID: plan.id ?? ""
                 )
                 self.mapDetails.append(contentsOf: details)
             }
@@ -82,7 +82,7 @@ class PlanManager: ObservableObject {
     }
 
     func mapDetails(for planID: String) -> [MapDetail] {
-        mapDetails.filter { $0.planID == planID }
+        mapDetails.filter { $0.containerID == planID }
     }
 
     // MARK: - Plan버튼 선택(전체경로 표시함수)

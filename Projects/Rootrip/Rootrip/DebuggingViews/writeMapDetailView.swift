@@ -9,22 +9,34 @@ import Foundation
 import SwiftUI
 import CoreLocation
 
-struct writeMapDetailView: View {
+struct WriteMapDetailView: View {
+    enum TargetType: String, CaseIterable, Identifiable {
+        case plan = "플랜"
+        case bookmark = "북마크"
+        var id: String { rawValue }
+    }
+
     @State private var projectID: String = ""
-    @State private var planID: String = ""
+    @State private var containerID: String = ""
     @State private var latitude: String = ""
     @State private var longitude: String = ""
-    
+    @State private var selectedTarget: TargetType = .plan
+
     @State private var statusMessage: String = ""
-    
-    private let repository: MapDetailRepositoryProtocol = MapDetailRepository()
 
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("프로젝트 & 플랜 정보")) {
+                Picker("저장 대상", selection: $selectedTarget) {
+                    ForEach(TargetType.allCases) { target in
+                        Text(target.rawValue).tag(target)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+                Section(header: Text("프로젝트 & 대상 ID")) {
                     TextField("Project ID", text: $projectID)
-                    TextField("Plan ID", text: $planID)
+                    TextField("\(selectedTarget.rawValue) ID", text: $containerID)
                 }
 
                 Section(header: Text("장소 정보")) {
@@ -51,7 +63,7 @@ struct writeMapDetailView: View {
     }
 
     private var isFormValid: Bool {
-        !projectID.isEmpty && !planID.isEmpty &&
+        !projectID.isEmpty && !containerID.isEmpty &&
         Double(latitude) != nil && Double(longitude) != nil
     }
 
@@ -61,17 +73,21 @@ struct writeMapDetailView: View {
             return
         }
 
-        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
         let newDetail = MapDetail(
-            id: nil,
-            planID: planID,
+            containerID: containerID,
             latitude: lat,
             longitude: lon
         )
 
         Task {
             do {
-                try await repository.addMapDetail(projectID: projectID, planID: planID, detail: newDetail)
+                let repo = MapDetailRepository()
+                switch selectedTarget {
+                case .plan:
+                    try await repo.addMapDetailToPlan(projectID: projectID, planID: containerID, detail: newDetail)
+                case .bookmark:
+                    try await repo.addMapDetailToBook(projectID: projectID, bookmarkID: containerID, detail: newDetail)
+                }
                 statusMessage = "✅ MapDetail 추가 성공!"
             } catch {
                 statusMessage = "❌ 에러: \(error.localizedDescription)"

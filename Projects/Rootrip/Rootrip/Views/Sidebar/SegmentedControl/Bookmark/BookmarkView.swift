@@ -5,17 +5,22 @@
 //  Created by MINJEONG on 7/24/25.
 //
 
-import SwiftUI
 import MapKit
+import SwiftUI
 
 struct BookmarkView: View {
     @EnvironmentObject var bookmarkManager: BookmarkManager
     @EnvironmentObject var mapState: RouteManager
 
+    let projectID: String
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                ForEach(bookmarkManager.bookmarks.filter { $0.id != nil }, id: \.id!) { bookmark in
+                ForEach(
+                    bookmarkManager.bookmarks.filter { $0.id != nil },
+                    id: \.id!
+                ) { bookmark in
                     VStack(alignment: .leading) {
                         // MARK: - 섹션별 Bookmark 버튼
                         BookmarkButton(bookmark: bookmark)
@@ -25,7 +30,8 @@ struct BookmarkView: View {
 
                         // MARK: - 섹션별 장소 목록
                         BookmarkCard(
-                            details: bookmarkManager.mapDetails(for: bookmark.id ?? "")
+                            projectID: projectID,
+                            bookmarkID: bookmark.id!
                         )
                         .padding(.horizontal, 22)
                         .padding(.vertical, 15)
@@ -33,14 +39,13 @@ struct BookmarkView: View {
                 }
                 Spacer()
             }
+            .onAppear {
+                Task {
+                    await bookmarkManager.loadBookmarks(for: projectID)
+                }
+            }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, 8)
         }
     }
 }
-    #Preview {
-        BookmarkView()
-            .environmentObject(BookmarkManager())
-            .environmentObject(RouteManager())
-            
-    }
