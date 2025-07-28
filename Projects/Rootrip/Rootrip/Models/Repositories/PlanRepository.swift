@@ -43,6 +43,21 @@ final class PlanRepository: PlanRepositoryProtocol {
     func addStrokeData(projectID: String, planID: String) async throws{
         
     }
+    func loadPlans(projectID: String) async throws -> [Plan] {
+        let planRef = db.collection("Rootrip")
+            .document(projectID)
+            .collection("plans")
+        
+        let snapshot = try await planRef.getDocuments()
+        
+        let plans: [Plan] = try snapshot.documents.map { doc in
+            var plan = try doc.data(as: Plan.self)
+            plan.id = doc.documentID
+            return plan
+        }
+        
+        return plans
+    }
 
     func updatePlan(projectID: String, plan: Plan) async throws {
 

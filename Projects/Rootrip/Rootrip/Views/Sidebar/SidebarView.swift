@@ -12,6 +12,9 @@ struct SidebarView: View {
     @State private var selectedIndex = 0
     @EnvironmentObject var planManager: PlanManager
     @EnvironmentObject var bookmarkManager: BookmarkManager
+    
+    let projectID: String
+    
     var body: some View {
         ScrollView{
             HStack{
@@ -30,7 +33,7 @@ struct SidebarView: View {
             
         //-MARK: SegmentedContolView의 선택된 탭 인덱스 변경될 때
         ///탭 인덱스 변경시 어노테이션 및 경로 초기화
-            SegmentedContolView(selectedIndex: $selectedIndex)
+            SegmentedContolView(selectedIndex: $selectedIndex, projectID: projectID)
                 .onChange(of: selectedIndex) { _, newValue in
                     if newValue == 0 {
                         bookmarkManager.resetSelection()
@@ -54,9 +57,9 @@ struct SidebarView: View {
 }
 
 
-#Preview(traits: .landscapeLeft) {
-    SidebarView()
-        .environmentObject(PlanManager())
-        .environmentObject(RouteManager())
-        .environmentObject(BookmarkManager())
-}
+//#Preview(traits: .landscapeLeft) {
+//    SidebarView()
+//        .environmentObject(PlanManager())
+//        .environmentObject(RouteManager())
+//        .environmentObject(BookmarkManager())
+//}

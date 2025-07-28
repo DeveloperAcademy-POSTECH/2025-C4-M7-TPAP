@@ -9,6 +9,7 @@ import SwiftUI
 
 // 사이드바 위에 툴바가 올라오도록 한 화면입니다.(사이드바는 기본 열림 상태)
 struct SidebarToggleView: View {
+    let project: Project
     @State private var showSidebar = true
     
     var body: some View {
@@ -17,10 +18,10 @@ struct SidebarToggleView: View {
                 .padding(.top, 50)
             
             VStack(alignment: .leading, spacing: 0) {
-                MapCanvasToolBar(isSidebarOpen: $showSidebar)
+                MapCanvasToolBar(project:project, isSidebarOpen: $showSidebar)
                 
                 if showSidebar {
-                    SidebarView()
+                    SidebarView(projectID: project.id!)
                         .ignoresSafeArea(edges: .bottom)
                 }
                 Spacer()
@@ -29,8 +30,8 @@ struct SidebarToggleView: View {
     }
 }
 
-#Preview(traits: .landscapeLeft) {
-    SidebarToggleView()
-        .environmentObject(PlanManager())
-        .environmentObject(RouteManager())
-}
+//#Preview(traits: .landscapeLeft) {
+//    SidebarToggleView()
+//        .environmentObject(PlanManager())
+//        .environmentObject(RouteManager())
+//}

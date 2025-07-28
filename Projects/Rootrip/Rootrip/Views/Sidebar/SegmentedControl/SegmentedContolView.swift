@@ -12,6 +12,7 @@ struct SegmentedContolView: View {
     @Binding var selectedIndex: Int
     @Namespace private var animation
     private let segments = ["일정", "보관함", "참여자"]
+    let projectID: String
 
     var body: some View {
         // MARK: - Segment Selection
@@ -50,8 +51,8 @@ struct SegmentedContolView: View {
         // MARK: - Child View Rendering (선택된 탭에 따른 하위 뷰 렌더링)
         Group {
             switch selectedIndex {
-            case 0: PlanView()
-            case 1: BookmarkView()// TODO: 북마크 뷰 구현 예정
+            case 0: PlanView(projectID: projectID)
+            case 1: BookmarkView(projectID: projectID)// TODO: 북마크 뷰 구현 예정
             case 2: EmptyView()// TODO: 참여자 뷰 구현 예정
             default: EmptyView()
             }

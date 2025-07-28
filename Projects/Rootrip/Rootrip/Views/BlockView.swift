@@ -65,6 +65,8 @@ struct BlockView: View {
             .onAppear {
                 Task { await viewModel.fetchProjects() }
             }
+            /// 새 프로젝트 생성
+            // TODO: @Steve 네비게이션 플로우 정리해주세요
             .onChange(of: viewModel.newProjectForNavigation) { _, newValue in
                 guard let project = newValue else { return }
                 self.projectToNavigate = project
@@ -72,7 +74,7 @@ struct BlockView: View {
             }
             .navigationDestination(isPresented: $navigateToProjectDetail) {
                 if let project = projectToNavigate {
-                    ProjectDetailView(project: project)
+                    ProjectView(project: project)
                         .onDisappear {
                             // detail에서 뒤로가기 시 초기화
                             viewModel.newProjectForNavigation = nil
