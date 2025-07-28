@@ -2,6 +2,7 @@ import SwiftUI
 
 //TODO: 툴바도 두개로 분리해 주어야 함
 struct MapCanvasToolBar: View {
+    let project: Project
     //    @Binding var showMapCanvas: Bool
     @State var isCanvasLocked: Bool = false
     @Binding var isSidebarOpen: Bool
@@ -20,9 +21,9 @@ struct MapCanvasToolBar: View {
                     }
                     Spacer()
                     Button(action: {
-
+                        // TODO: 날짜, 이름 수정
                     }) {
-                        Text("TPAP 우정여행")
+                        Text("\(project.title)")
                         Image(systemName: "chevron.down")
                             .resizable()
                             .scaledToFit()
@@ -80,8 +81,8 @@ struct MapCanvasToolBar: View {
     }
 }
 
-#Preview {
-    MapCanvasToolBar(isSidebarOpen: .constant(true))
-        .environmentObject(PlanManager())
-        .environmentObject(RouteManager())
-}
+//#Preview {
+//    MapCanvasToolBar(isSidebarOpen: .constant(true))
+//        .environmentObject(PlanManager())
+//        .environmentObject(RouteManager())
+//}

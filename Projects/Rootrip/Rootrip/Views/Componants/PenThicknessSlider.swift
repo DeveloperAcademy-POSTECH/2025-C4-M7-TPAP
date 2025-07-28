@@ -2,7 +2,9 @@ import SwiftUI
 
 
 struct PenThicknessSlider: View {
-    @State var thickness: CGFloat = 1.0 //TODO: 굵기 관리하는 뷰에서 바인딩 필요
+    //TODO: 굵기 관리하는 뷰에서 바인딩 필요
+    // 기본(권장) 두께 '8.0'로 가신답니다
+    @State var thickness: CGFloat = 8.0
 
     let minThickness: CGFloat = 1
     let maxThickness: CGFloat = 20

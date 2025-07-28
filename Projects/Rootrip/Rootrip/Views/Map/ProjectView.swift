@@ -22,7 +22,7 @@ struct ProjectView: View {
             MapCanvasView()
             
             // 사이드바 버튼 오버레이(추가함!)
-            SidebarToggleView().environmentObject(mapState)
+            SidebarToggleView(project: project).environmentObject(mapState)
         }
         .edgesIgnoringSafeArea(.all)
     }
