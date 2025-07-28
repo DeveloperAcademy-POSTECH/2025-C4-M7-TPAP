@@ -11,7 +11,7 @@ import SwiftUI
 
 struct PlanView: View {
     @EnvironmentObject var planManager: PlanManager
-    @EnvironmentObject var mapState: LocationManager
+    @EnvironmentObject var mapState: RouteManager
     
     let projectID: String
 
@@ -42,9 +42,3 @@ struct PlanView: View {
         }
     }
 }
-
-//#Preview(traits: .landscapeLeft) {
-//    PlanView()
-//        .environmentObject(PlanManager())
-//        .environmentObject(LocationManager())
-//}

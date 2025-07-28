@@ -1,25 +1,21 @@
-import SwiftUI
-import MapKit
+//
+//  UtilPen.swift
+//  utilPenTest
+//
+//  Created by POS on 7/12/25.
+//
+// TODO: PKStroke input에 따른 각 함수의 input값 수정(지금은 좌표의 개수로)
+
 import CoreLocation
 import Foundation
+import MapKit
+import SwiftUI
 
-class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-    private let manager = CLLocationManager()
-    @Published var location: CLLocation?
+class RouteManager: ObservableObject {
+
+    // MARK: - Published Properties (SwiftUI 연동)
+    @Published var mapView = MKMapView()
     
-    var mapView: MKMapView!
-
-    override init() {
-        super.init()
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
-    }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        location = locations.first
-    }
     // MARK: - 지도 경로 랜더링 및 도보 소요시간 반환
     /// MapKit 경로를 지도에 표시하고 예상 도보 시간을 반환
     func showRoute(
@@ -65,8 +61,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             completion(route.expectedTravelTime)
         }
     }
-
-
+    
+    
     // MARK: - Zoom 및 Shape 유틸리티
     func zoomToRegion(containing coordinates: [CLLocationCoordinate2D], animated: Bool = true) {
         guard !coordinates.isEmpty else { return }
@@ -79,29 +75,4 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 80, left: 40, bottom: 80, right: 40), animated: animated)
     }
-
-    // MARK: - MKMapViewDelegate methods
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKUserLocation {
-            return nil
-        }
-        
-        let identifier = "POIAnnotation"
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
-        
-        if annotationView == nil {
-            annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            annotationView?.canShowCallout = true
-        } else {
-            annotationView?.annotation = annotation
-        }
-        
-        return annotationView
-    }
-
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print("Selected annotation at: \(String(describing: view.annotation?.coordinate))")
-    }
-
 }
-

@@ -36,7 +36,7 @@ struct LoginView: View {
         else{
             BlockView()
                 .environmentObject(PlanManager())
-                .environmentObject(LocationManager())
+                .environmentObject(RouteManager())
                 .environmentObject(BookmarkManager())
         }
     }
