@@ -18,10 +18,11 @@ struct BookmarkCard: View {
                 Button(action: {
                     bookmarkManager.toggleBookmark(detail)
                 }) {
-                    MapDetailitem(
-                        detail: detail,
-                        isSelected: bookmarkManager.selectedBookmarkID == detail.id
-                    )
+//                    MapDetailitem(
+//                        detail: detail,
+//                        isSelected: bookmarkManager.selectedBookmarkID == detail.id
+//                    )
+                    Text("")
                 }
             }
         }
