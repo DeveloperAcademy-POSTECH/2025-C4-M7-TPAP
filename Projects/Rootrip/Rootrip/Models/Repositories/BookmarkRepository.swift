@@ -30,6 +30,23 @@ final class BookmarkRepository: BookmarkRepositoryProtocol {
     func addMapDetail(projectID: String, bookmarkID: String) async throws {
 
     }
+    func loadBookmark(projectID: String, bookmarkID: String) async throws -> [MapDetail] {
+        let ref = Firestore.firestore()
+            .collection("Rootrip")
+            .document(projectID)
+            .collection("bookmarks")
+            .document(bookmarkID)
+            .collection("mapDetails")
+
+        let snapshot = try await ref.getDocuments()
+        let details: [MapDetail] = try snapshot.documents.map { doc in
+            var detail = try doc.data(as: MapDetail.self)
+            detail.id = doc.documentID
+            return detail
+        }
+        return details
+    }
+
     func updateBookmark(projectID: String, bookmark: Bookmark) async throws {
 
     }

@@ -27,11 +27,20 @@ final class MapDetailRepository: MapDetailRepositoryProtocol {
         return details
     }
 
-    func addMapDetail(projectID: String, planID: String, detail: MapDetail) async throws {
+    func addMapDetailToPlan(projectID: String, planID: String, detail: MapDetail) async throws {
         let ref = db.collection("Rootrip")
             .document(projectID)
             .collection("plans")
             .document(planID)
+            .collection("mapDetails")
+
+        try ref.addDocument(from: detail)
+    }
+    func addMapDetailToBook(projectID: String, bookmarkID: String, detail: MapDetail) async throws {
+        let ref = db.collection("Rootrip")
+            .document(projectID)
+            .collection("bookmarks")
+            .document(bookmarkID)
             .collection("mapDetails")
 
         try ref.addDocument(from: detail)

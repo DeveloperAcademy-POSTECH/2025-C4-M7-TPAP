@@ -11,7 +11,7 @@ import CoreLocation
 
 struct MapDetail: Identifiable, Codable {
     @DocumentID var id: String?
-    var planID: String //Plan A, B 등 플랜 긴 구분에 관한 id(추가)
+    var containerID: String //Plan A, B 등 플랜 긴 구분에 관한 id(추가) + 어느 bookmark에 소속되어있는지도
     var latitude: Double
     var longitude: Double
 }

@@ -82,7 +82,7 @@ class PlanManager: ObservableObject {
     }
 
     func mapDetails(for planID: String) -> [MapDetail] {
-        mapDetails.filter { $0.planID == planID }
+        mapDetails.filter { $0.containerID == planID }
     }
 
     // MARK: - Plan버튼 선택(전체경로 표시함수)
