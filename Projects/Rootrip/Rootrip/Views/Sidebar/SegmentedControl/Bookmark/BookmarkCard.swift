@@ -1,75 +1,22 @@
-////
-////  BookmarkSectionView.swift
-////  Rootrip
-////
-////  Created by MINJEONG on 7/24/25.
-////
-//
-//import SwiftUI
-//
-//struct BookmarkCard: View {
-//    let details: [MapDetail]  // 해당 bookmark에 속하는 장소 목록
-//    @EnvironmentObject var bookmarkManager: BookmarkManager
-//    
-//    var body: some View {
-//        // 북마크 리스트 카드 스타일
-//        VStack(spacing: 20){
-//            ForEach(details, id: \.id) { detail in
-//                Button(action: {
-//                    bookmarkManager.toggleBookmark(detail)
-//                }) {
-////                    MapDetailitem(
-////                        detail: detail,
-////                        isSelected: bookmarkManager.selectedBookmarkID == detail.id
-////                    )
-//                    Text("")
-//                }
-//            }
-//        }
-//        .padding(.all, 16)
-//        .frame(width: 216)
-//        .background(.secondary4)
-//        .clipShape(RoundedRectangle(cornerRadius: 20))
-//    }
-//}
+
 import SwiftUI
 
 struct BookmarkCard: View {
     let projectID: String
     let bookmarkID: String
-
-    @State private var mapDetails: [MapDetail] = []
+    
+    @State private var poiDataList: [POIData] = []
     @State private var isLoading = true
     @EnvironmentObject var bookmarkManager: BookmarkManager
-
+    @Binding var isEditing: Bool
+    
     var body: some View {
         VStack(spacing: 20) {
             if isLoading {
-                ProgressView("북마크 불러오는 중...")
+                LoadingView()
             } else {
-                ForEach(mapDetails, id: \.id) { detail in
-                    let isSelected = bookmarkManager.selectedBookmarkID == detail.id
-
-                    Button(action: {
-                        bookmarkManager.toggleBookmark(detail)
-                    }) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("위도: \(detail.latitude), 경도: \(detail.longitude)")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-
-                            if isSelected {
-                                Text("선택됨")
-                                    .font(.caption)
-                                    .foregroundColor(.green)
-                            }
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white.opacity(0.8))
-                        .cornerRadius(12)
-                    }
-                }
+                BookmarkListContent(poiDataList: poiDataList, isEditing: isEditing)
+                    .environmentObject(bookmarkManager)
             }
         }
         .padding(.all, 16)
@@ -78,22 +25,109 @@ struct BookmarkCard: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .onAppear {
             Task {
-                await loadBookmarkDetails()
+                await loadPOIData()
+            }
+        }
+        .onChange(of: bookmarkManager.mapDetails) { _, _ in
+            Task {
+                await loadPOIData()
             }
         }
     }
-
+    
     @MainActor
-    private func loadBookmarkDetails() async {
-        do {
-            let repository = MapDetailRepository()
-            self.mapDetails = try await repository.loadMapDetailsFromBook(
-                projectID: projectID,
-                containerID: bookmarkID
-            )
+    private func loadPOIData() async {
+        isLoading = true
+        
+        let mapDetails = bookmarkManager.mapDetails(for: bookmarkID)
+        
+        var loadedPOIDataList: [POIData] = []
+        let group = DispatchGroup()
+
+        for detail in mapDetails {
+            group.enter()
+            bookmarkManager.convertMapDetailToPOIAnnotation(detail) { annotation in
+                if let annotation = annotation {
+                    let data = POIData(
+                        mapDetailID: detail.id ?? "",
+                        name: detail.name,
+                        keyword: annotation.keyword
+                    )
+                    loadedPOIDataList.append(data)
+                }
+                group.leave()
+            }
+        }
+
+        group.notify(queue: .main) {
+            self.poiDataList = loadedPOIDataList
             self.isLoading = false
-        } catch {
-            print("BookmarkCard Error - details 로딩 실패: \(error.localizedDescription)")
+        }
+    }
+}
+
+// MARK: - 북마크 리스트 컨텐츠
+struct BookmarkListContent: View {
+    let poiDataList: [POIData]
+    let isEditing: Bool
+    @EnvironmentObject var bookmarkManager: BookmarkManager
+    
+    var body: some View {
+        LazyVStack(spacing: 0) {
+            ForEach(poiDataList) { poi in
+                BookmarkListRow(poi: poi, isEditing: isEditing)
+                    .padding(.vertical, 8)
+                    .environmentObject(bookmarkManager)
+            }
+        }
+    }
+}
+
+// MARK: - 북마크 리스트 로우
+// MARK: - BookmarkListRow
+struct BookmarkListRow: View {
+    let poi: POIData
+    let isEditing: Bool
+    @EnvironmentObject var bookmarkManager: BookmarkManager
+    
+    var body: some View {
+        let isSelected = bookmarkManager.selectedBookmarkID == poi.mapDetailID ||
+        bookmarkManager.selectedBookmarkID?.contains(poi.mapDetailID) == true
+        
+        let isDeleteSelected = bookmarkManager.selectedForDeletionPlaceIDs.contains(poi.mapDetailID)
+        
+        HStack(spacing: 12) {
+            // 앞쪽 원 아이콘
+            if isEditing {
+                Image(isDeleteSelected ? "purplemini" : "graymini")
+                    .onTapGesture {
+                        bookmarkManager.togglePlaceForDeletion(poi.mapDetailID)
+                    }
+            }
+            
+            // 아이콘
+            Image(isSelected ? poi.selectedImageName : poi.imageName)
+            
+            // 텍스트
+            Text(poi.name)
+                .font(.prereg16)
+                .foregroundColor(isSelected ? .accent1 : .maintext)
+            
+            Spacer()
+            
+            // 오른쪽 햄버거 아이콘
+            if isEditing {
+                Image(systemName: "line.3.horizontal")
+                    .foregroundColor(.secondary2)
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if !isEditing {
+                if let detail = bookmarkManager.mapDetails.first(where: { $0.id == poi.mapDetailID }) {
+                    bookmarkManager.toggleBookmark(detail)
+                }
+            }
         }
     }
 }

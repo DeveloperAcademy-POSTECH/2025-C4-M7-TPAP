@@ -21,7 +21,9 @@ class PlanManager: ObservableObject {
     @Published var plans: [Plan] = []
     @Published var mapDetails: [MapDetail] = []// 위도 경도
     @Published var annotations: [POIAnnotation] = [] // 장소 이름, 카테고리, 지도 검색 결과 기반
-    
+    @Published var selectedForDeletionPlaceIDs: [String] = []
+    @Published var selectedPlanIDsForEdit: [String] = []
+
     
     private var locationManager: LocationManager?
     private let planRepository: PlanRepositoryProtocol = PlanRepository()
@@ -99,6 +101,7 @@ class PlanManager: ObservableObject {
     // MARK: - Plan버튼 선택(전체경로 표시함수)
     /// 섹션 선택 시 기존 상태 초기화 및 전체 경로 그리기
     func selectPlan(_ planID: String?) {
+        print("📍 selectPlan called with: \(String(describing: planID))")
         selectedPlanID = planID
         
         resetSelections()
@@ -270,9 +273,9 @@ class PlanManager: ObservableObject {
                 return
             }
             
-            let rawKeyword = item.pointOfInterestCategory?.rawValue ?? self?.guessKeyword(from: item.name ?? "") ?? "location"
+            let rawKeyword = item.pointOfInterestCategory?.rawValue ?? "location"
 
-            // ✅ keyword 정제 로직 추가
+            // keyword 정제 로직 추가
             let keyword: String
             let lowered = rawKeyword.lowercased()
 
@@ -280,10 +283,6 @@ class PlanManager: ObservableObject {
                 keyword = "restaurant"
             } else if lowered.contains("cafe") || lowered.contains("coffee") || lowered.contains("bakery") {
                 keyword = "cafe"
-            } else if lowered.contains("school") {
-                keyword = "school"
-            } else if lowered.contains("park") {
-                keyword = "park"
             } else {
                 keyword = "location"
             }
@@ -293,25 +292,66 @@ class PlanManager: ObservableObject {
         }
     }
     
-    private func guessKeyword(from name: String) -> String {
-        let lowerName = name.lowercased()
-        
-        if lowerName.contains("카페") || lowerName.contains("cafe") || lowerName.contains("커피") {
-            return "cafe"
-        } else if lowerName.contains("식당") || lowerName.contains("restaurant") || lowerName.contains("맛집") {
-            return "restaurant"
-        } else if lowerName.contains("공원") || lowerName.contains("park") {
-            return "park"
-        } else if lowerName.contains("마트") || lowerName.contains("store") || lowerName.contains("shop") {
-            return "shopping"
-        } else if lowerName.contains("병원") || lowerName.contains("hospital") {
-            return "hospital"
-        } else if lowerName.contains("학교") || lowerName.contains("school") {
-            return "school"
-        } else if lowerName.contains("호텔") || lowerName.contains("hotel") {
-            return "lodging"
+    func togglePlaceForDeletion(_ placeID: String) {
+        if selectedForDeletionPlaceIDs.contains(placeID) {
+            selectedForDeletionPlaceIDs.removeAll { $0 == placeID }
         } else {
-            return "location"
+            selectedForDeletionPlaceIDs.append(placeID)
+        }
+    }
+    
+    
+    func toggleEditSelection(for planID: String) {
+        if selectedPlanIDsForEdit.contains(planID) {
+            selectedPlanIDsForEdit.removeAll { $0 == planID }
+        } else {
+            selectedPlanIDsForEdit.append(planID)
+        }
+    }
+    
+    // MARK: - 삭제 관련 함수들
+    @MainActor
+    func deletePlanSection(projectID: String, planID: String) async {
+        do {
+            try await planRepository.deletePlan(projectID: projectID, planID: planID)
+            
+            self.plans.removeAll { $0.id == planID }
+            self.mapDetails.removeAll { $0.containerID == planID }
+            
+        } catch {
+            print("Plan 섹션 삭제 실패: \(error)")
+        }
+    }
+
+    @MainActor
+    func deletePlace(projectID: String, placeID: String) async {
+        guard let mapDetail = mapDetails.first(where: { $0.id == placeID }) else {
+            return
+        }
+        
+        let containerID = mapDetail.containerID
+        
+        do {
+            try await mapDetailRepository.deleteMapDetail(
+                projectID: projectID,
+                containerID: containerID,
+                mapDetailID: placeID
+            )
+            self.mapDetails.removeAll { $0.id == placeID }
+            
+        } catch {
+            print("장소 삭제 실패: \(error)")
+        }
+    }
+    
+    
+    @MainActor
+    func createNewPlan(projectID: String) async {
+        do {
+            try await planRepository.createPlan(projectID: projectID)
+            await loadPlans(for: projectID)
+        } catch {
+            print("❌ Plan 생성 실패: \(error)")
         }
     }
 }

@@ -17,16 +17,17 @@ struct POIData: Identifiable {
     
     var imageName: String {
         switch keyword {
-        case "cafe":
-            return "cup.and.saucer"
-        case "restaurant":
-            return "fork.knife"
-        case "park":
-            return "leaf"
-        case "school":
-            return "building.columns"
-        default:
-            return "mappin"
+        case "cafe": return "graycafe"
+        case "restaurant": return "grayrestaurant"
+        default: return "graymap"
+        }
+    }
+    
+    var selectedImageName: String {
+        switch keyword {
+        case "cafe": return "greencafe"
+        case "restaurant": return "greenrestaurant"
+        default: return "greenmap"
         }
     }
 }
