@@ -17,8 +17,6 @@ struct BlockView: View {
                 
                 VStack(spacing: 0) {
                     ScrollView {
-                        Text("📦 projects.count = \(viewModel.projects.count)")
-                            .foregroundStyle(.red)
                         Spacer()
                             .frame(height: 70)
                         
@@ -26,11 +24,12 @@ struct BlockView: View {
                             codeInputButton
                                 .opacity(isEditing ? 0 : 1)
                                 .allowsHitTesting(!isEditing)
-                            
+                                .frame(height: 0)
                             Spacer()
                         }
                         .padding(.horizontal, 80)
-                        .padding(.bottom, 10)
+                        .padding(.top, 17)
+                        .padding(.bottom, 30)
                         
                         // 실제 프로젝트 리스트
                         ProjectListView(
@@ -44,6 +43,7 @@ struct BlockView: View {
                     }
                 }
                 
+                // TODO: 전면 리펙토링. scroll View에서 자연스러운 형태로 사용하려면 ZStack에 뷰를 넣는게 아니라 toolbar나 navigationbar을 사용해야함
                 MainViewToolBar(
                     isEditing: $isEditing,
                     selectedProjects: $selectedProjects,
@@ -93,15 +93,14 @@ struct BlockView: View {
         } label: {
             Text("코드로 참여하기")
                 .foregroundStyle(.primary1)
-                .bold()
+                .font(.presemi16)
         }
         .buttonStyle(.plain)
-        .padding(.vertical, 15)
-        .padding(.horizontal, 26)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 20)
         .background(.secondary4)
         .cornerRadius(36)
-        .shadow(color: .gray.opacity(0.4),
-                radius: 6, x: 0, y: 0)
+        .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 0)
     }
 }
 
