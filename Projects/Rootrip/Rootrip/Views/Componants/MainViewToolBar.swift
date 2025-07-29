@@ -3,16 +3,15 @@ import SwiftUI
 // MainViewToolBar: 상단 툴바
 struct MainViewToolBar: View {
     @EnvironmentObject var viewModel: BlockViewModel
-    
-    @State private var isShowingPopover:Bool = false
+
+    @State private var isShowingPopover: Bool = false
     @State private var isShowingLogoutAlert = false
     @State private var showDeleteAccountAlert = false
     @Binding var isEditing: Bool
     @Binding var selectedProjects: Set<String>
-    
+
     let onProjectCreated: (Project) -> Void
-    
-    
+
     var body: some View {
         GeometryReader { geometry in
             let screenWidth = UIScreen.main.bounds.width
@@ -23,11 +22,16 @@ struct MainViewToolBar: View {
                         .fontWeight(.bold)
                         .foregroundColor(.secondary4)
                 }
-                
+
                 // 2. 버튼들 (오른쪽 정렬)
                 HStack(spacing: 36) {
                     Spacer()
-                    
+                    // 더미데이터개ㅕ 입력을 위한 dev view
+                    NavigationLink(destination: WriteMapDetailView()) {
+                        Rectangle()
+                            .fill(Color.clear)
+                            .frame(width: 70, height: 70)
+                    }
                     if isEditing {
                         editingButtons
                     } else {
@@ -36,7 +40,7 @@ struct MainViewToolBar: View {
                 }
                 .padding(.trailing, trailingPadding)
             }
-            .frame(height: 50) // 툴바 콘텐츠의 높이 지정
+            .frame(height: 50)  // 툴바 콘텐츠의 높이 지정
             .background(
                 // 3. 배경색을 ZStack의 background 수정자로 이동시킵니다.
                 //    이렇게 하면 배경에만 ignoresSafeArea가 적용됩니다.
@@ -56,7 +60,7 @@ struct MainViewToolBar: View {
                     }
                 )
             } else if showDeleteAccountAlert {
-                DeleteAccountAlert (
+                DeleteAccountAlert(
                     onCancel: {
                         showDeleteAccountAlert = false
                     },
@@ -68,14 +72,15 @@ struct MainViewToolBar: View {
             }
         }
     }
-    
-    
+
     // MARK: - 선택 모드 버튼
     private var editingButtons: some View {
         Group {
             Button {
                 Task {
-                    await viewModel.deleteProjects(projectIDs: Array(selectedProjects))
+                    await viewModel.deleteProjects(
+                        projectIDs: Array(selectedProjects)
+                    )
                     selectedProjects.removeAll()
                     isEditing = false
                 }
@@ -86,7 +91,7 @@ struct MainViewToolBar: View {
             }
             .disabled(selectedProjects.isEmpty)
             .opacity(selectedProjects.isEmpty ? 0.5 : 1.0)
-            
+
             Button {
                 isEditing = false
                 selectedProjects.removeAll()
@@ -97,7 +102,7 @@ struct MainViewToolBar: View {
             }
         }
     }
-    
+
     // MARK: - 기본 모드 버튼
     private var normalButtons: some View {
         Group {
@@ -115,17 +120,17 @@ struct MainViewToolBar: View {
                     .foregroundStyle(.secondary4)
             }
             .buttonStyle(.plain)
-            
+
             Button {
                 isEditing = true
-                selectedProjects.removeAll() //선택을 전부 해제
+                selectedProjects.removeAll()  //선택을 전부 해제
             } label: {
                 Text("선택")
                     .font(.presemi20)
                     .foregroundStyle(.secondary4)
             }
             .buttonStyle(.plain)
-            
+
             Button {
                 isShowingPopover.toggle()
             } label: {
@@ -145,8 +150,6 @@ struct MainViewToolBar: View {
     }
 }
 
-
-
 // MARK: - 프로필 팝오버 뷰
 struct ProfilePopover: View {
     @Binding var isShowingLogoutAlert: Bool
@@ -164,10 +167,10 @@ struct ProfilePopover: View {
                     .padding(.top, 10)
             }
             .buttonStyle(.plain)
-            
+
             Divider()
                 .padding(.horizontal, 12)
-            
+
             Button {
                 isShowingPopover = false
                 showDeleteAccountAlert = true

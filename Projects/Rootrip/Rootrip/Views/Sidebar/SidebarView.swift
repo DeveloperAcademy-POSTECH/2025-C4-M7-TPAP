@@ -56,10 +56,10 @@ struct SidebarView: View {
     }
 }
 
-
-#Preview(traits: .landscapeLeft) {
-    SidebarView()
-        .environmentObject(PlanManager())
-        .environmentObject(LocationManager())
-        .environmentObject(BookmarkManager())
-}
+//
+//#Preview(traits: .landscapeLeft) {
+//    SidebarView()
+//        .environmentObject(PlanManager())
+//        .environmentObject(LocationManager())
+//        .environmentObject(BookmarkManager())
+//}

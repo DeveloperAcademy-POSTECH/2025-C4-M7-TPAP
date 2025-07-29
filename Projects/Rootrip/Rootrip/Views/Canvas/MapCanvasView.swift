@@ -4,24 +4,31 @@
 //
 //  Created by POS on 7/24/25.
 
-import SwiftUI
 import MapKit
 import PencilKit
+import SwiftUI
 
 struct MapCanvasView: View {
     @ObservedObject var viewModel: MapViewModel
     @Binding var shouldCenterOnUser: Bool
-    
+
     @State private var isCanvasActive = false
     @State private var mapView = MKMapView()
     @State private var drawing = PKDrawing()
-    @State private var isUtilPen = false
-
+    @State private var isUtilPen = true
 
     var body: some View {
         ZStack {
-            MapView(viewModel: viewModel, shouldCenterOnUser: $shouldCenterOnUser)
-                .ignoresSafeArea()
+            // UtilPen이 정상작동하는 세계관
+//            MapView(mapView: $mapView)
+//                            .ignoresSafeArea()
+            
+            MapView(
+                viewModel: viewModel,
+                shouldCenterOnUser: $shouldCenterOnUser
+            )
+            .ignoresSafeArea()
+            
 
             if isCanvasActive {
                 CanvasView(
@@ -34,20 +41,25 @@ struct MapCanvasView: View {
             }
         }
         .overlay(
-            Button(action: {
-                if isCanvasActive {
-                    drawing = PKDrawing()
+            VStack(spacing: -7) {
+                /// 드로잉펜-유틸펜 전환 버튼
+                Button(action: {
+                    if isCanvasActive {
+                        drawing = PKDrawing()
+                    }
+                    isCanvasActive.toggle()
+                }) {
+                    Image(isCanvasActive ? "utilOn" : "utilOff")
                 }
-                isCanvasActive.toggle()
-            }) {
-                Text(isCanvasActive ? "TO MAP" : "TO CANVAS")
-                    .padding()
-                    .background(.ultraThinMaterial)
-                    .cornerRadius(10)
-            }
+                /// 내위치로 가기 버튼
+                Button(action: {
 
+                }) {
+                    Image("myLocation")
+                }
+            }
             .padding(),
-            alignment: .topTrailing
+            alignment: .bottomTrailing
         )
         .onAppear {
             mapView.delegate = MapDelegate.shared
@@ -58,15 +70,17 @@ struct MapCanvasView: View {
 // TODO: pencil Toolbar의 값을 반영할 수 있도록 연동
 class MapDelegate: NSObject, MKMapViewDelegate {
     static let shared = MapDelegate()
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay)
+        -> MKOverlayRenderer
+    {
         if let polyline = overlay as? MKPolyline {
             let renderer = MKPolylineRenderer(polyline: polyline)
             if let hex = polyline.title, let color = UIColor(hexString: hex) {
                 renderer.strokeColor = color
             } else {
-                renderer.strokeColor = .systemBlue // 유틸펜의 기본색상 삽입
+                renderer.strokeColor = .systemBlue  // 유틸펜의 기본색상 삽입
             }
-            renderer.lineWidth = 4 // 선굵기값 받아오기
+            renderer.lineWidth = 4  // 선굵기값 받아오기
             return renderer
         }
         return MKOverlayRenderer(overlay: overlay)
@@ -76,7 +90,8 @@ class MapDelegate: NSObject, MKMapViewDelegate {
 // Drawing Pen이 색을 유지할 수 있게
 extension UIColor {
     convenience init?(hexString: String) {
-        var cString = hexString.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        var cString = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
+            .uppercased()
         if cString.hasPrefix("#") { cString.removeFirst() }
         guard cString.count == 6 else { return nil }
         var rgb: UInt64 = 0
@@ -89,10 +104,13 @@ extension UIColor {
         )
     }
     var hexString: String {
-        var r: CGFloat=0, g: CGFloat=0, b: CGFloat=0, a: CGFloat=0
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
         getRed(&r, green: &g, blue: &b, alpha: &a)
-        let rgb: Int = (Int)(r*255)<<16 | (Int)(g*255)<<8 | (Int)(b*255)<<0
-        return String(format:"#%06X", rgb)
+        let rgb: Int =
+            (Int)(r * 255) << 16 | (Int)(g * 255) << 8 | (Int)(b * 255) << 0
+        return String(format: "#%06X", rgb)
     }
 }
-

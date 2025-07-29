@@ -6,16 +6,7 @@ import Foundation
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     @Published var location: CLLocation?
-    
-    var mapView: MKMapView!
-
-    override init() {
-        super.init()
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
-    }
+    @Published var mapView = MKMapView()
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.first
@@ -79,29 +70,5 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         
         mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 80, left: 40, bottom: 80, right: 40), animated: animated)
     }
-
-    // MARK: - MKMapViewDelegate methods
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKUserLocation {
-            return nil
-        }
-        
-        let identifier = "POIAnnotation"
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
-        
-        if annotationView == nil {
-            annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            annotationView?.canShowCallout = true
-        } else {
-            annotationView?.annotation = annotation
-        }
-        
-        return annotationView
-    }
-
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print("Selected annotation at: \(String(describing: view.annotation?.coordinate))")
-    }
-
 }
 

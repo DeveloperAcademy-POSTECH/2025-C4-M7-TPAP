@@ -108,5 +108,5 @@ struct BlockView: View {
 #Preview(traits: .landscapeLeft) {
     BlockView()
         .environmentObject(PlanManager())
-        .environmentObject(RouteManager())
+        .environmentObject(LocationManager())
 }

@@ -10,10 +10,8 @@ import SwiftUI
 
 struct BookmarkView: View {
     @EnvironmentObject var bookmarkManager: BookmarkManager
-    @EnvironmentObject var mapState: RouteManager
+    @EnvironmentObject var mapState: LocationManager
     
-    let projectID: String
-
     let projectID: String
 
     var body: some View {

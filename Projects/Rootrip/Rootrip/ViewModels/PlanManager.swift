@@ -211,7 +211,7 @@ class PlanManager: ObservableObject {
             let coordinates = details.map { $0.coordinate }
             if coordinates.count >= 2 {
                 for i in 0..<coordinates.count - 1 {
-                    routeManager.showRoute(
+                    locationManager.showRoute(
                         from: coordinates[i],
                         to: coordinates[i + 1],
                         on: mapView
