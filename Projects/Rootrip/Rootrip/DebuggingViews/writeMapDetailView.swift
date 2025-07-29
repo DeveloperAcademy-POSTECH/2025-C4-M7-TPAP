@@ -21,6 +21,7 @@ struct WriteMapDetailView: View {
     @State private var latitude: String = ""
     @State private var longitude: String = ""
     @State private var selectedTarget: TargetType = .plan
+    @State private var name: String = ""
 
     @State private var statusMessage: String = ""
 
@@ -40,6 +41,8 @@ struct WriteMapDetailView: View {
                 }
 
                 Section(header: Text("장소 정보")) {
+                    TextField("장소 이름", text: $name)
+                        .keyboardType(.decimalPad)
                     TextField("위도 (latitude)", text: $latitude)
                         .keyboardType(.decimalPad)
                     TextField("경도 (longitude)", text: $longitude)
@@ -63,7 +66,7 @@ struct WriteMapDetailView: View {
     }
 
     private var isFormValid: Bool {
-        !projectID.isEmpty && !containerID.isEmpty &&
+        !projectID.isEmpty && !containerID.isEmpty && !name.isEmpty &&
         Double(latitude) != nil && Double(longitude) != nil
     }
 
@@ -75,8 +78,10 @@ struct WriteMapDetailView: View {
 
         let newDetail = MapDetail(
             containerID: containerID,
+            name: name,
             latitude: lat,
             longitude: lon
+            
         )
 
         Task {
