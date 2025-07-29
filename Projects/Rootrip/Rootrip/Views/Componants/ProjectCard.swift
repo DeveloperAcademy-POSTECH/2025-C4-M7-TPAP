@@ -15,28 +15,42 @@ struct ProjectCard: View {
         }
     }
     
-    // MARK: - Background Layer
     private var normalCardView: some View {
-        Rectangle() //TODO: 지도 이미지 들어가도록 만들어야함
-            .foregroundStyle(.secondary4)
-            .frame(maxWidth: isHighlighted ? 1070 : 325,
-                   maxHeight: isHighlighted ? 380 : 190)
-            .clipped()
-            .overlay(cardContent)
-            .cornerRadius(16)
-            .shadow(color: .gray.opacity(0.4),
-                    radius: isHighlighted ? 8 : 4, x: 0, y: 2)
+        baseCard(
+            width: isHighlighted ? 1070 : 325,
+            height: isHighlighted ? 380 : 190
+        ) {
+            if isHighlighted {
+                hilightContent
+            } else {
+                cardContent
+            }
+        }
     }
-    
+
+    // MARK: - Background Layer
+    @ViewBuilder
+    private func baseCard(width: CGFloat, height: CGFloat, @ViewBuilder content: () -> some View ) -> some View {
+        Rectangle() // TODO: 지도 이미지 들어가도록 만들어야 함
+            .foregroundStyle(.primary1)
+            .frame(maxWidth: width, maxHeight: height)
+            .clipped()
+            .overlay(content())
+            .cornerRadius(16)
+    }
+
     // MARK: - Overlay Content
     @ViewBuilder
-    private var cardContent: some View {
+    private var hilightContent: some View {
         ZStack {
             if isEditing {
                 Color.black.opacity(0.2)
             }
             LinearGradient(
-                gradient: Gradient(colors: [Color(red: 0.4941, green: 0.5569, blue: 0.902).opacity(0.7), .clear]),
+                gradient: Gradient(colors: [
+                    Color(red: 0.4941, green: 0.5569, blue: 0.902).opacity(0.7),
+                    .clear
+                ]),
                 startPoint: .bottom,
                 endPoint: .center
             )
@@ -47,10 +61,29 @@ struct ProjectCard: View {
                     Spacer()
                     dateView
                 }
-                .padding(isHighlighted ? 24 : 16)
+                .padding(24)
             }
         }
     }
+
+    @ViewBuilder
+    private var cardContent: some View {
+        ZStack {
+            if isEditing {
+                Color.black.opacity(0.2)
+            }
+            VStack {
+                Spacer()
+                HStack {
+                    titleText
+                    Spacer()
+                    dateView
+                }
+                .padding(16)
+            }
+        }
+    }
+
     
     private var titleText: some View {
         Text(project.title)
