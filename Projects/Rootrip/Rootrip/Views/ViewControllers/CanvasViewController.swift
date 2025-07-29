@@ -40,7 +40,6 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
     private func setupCanvasView() {
         canvasView.translatesAutoresizingMaskIntoConstraints = false
         canvasView.delegate = self
-        canvasView.backgroundColor = .clear
         canvasView.drawingPolicy = .pencilOnly
         canvasView.tool = PKInkingTool(.pen, color: penColor, width: 5)
         canvasView.isOpaque = false
