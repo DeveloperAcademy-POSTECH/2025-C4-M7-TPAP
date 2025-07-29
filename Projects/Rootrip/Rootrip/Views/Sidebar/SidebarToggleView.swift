@@ -49,9 +49,10 @@ struct SidebarToggleView: View {
             VStack {
                 HStack {
                     Spacer()
-                    searchBar(text: $searchText) {
-                        print("검색 실행: \(searchText)")
-                    }
+//                    searchBar(text: $searchText) {
+//                        print("검색 실행: \(searchText)")
+//                    }
+                    SearchBarToggleView(text: $searchText)
                     .padding(.trailing, 20)
                 }
                 .padding(.top, 120)  // 최상단에서 숫자만큼 아래에 위치하도록(하드코딩,,)
