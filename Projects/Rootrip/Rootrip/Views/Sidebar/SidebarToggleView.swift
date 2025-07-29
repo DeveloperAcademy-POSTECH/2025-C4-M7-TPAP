@@ -17,7 +17,8 @@ struct SidebarToggleView: View {
         ZStack(alignment: .topLeading) {
             MapCanvasToolPicker()
                 .padding(.top, 50)
-            
+                .shadow(color: .black.opacity(0.15), radius: 1, x: 0, y: 4)
+
             /// 사이드바
             VStack(alignment: .leading, spacing: 0) {
                 MapCanvasToolBar(project: project, isSidebarOpen: $showSidebar)
@@ -25,14 +26,28 @@ struct SidebarToggleView: View {
                 HStack {
                     if showSidebar {
                         SidebarView(projectID: project.id!)
+                            .frame(width: 221)
+                            .padding(.leading, 22)
+                            .padding(.trailing, 17)
+                            .padding(.top, 13)
+                            .padding(.bottom, 86)
+                            .background(
+                                Color(red: 0.96, green: 0.96, blue: 0.96)
+                                    .shadow(
+                                        color: .black.opacity(0.25),
+                                        radius: 2,
+                                        x: 2,
+                                        y: 0
+                                    )
+                            )
                             .ignoresSafeArea(edges: .bottom)
                     }
                     Spacer()
                 }
             }
-            
+
             /// 검색창
-            VStack(){
+            VStack {
                 HStack {
                     Spacer()
                     searchBar(text: $searchText) {
@@ -40,7 +55,7 @@ struct SidebarToggleView: View {
                     }
                     .padding(.trailing, 20)
                 }
-                .padding(.top, 120) // 최상단에서 숫자만큼 아래에 위치하도록(하드코딩,,)
+                .padding(.top, 120)  // 최상단에서 숫자만큼 아래에 위치하도록(하드코딩,,)
                 Spacer()
             }
         }
