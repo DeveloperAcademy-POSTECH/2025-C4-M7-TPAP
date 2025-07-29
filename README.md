@@ -9,16 +9,6 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
 ---
-## ✨ Contributors
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/yourname"><img src="https://avatars.githubusercontent.com/u/12345678?v=4" width="100px;" alt=""/><br /><sub><b>Your Name</b></sub></a><br /><a href="#code-yourname" title="Code">💻</a> <a href="#design-yourname" title="Design">🎨</a></td>
-  </tr>
-</table>
-<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## 🗂 목차
 - [소개](#소개)
