@@ -26,8 +26,8 @@ struct SidebarView: View {
                     Text("편집")
                         .foregroundColor(.purple)
                         .font(.system(size: 16))
-                }
-            }
+                } // Button
+            } // HStack
             .padding(.top, 10)
             .padding(.trailing, 16)
             
@@ -48,11 +48,15 @@ struct SidebarView: View {
                     }
                 }
             Spacer()
-        }
-        .frame(width: 259)
+        } // ScrollView
+        .frame(width: 216)
         .frame(maxHeight: .infinity)
         .background(.mainbackground)
         .transition(.move(edge: .leading))
+        .padding(.leading, 22)
+        .padding(.trailing, 17)
+        .padding(.top, 13)
+        .padding(.bottom, 86)
     }
 }
 
