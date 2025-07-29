@@ -10,7 +10,7 @@ import MapKit
 
 /// 북마크 버튼
 struct BookmarkButton: View {
-    @EnvironmentObject var routeManager: LocationManager // 현재 지도 상태를 관리하는 객체
+    @EnvironmentObject var locationManager: LocationManager // 현재 지도 상태를 관리하는 객체
     @EnvironmentObject var bookmarkManager: BookmarkManager // 북마크 상태를 관리하는 객체
 
     let bookmark: Bookmark // 개별 북마크 데이터
@@ -26,7 +26,7 @@ struct BookmarkButton: View {
         }
         // 뷰가 나타날 때 routeManager 설정
         .onAppear {
-            bookmarkManager.configure(with: routeManager)
+            bookmarkManager.configure(with: locationManager)
         }
     }
 }

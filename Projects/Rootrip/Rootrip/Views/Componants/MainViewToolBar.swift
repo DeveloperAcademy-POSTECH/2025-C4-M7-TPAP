@@ -26,7 +26,7 @@ struct MainViewToolBar: View {
                 // 2. 버튼들 (오른쪽 정렬)
                 HStack(spacing: 36) {
                     Spacer()
-                    // 더미데이터 입력을 위한 dev view
+                    // 더미데이터개ㅕ 입력을 위한 dev view
                     NavigationLink(destination: WriteMapDetailView()) {
                         Rectangle()
                             .fill(Color.clear)
