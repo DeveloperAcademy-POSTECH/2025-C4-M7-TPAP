@@ -11,8 +11,8 @@
 ---
 ## Contributors
 
-Thanks to all these wonderful people:  
-[![Contributors](https://contrib.rocks/image?repo=OWNER/REPO)](https://github.com/DeveloperAcademy-POSTECH/2025-C4-M7-TPAP/graphs/contributors)
+Thanks to all the amazing contributors!  
+[![Contributors](https://contrib.rocks/image?repo=DeveloperAcademy-POSTECH/2025-C4-M7-TPAP)](https://github.com/DeveloperAcademy-POSTECH/2025-C4-M7-TPAP/graphs/contributors)
 
 ## 🗂 목차
 - [소개](#소개)
