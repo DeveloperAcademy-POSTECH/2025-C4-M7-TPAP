@@ -47,6 +47,7 @@ struct SegmentedContolView: View {
         .background(Color.primary1)
         .clipShape(RoundedRectangle(cornerRadius: 13))
         .padding(.vertical, 11)
+        .padding(.bottom, 19)
 
         // MARK: - Child View Rendering (선택된 탭에 따른 하위 뷰 렌더링)
         Group {

@@ -24,12 +24,13 @@ struct SidebarView: View {
                     
                 }){
                     Text("편집")
-                        .foregroundColor(.purple)
-                        .font(.system(size: 16))
-                } // Button
-            } // HStack
+                        .foregroundColor(.accent3)
+                        .font(.premed16)
+                }
+            }
             .padding(.top, 10)
-            .padding(.trailing, 16)
+            .padding(.bottom, 19)
+            .padding(.trailing, 19)
             
         //-MARK: SegmentedContolView의 선택된 탭 인덱스 변경될 때
         ///탭 인덱스 변경시 어노테이션 및 경로 초기화
@@ -48,15 +49,11 @@ struct SidebarView: View {
                     }
                 }
             Spacer()
-        } // ScrollView
+        }
         .frame(width: 216)
         .frame(maxHeight: .infinity)
         .background(.mainbackground)
         .transition(.move(edge: .leading))
-        .padding(.leading, 22)
-        .padding(.trailing, 17)
-        .padding(.top, 13)
-        .padding(.bottom, 86)
     }
 }
 
