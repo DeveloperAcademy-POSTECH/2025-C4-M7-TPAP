@@ -11,6 +11,9 @@ struct MapCanvasToolPicker: View {
     @Binding var isUtilPen: Bool
     @Binding var isCanvasActive: Bool
     @Binding var lineWidth: CGFloat
+    @Binding var lineWidthTrigger: Bool
+    
+    @State var isDrawing: Bool = false
     
     var body: some View {
         ZStack {
@@ -22,7 +25,7 @@ struct MapCanvasToolPicker: View {
                     .padding(.trailing, 10)
                     .foregroundStyle(.gray)
                 
-                PenThicknessSlider(thickness: $lineWidth)
+                PenThicknessSlider(thickness: $lineWidth, lineWidthTrigger: $lineWidthTrigger)
                     .padding(.trailing, 20)
                 
                 Button(action: {}) {
@@ -33,10 +36,12 @@ struct MapCanvasToolPicker: View {
 //                    Image(systemName: "pencil.circle.fill")
 //                }
                 Button(action: {
+                    isDrawing.toggle()
                     isCanvasActive.toggle()
                     isUtilPen = false
                 }) {
                     Image(systemName: "pencil.tip.crop.circle.fill")
+                        .foregroundStyle(isDrawing ? Color.green : Color.black)
                 }
                 Button(action: {}) {
                     Image(systemName: "paintpalette")

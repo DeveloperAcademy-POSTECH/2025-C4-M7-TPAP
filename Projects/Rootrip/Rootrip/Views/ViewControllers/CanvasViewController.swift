@@ -97,19 +97,54 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
 
     //canvasview비활성화 상태일때는 동작 안함
     @objc func undoTapped() {
-//        canvasView.undoManager?.undo()
-        guard let mv = mapView else { return }
-        let tmpCount = mv.overlays.count
+        guard let mv = mapView else {
+            print("map view error")
+            return
+        }
+        guard let lastOverlay = mv.overlays.last else {
+            print("no overlays to undo")
+            return
+        }
         
-        tmpPolyline.append( mv.overlays[tmpCount-1] as! MKPolyline)
-        mv.removeOverlay(tmpCount == 0 ? mv.overlays[tmpCount-1] : mv.overlays[tmpCount-1])//언더플로우 에러 수정필요
+        guard let polyline = lastOverlay as? MKPolyline else {
+            print("last overlay is not MKPolyline")
+            return
+        }
+        
+        print("undo tapped")
+        // tmpPolyline에 추가 (redo를 위해)
+        tmpPolyline.append(polyline)
+        print("tmpPolyline added: \(tmpPolyline.count) items")
+        
+        mv.removeOverlay(lastOverlay)
     }
     //리두 작동안함
     @objc func redoTapped() {
-        canvasView.undoManager?.redo()
-        guard let mv = mapView else { return }
-        mv.addOverlay(tmpPolyline.last!)//언래핑 구조 개선 필요
+        guard let mv = mapView else {
+            print("map view error")
+            return
+        }
+        
+        guard !tmpPolyline.isEmpty else {
+            print("redo 할 수 있는 스트로크가 없습니다.")
+            return
+        }
+        
+        guard let lastPolyline = tmpPolyline.last else {
+            print("[redo] : tmpPolyline.last error")
+            return
+        }
+        
+        print("redo tapped - restoring polyline")
+        mv.addOverlay(lastPolyline)
+        tmpPolyline.removeLast()
+        print("tmpPolyline remaining: \(tmpPolyline.count) items")
     }
+    @objc func linewidthSliderValueChanged() {
+        canvasView.tool = PKInkingTool(.pen, color: penColor, width: lineWidth)
+    }
+
+    
     @objc func eraserTapped() { canvasView.tool = PKEraserTool(.vector) }
     @objc func colorChanged() {
         if let selected = colorPicker.selectedColor {

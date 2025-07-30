@@ -17,6 +17,7 @@ struct MapCanvasView: View {
     @Binding var undoTrigger: Bool 
     @Binding var redoTrigger: Bool
     @Binding var lineWidth: CGFloat
+    @Binding var lineWidthTrigger: Bool
     
     @State var mapView = MKMapView()
     @State var drawing = PKDrawing()
@@ -43,7 +44,8 @@ struct MapCanvasView: View {
                     mapView: $mapView,
                     undoTrigger: $undoTrigger,
                     redoTrigger: $redoTrigger,
-                    lineWidth: $lineWidth
+                    lineWidth: $lineWidth,
+                    lineWidthTrigger: $lineWidthTrigger
                 )
                 .background(Color.clear)
                 .ignoresSafeArea()
