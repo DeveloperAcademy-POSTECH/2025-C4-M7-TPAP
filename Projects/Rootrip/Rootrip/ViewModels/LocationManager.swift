@@ -1,7 +1,7 @@
-import SwiftUI
-import MapKit
 import CoreLocation
 import Foundation
+import MapKit
+import SwiftUI
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
@@ -22,7 +22,19 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
 
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    // 내 위치 동의 및 받아오는 부분
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
+    }
+
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]
+    ) {
         location = locations.first
     }
     
@@ -43,12 +55,12 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         let end = MKPlacemark(coordinate: end)
         let sttItem = MKMapItem(placemark: stt)
         let endItem = MKMapItem(placemark: end)
-        
+
         let request = MKDirections.Request()
         request.source = sttItem
         request.destination = endItem
         request.transportType = .walking
-        
+      
         let directions = MKDirections(request: request)
         directions.calculate { response, error in
             guard let route = response?.routes.first else {
@@ -56,6 +68,23 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 completion(nil)
                 return
             }
+
+//             mapView.addOverlay(route.polyline)
+
+//             /// 중간 지점 계산
+//             let polylinePoints = route.polyline.points()
+//             let midPoint = polylinePoints[route.polyline.pointCount / 2]
+//                 .coordinate
+
+//             /// 소요시간 어노테이션 추가
+//             // TODO: - 도보 타이틀 제거 시킴으로써 RouteMapRepresentable에 불필요한 코드 삭제
+//             let annotation = MKPointAnnotation()
+//             annotation.coordinate = midPoint
+//             annotation.title = "도보 \(Int(route.expectedTravelTime / 60))분"
+//             //            annotation.title = "차량 \(Int(route.expectedTravelTime / 60))분"
+//             mapView.addAnnotation(annotation)
+
+
             
             DispatchQueue.main.async {
                 targetMapView.addOverlay(route.polyline)
@@ -76,18 +105,33 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 
     // MARK: - Zoom 및 Shape 유틸리티
-    func zoomToRegion(containing coordinates: [CLLocationCoordinate2D], animated: Bool = true) {
+    func zoomToRegion(
+        containing coordinates: [CLLocationCoordinate2D],
+        animated: Bool = true
+    ) {
         guard !coordinates.isEmpty else { return }
+
         guard let mapView = self.mapView else { return }
         
+
         var rect = MKMapRect.null
         for coordinate in coordinates {
             let point = MKMapPoint(coordinate)
-            rect = rect.union(MKMapRect(origin: point, size: MKMapSize(width: 0, height: 0)))
+            rect = rect.union(
+                MKMapRect(origin: point, size: MKMapSize(width: 0, height: 0))
+            )
         }
+
+//         mapView.setVisibleMapRect(
+//             rect,
+//             edgePadding: UIEdgeInsets(top: 80, left: 40, bottom: 80, right: 40),
+//             animated: animated
+//         )
+
         
         DispatchQueue.main.async {
             mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 80, left: 40, bottom: 80, right: 40), animated: animated)
         }
+
     }
 }

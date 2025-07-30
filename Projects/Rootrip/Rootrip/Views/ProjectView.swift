@@ -20,7 +20,7 @@ struct ProjectView: View {
     @State private var hasLoadedPlans = false
     @State private var shouldCenterOnUser = false
     
-    @State var isUtilPen = true
+    @State var isUtilPen = false
     @State var isCanvasActive = false
     @State var undoTrigger: Bool = false
     @State var redoTrigger: Bool = false

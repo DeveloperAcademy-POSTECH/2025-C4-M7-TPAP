@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MapCanvasView: View {
     @ObservedObject var viewModel: MapViewModel
+
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var planManager: PlanManager
     @EnvironmentObject var bookmarkManager: BookmarkManager
@@ -17,27 +18,29 @@ struct MapCanvasView: View {
     @Binding var shouldCenterOnUser: Bool
     @Binding var isUtilPen: Bool
     @Binding var isCanvasActive: Bool
-    @Binding var undoTrigger: Bool 
+    @Binding var undoTrigger: Bool
     @Binding var redoTrigger: Bool
     @Binding var lineWidth: CGFloat
+
     @Binding var lineWidthTrigger: Bool
     
     @State var mapView = MKMapView()
     @State var drawing = PKDrawing()
+    @State private var pageLock = false
+
 
     var body: some View {
         ZStack {
             // UtilPen이 정상작동하는 세계관
-//            MapView(mapView: $mapView)
-//                            .ignoresSafeArea()
-            
+            //            MapView(mapView: $mapView)
+            //                            .ignoresSafeArea()
+
             MapView(
                 viewModel: viewModel,
                 shouldCenterOnUser: $shouldCenterOnUser,
                 mapView: $mapView
             )
             .ignoresSafeArea()
-            
 
             if isCanvasActive {
                 CanvasView(
@@ -56,16 +59,28 @@ struct MapCanvasView: View {
         }
         .overlay(
             VStack(spacing: -7) {
-                /// 드로잉펜-유틸펜 전환 버튼
+                /// 유틸펜 사용 토글 버튼
                 Button(action: {
-                    isCanvasActive.toggle()
-                    isUtilPen = false
-                    if isCanvasActive{
+                    switch (isCanvasActive, isUtilPen) {
+                    case (true, true):
+                        print("canvas activate, utilpen activate")
+                        isCanvasActive = false
+                        isUtilPen = false
+                        drawing = PKDrawing()
+                    case (true, false):
+                        print("canvas activate, utilpen deactivate")
+                        isUtilPen = true
+                    case (false, false):
+                        print("canvas deactivate, utilpen deactivate")
+                        isCanvasActive = true
                         isUtilPen = true
                         drawing = PKDrawing()
+                    default:
+                        print("canvas deactivate, utilpen activate")
+                        break // logic error
                     }
                 }) {
-                    Image(isUtilPen && isCanvasActive ? "utilOn" : "utilOff")
+                    Image(isUtilPen ? "utilOn" : "utilOff")
                 }
                 /// 내위치로 가기 버튼
                 Button(action: {

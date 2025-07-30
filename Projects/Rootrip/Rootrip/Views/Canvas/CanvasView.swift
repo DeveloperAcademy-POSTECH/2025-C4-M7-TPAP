@@ -46,7 +46,6 @@ struct CanvasView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: CanvasViewController, context: Context) {
         uiViewController.drawing = drawing
         uiViewController.isUtilPen = isUtilPen
-        uiViewController.updatePenModeButtons()
         uiViewController.lineWidth = lineWidth
 //        print("[CanvasView] updateUIViewController: isUtilPen = \(isUtilPen)")
 
@@ -76,6 +75,4 @@ struct CanvasView: UIViewControllerRepresentable {
             uiViewController.clearCanvas()
         }
     }
-    
-    // Removed the incorrect popPolyline() function from here
 }
