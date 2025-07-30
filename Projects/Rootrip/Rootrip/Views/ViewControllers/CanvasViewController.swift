@@ -36,9 +36,7 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCanvasView()
-        setupToolbar()
         canvasView.drawing = drawing
-        updatePenModeButtons()
     }
 
     private func setupCanvasView() {
@@ -54,44 +52,6 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
             canvasView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             canvasView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             canvasView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-    }
-
-    private func setupToolbar() {
-        toolbar.axis = .horizontal
-        toolbar.alignment = .center
-        toolbar.distribution = .equalSpacing
-        toolbar.spacing = 24
-        toolbar.translatesAutoresizingMaskIntoConstraints = false
-
-        undoButton.setImage(UIImage(systemName: "arrow.uturn.backward"), for: .normal)
-        redoButton.setImage(UIImage(systemName: "arrow.uturn.forward"), for: .normal)
-        eraserButton.setImage(UIImage(systemName: "eraser"), for: .normal)
-        penButton.setImage(UIImage(systemName: "pencil.tip"), for: .normal)
-        utilPenButton.setImage(UIImage(systemName: "map"), for: .normal)
-        colorPicker.selectedColor = penColor
-        colorPicker.supportsAlpha = false
-
-        undoButton.addTarget(self, action: #selector(undoTapped), for: .touchUpInside)
-        redoButton.addTarget(self, action: #selector(redoTapped), for: .touchUpInside)
-        eraserButton.addTarget(self, action: #selector(eraserTapped), for: .touchUpInside)
-        penButton.addTarget(self, action: #selector(penTapped), for: .touchUpInside)
-        colorPicker.addTarget(self, action: #selector(colorChanged), for: .valueChanged)
-        utilPenButton.addTarget(self, action: #selector(utilPenToggled), for: .touchUpInside)
-
-        [undoButton, redoButton, eraserButton, penButton, utilPenButton, colorPicker].forEach { button in
-            button.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-            toolbar.addArrangedSubview(button)
-        }
-
-        toolbar.backgroundColor = UIColor.white.withAlphaComponent(0.8)
-        toolbar.layer.cornerRadius = 18
-
-        view.addSubview(toolbar)
-        NSLayoutConstraint.activate([
-            toolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            toolbar.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
 
@@ -125,7 +85,6 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
             clearCanvas()
         }
         isUtilPen = false
-        updatePenModeButtons()
         canvasView.tool = PKInkingTool(.pen, color: penColor, width: lineWidth)
         onUtilPenToggled?(isUtilPen)
     }
@@ -135,35 +94,15 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
             clearCanvas()
         }
         isUtilPen = true
-        updatePenModeButtons()
         onUtilPenToggled?(isUtilPen)
     }
-    func updatePenModeButtons() {
-        penButton.tintColor = isUtilPen ? .systemGray : .systemBlue
-        utilPenButton.tintColor = isUtilPen ? .systemBlue : .systemGray
-    }
+
     func clearCanvas() {
         DispatchQueue.main.async {
             self.drawing = PKDrawing()
             self.canvasView.drawing = PKDrawing()
         }
     }
-
-    // 드로잉 중 겹치는 점이 있는가. 근데 직선이랑 구분이 안됨 대체왜그러는거임 나한테
-//    func hasOverlappingPoint(_ points: [CGPoint]) -> Bool {
-//        let threshold: CGFloat = 3
-//        for i in 0..<points.count {
-//            for j in (i+1)..<points.count {
-//                let dx = points[i].x - points[j].x
-//                let dy = points[i].y - points[j].y
-//                if sqrt(dx*dx + dy*dy) < threshold {
-//                    print("--- overlapped point detected ---")
-//                    return true
-//                }
-//            }
-//        }
-//        return false
-//    }
 
     // 시작점과 끝점 거리가 가까운가
     func isClosedShape(points: [CGPoint]) -> Bool {

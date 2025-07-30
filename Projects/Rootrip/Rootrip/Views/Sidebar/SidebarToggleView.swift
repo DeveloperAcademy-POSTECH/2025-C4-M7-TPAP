@@ -12,6 +12,7 @@ struct SidebarToggleView: View {
     let project: Project
     @State private var showSidebar = true
     @State private var searchText = ""
+    @State private var pageLock: Bool = false
     
     @Binding var lineWidth: CGFloat
     @Binding var isUtilPen: Bool
@@ -36,7 +37,9 @@ struct SidebarToggleView: View {
                     isSidebarOpen: $showSidebar,
                     isCanvasActive: $isCanvasActive,
                     undoTrigger: $undoTrigger,
-                    redoTrigger: $redoTrigger)
+                    redoTrigger: $redoTrigger,
+                    pageLock: $pageLock
+                )
 
                 HStack {
                     if showSidebar {
