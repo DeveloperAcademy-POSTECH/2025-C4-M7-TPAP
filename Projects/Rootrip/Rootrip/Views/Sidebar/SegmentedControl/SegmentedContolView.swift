@@ -58,6 +58,7 @@ struct SegmentedContolView: View {
             default: EmptyView()
             }
         }
+
     }
 }
 

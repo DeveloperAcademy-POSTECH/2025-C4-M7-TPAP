@@ -28,6 +28,10 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
     var onDrawingChanged: ((PKDrawing) -> Void)?
     var onUtilPenInput: (([CLLocationCoordinate2D]) -> Void)?
     var onUtilPenToggled: ((Bool) -> Void)?
+    
+    var tmpPolyline: [MKPolyline] = []
+    
+    var lineWidth: CGFloat = 8.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +46,7 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
         canvasView.delegate = self
         canvasView.backgroundColor = .clear
         canvasView.drawingPolicy = .pencilOnly
-        canvasView.tool = PKInkingTool(.pen, color: penColor, width: 5)
+        canvasView.tool = PKInkingTool(.pen, color: penColor, width: lineWidth)
         canvasView.isOpaque = false
         view.addSubview(canvasView)
         NSLayoutConstraint.activate([
@@ -91,14 +95,27 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
         ])
     }
 
-    @objc func undoTapped() { canvasView.undoManager?.undo() }
-    @objc func redoTapped() { canvasView.undoManager?.redo() }
+    //canvasview비활성화 상태일때는 동작 안함
+    @objc func undoTapped() {
+//        canvasView.undoManager?.undo()
+        guard let mv = mapView else { return }
+        let tmpCount = mv.overlays.count
+        
+        tmpPolyline.append( mv.overlays[tmpCount-1] as! MKPolyline)
+        mv.removeOverlay(tmpCount == 0 ? mv.overlays[tmpCount-1] : mv.overlays[tmpCount-1])//언더플로우 에러 수정필요
+    }
+    //리두 작동안함
+    @objc func redoTapped() {
+        canvasView.undoManager?.redo()
+        guard let mv = mapView else { return }
+        mv.addOverlay(tmpPolyline.last!)//언래핑 구조 개선 필요
+    }
     @objc func eraserTapped() { canvasView.tool = PKEraserTool(.vector) }
     @objc func colorChanged() {
         if let selected = colorPicker.selectedColor {
             penColor = selected
             if !isUtilPen {
-                canvasView.tool = PKInkingTool(.pen, color: penColor, width: 5)
+                canvasView.tool = PKInkingTool(.pen, color: penColor, width: lineWidth)
             }
         }
     }
@@ -109,7 +126,7 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
         }
         isUtilPen = false
         updatePenModeButtons()
-        canvasView.tool = PKInkingTool(.pen, color: penColor, width: 5)
+        canvasView.tool = PKInkingTool(.pen, color: penColor, width: lineWidth)
         onUtilPenToggled?(isUtilPen)
     }
     @objc func utilPenToggled() {

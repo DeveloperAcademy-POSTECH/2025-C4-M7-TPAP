@@ -1,12 +1,14 @@
 import SwiftUI
 
-//TODO: 툴바도 두개로 분리해 주어야 함
 struct MapCanvasToolBar: View {
     let project: Project
-    //    @Binding var showMapCanvas: Bool
-    @State var isCanvasLocked: Bool = false
     @Binding var isSidebarOpen: Bool
-
+    @Binding var isCanvasActive: Bool
+    @Binding var undoTrigger: Bool
+    @Binding var redoTrigger: Bool 
+    
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topLeading) {
@@ -20,37 +22,28 @@ struct MapCanvasToolBar: View {
                             .padding(.leading, 20)
                     }
                     Spacer()
-                    Button(action: {
-                        // TODO: 날짜, 이름 수정
-                    }) {
-                        Text("\(project.title)")
-                        Image(systemName: "chevron.down")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 10)
-                    }
-                    Spacer()
+                    
 
                     Button(action: {
-
+                        undoTrigger.toggle()
                     }) {
                         Image(systemName: "arrow.uturn.backward")
                     }
 
                     Button(action: {
-
+                        redoTrigger.toggle()
                     }) {
                         Image(systemName: "arrow.uturn.forward")
                     }
 
                     Button(action: {
                         withAnimation(.linear) {
-                            isCanvasLocked.toggle()
+                            isCanvasActive = false
                         }
                     }) {
                         Image(
-                            systemName: isCanvasLocked
-                                ? "lock.fill" : "lock.open.fill"
+                            systemName: isCanvasActive
+                                ? "lock.open.fill" : "lock.fill"
                         )
                         .frame(width: 20)
                     }
@@ -62,15 +55,31 @@ struct MapCanvasToolBar: View {
                     }
 
                     Button(action: {
-                        //                        withAnimation(.linear){
-                        //                            showMapCanvas = false
-                        //                        }
+                        dismiss()
                     }) {
                         Text("홈")
                     }
                     .padding(.trailing, 30)
                 }
                 .foregroundStyle(.secondary4)
+                
+                //MARK: 프로젝트 title
+                HStack{
+                    Spacer()
+                    Button(action: {
+                        // TODO: 날짜, 이름 수정
+                    }) {
+                        Text("\(project.title)")
+                        Image(systemName: "chevron.down")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 10)
+                    }
+                    Spacer()
+                }
+                .foregroundStyle(.white)
+                .fontWeight(.bold)
+                
             }
             .frame(height: 50)  // 툴바 콘텐츠의 높이 지정
             .background(
