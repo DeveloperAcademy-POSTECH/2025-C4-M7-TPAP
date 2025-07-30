@@ -83,7 +83,6 @@ struct BookmarkListContent: View {
     }
 }
 
-// MARK: - 북마크 리스트 로우
 // MARK: - BookmarkListRow
 struct BookmarkListRow: View {
     let poi: POIData
@@ -96,7 +95,7 @@ struct BookmarkListRow: View {
         
         let isDeleteSelected = bookmarkManager.selectedForDeletionPlaceIDs.contains(poi.mapDetailID)
         
-        HStack(spacing: 12) {
+        HStack(spacing: 8) {
             // 앞쪽 원 아이콘
             if isEditing {
                 Image(isDeleteSelected ? "purplemini" : "graymini")
@@ -112,6 +111,7 @@ struct BookmarkListRow: View {
             Text(poi.name)
                 .font(.prereg16)
                 .foregroundColor(isSelected ? .accent1 : .maintext)
+                .lineLimit(1)
             
             Spacer()
             
@@ -119,6 +119,7 @@ struct BookmarkListRow: View {
             if isEditing {
                 Image(systemName: "line.3.horizontal")
                     .foregroundColor(.secondary2)
+                    .font(.prereg16)
             }
         }
         .contentShape(Rectangle())
