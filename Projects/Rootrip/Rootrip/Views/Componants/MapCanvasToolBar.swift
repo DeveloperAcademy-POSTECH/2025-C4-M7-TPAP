@@ -4,11 +4,12 @@ struct MapCanvasToolBar: View {
     let project: Project
     @Binding var isSidebarOpen: Bool
     @Binding var isCanvasActive: Bool
+    @Binding var isPageLocked: Bool
     @Binding var undoTrigger: Bool
     @Binding var redoTrigger: Bool
-    
+
     @Environment(\.dismiss) var dismiss
-    
+
     var body: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topLeading) {
@@ -22,7 +23,6 @@ struct MapCanvasToolBar: View {
                             .padding(.leading, 20)
                     }
                     Spacer()
-                    
 
                     Button(action: {
                         undoTrigger.toggle()
@@ -36,27 +36,28 @@ struct MapCanvasToolBar: View {
                         Image(systemName: "arrow.uturn.forward")
                     }
 
-//                    Button(action: {
-//                        withAnimation(.linear) {
-//                            isCanvasActive = false
-//                        }
-//                    }) {
-//                        Image(
-//                            systemName: isCanvasActive
-//                                ? "lock.open.fill" : "lock.fill"
-//                        )
-//                        .frame(width: 20)
-//                    }
+                    //                    Button(action: {
+                    //                        withAnimation(.linear) {
+                    //                            isCanvasActive = false
+                    //                        }
+                    //                    }) {
+                    //                        Image(
+                    //                            systemName: isCanvasActive
+                    //                                ? "lock.open.fill" : "lock.fill"
+                    //                        )
+                    //                        .frame(width: 20)
+                    //                    }
                     Button(action: {
-                        pageLock.toggle()
                         withAnimation(.linear) {
+                            isPageLocked.toggle()
                             isCanvasActive = false
                         }
                     }) {
-                        Image(systemName: pageLock ? "lock.fill" : "lock.open.fill")
-                            .frame(width: 20)
+                        Image(
+                            systemName: isPageLocked
+                                ? "lock.fill" : "lock.open.fill"
+                        )
                     }
-
 
                     Button(action: {
                         //저장 로직 여기에 입력
@@ -72,9 +73,9 @@ struct MapCanvasToolBar: View {
                     .padding(.trailing, 30)
                 }
                 .foregroundStyle(.secondary4)
-                
+
                 //MARK: 프로젝트 title
-                HStack{
+                HStack {
                     Spacer()
                     Button(action: {
                         // TODO: 날짜, 이름 수정
@@ -89,7 +90,7 @@ struct MapCanvasToolBar: View {
                 }
                 .foregroundStyle(.white)
                 .fontWeight(.bold)
-                
+
             }
             .frame(height: 50)  // 툴바 콘텐츠의 높이 지정
             .background(

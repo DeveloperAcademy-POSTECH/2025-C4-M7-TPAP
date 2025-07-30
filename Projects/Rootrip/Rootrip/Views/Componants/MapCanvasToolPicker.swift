@@ -10,6 +10,7 @@ import SwiftUI
 struct MapCanvasToolPicker: View {
     @Binding var isUtilPen: Bool
     @Binding var isCanvasActive: Bool
+    @Binding var isPageLocked: Bool
     @Binding var lineWidth: CGFloat
 
     var body: some View {
@@ -30,6 +31,10 @@ struct MapCanvasToolPicker: View {
                 }
 
                 Button(action: {
+                    guard !isPageLocked else {
+                        return
+                    }
+
                     if isCanvasActive && !isUtilPen {
                         isCanvasActive = false
                     } else if !isCanvasActive && !isUtilPen {

@@ -14,14 +14,13 @@ struct MapCanvasView: View {
     @Binding var shouldCenterOnUser: Bool
     @Binding var isUtilPen: Bool
     @Binding var isCanvasActive: Bool
+    @Binding var isPageLocked: Bool
     @Binding var undoTrigger: Bool
     @Binding var redoTrigger: Bool
     @Binding var lineWidth: CGFloat
 
     @State var mapView = MKMapView()
     @State var drawing = PKDrawing()
-    @State private var pageLock = false
-
 
     var body: some View {
         ZStack {
@@ -54,23 +53,23 @@ struct MapCanvasView: View {
             VStack(spacing: -7) {
                 /// 유틸펜 사용 토글 버튼
                 Button(action: {
+                    guard !isPageLocked else {
+                        return
+                    }
+
                     switch (isCanvasActive, isUtilPen) {
                     case (true, true):
-                        print("canvas activate, utilpen activate")
                         isCanvasActive = false
                         isUtilPen = false
                         drawing = PKDrawing()
                     case (true, false):
-                        print("canvas activate, utilpen deactivate")
                         isUtilPen = true
                     case (false, false):
-                        print("canvas deactivate, utilpen deactivate")
                         isCanvasActive = true
                         isUtilPen = true
                         drawing = PKDrawing()
                     default:
-                        print("canvas deactivate, utilpen activate")
-                        break // logic error
+                        break  // logic error
                     }
                 }) {
                     Image(isUtilPen ? "utilOn" : "utilOff")

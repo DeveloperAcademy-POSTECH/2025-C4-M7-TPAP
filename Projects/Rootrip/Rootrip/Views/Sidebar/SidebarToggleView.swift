@@ -13,22 +13,24 @@ struct SidebarToggleView: View {
     @State private var showSidebar = true
     @State private var searchText = ""
     @State private var pageLock: Bool = false
-    
+
     @Binding var lineWidth: CGFloat
     @Binding var isUtilPen: Bool
     @Binding var isCanvasActive: Bool
+    @Binding var isPageLocked: Bool
     @Binding var undoTrigger: Bool
     @Binding var redoTrigger: Bool
-    
+
     var body: some View {
         ZStack(alignment: .topLeading) {
             MapCanvasToolPicker(
                 isUtilPen: $isUtilPen,
                 isCanvasActive: $isCanvasActive,
+                isPageLocked: $isPageLocked,
                 lineWidth: $lineWidth
             )
-                .padding(.top, 50)
-                .shadow(color: .black.opacity(0.15), radius: 1, x: 0, y: 4)
+            .padding(.top, 50)
+            .shadow(color: .black.opacity(0.15), radius: 1, x: 0, y: 4)
 
             /// 사이드바
             VStack(alignment: .leading, spacing: 0) {
@@ -36,6 +38,7 @@ struct SidebarToggleView: View {
                     project: project,
                     isSidebarOpen: $showSidebar,
                     isCanvasActive: $isCanvasActive,
+                    isPageLocked: $isPageLocked,
                     undoTrigger: $undoTrigger,
                     redoTrigger: $redoTrigger
                 )
@@ -66,11 +69,8 @@ struct SidebarToggleView: View {
             VStack {
                 HStack {
                     Spacer()
-//                    searchBar(text: $searchText) {
-//                        print("검색 실행: \(searchText)")
-//                    }
                     SearchBarToggleView(text: $searchText)
-                    .padding(.trailing, 20)
+                        .padding(.trailing, 20)
                 }
                 .padding(.top, 120)  // 최상단에서 숫자만큼 아래에 위치하도록(하드코딩,,)
                 Spacer()

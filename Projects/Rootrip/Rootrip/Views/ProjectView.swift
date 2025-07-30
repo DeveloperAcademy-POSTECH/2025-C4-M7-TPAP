@@ -13,7 +13,7 @@ struct ProjectView: View {
     let project: Project
     @StateObject private var mapState = LocationManager()
     @StateObject private var viewModel = MapViewModel()
-    
+
     @EnvironmentObject var planManager: PlanManager
 
     @State private var hasLoadedPlans = false
@@ -21,9 +21,10 @@ struct ProjectView: View {
     
     @State var isUtilPen = false
     @State var isCanvasActive = false
+    @State var isPageLocked: Bool = false
     @State var undoTrigger: Bool = false
     @State var redoTrigger: Bool = false
-    @State var lineWidth:CGFloat = 8.0
+    @State var lineWidth: CGFloat = 8.0
 
     // MARK: - Body
     var body: some View {
@@ -33,6 +34,7 @@ struct ProjectView: View {
                 shouldCenterOnUser: $shouldCenterOnUser,
                 isUtilPen: $isUtilPen,
                 isCanvasActive: $isCanvasActive,
+                isPageLocked: $isPageLocked,
                 undoTrigger: $undoTrigger,
                 redoTrigger: $redoTrigger,
                 lineWidth: $lineWidth
@@ -44,6 +46,7 @@ struct ProjectView: View {
                 lineWidth: $lineWidth,
                 isUtilPen: $isUtilPen,
                 isCanvasActive: $isCanvasActive,
+                isPageLocked: $isPageLocked,
                 undoTrigger: $undoTrigger,
                 redoTrigger: $redoTrigger
             )
