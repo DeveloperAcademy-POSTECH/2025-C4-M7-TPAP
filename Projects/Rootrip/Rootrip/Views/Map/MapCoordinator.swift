@@ -5,6 +5,7 @@ import CoreLocation
 
 // MARK: - MapCoordinator
 /// MKMapViewDelegate 구현 및 사용자 중심 초기화 상태 관리를 담당하는 Coordinator
+/// 
 class MapCoordinator: NSObject, MKMapViewDelegate {
     var hasCenteredOnUser = false
     var parent: MapView?
@@ -52,7 +53,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let polyline = overlay as? MKPolyline {
             let renderer = MKPolylineRenderer(overlay: polyline)
-            renderer.strokeColor = .accent1
+            renderer.strokeColor = UIColor(named: "accent1") ?? .accent1
             renderer.lineWidth = 8
             return renderer
         }
@@ -102,7 +103,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate {
         if annotationView == nil {
             annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             annotationView?.canShowCallout = true
-            annotationView?.markerTintColor = .systemIndigo
+            annotationView?.markerTintColor = UIColor(named: "accent1") ?? .accent1
         } else {
             annotationView?.annotation = annotation
         }
@@ -132,9 +133,10 @@ class MapCoordinator: NSObject, MKMapViewDelegate {
             return annotationView
         } else {
             annotationView?.glyphText = "⭐️"
-            annotationView?.markerTintColor = .systemIndigo
+            annotationView?.markerTintColor = UIColor(named: "accent1") ?? .accent1
             return annotationView
         }
     }
+    
 }
 

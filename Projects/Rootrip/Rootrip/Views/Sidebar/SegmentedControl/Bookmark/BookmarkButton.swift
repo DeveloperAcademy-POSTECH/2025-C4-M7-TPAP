@@ -46,10 +46,6 @@ struct BookmarkButton: View {
                     )
             }
         }
-        // 뷰가 나타날 때 routeManager 설정
-        .onAppear {
-            bookmarkManager.configure(with: locationManager)
-        }
         .onChange(of: isEditing) { _, newValue in
             if newValue {
                 bookmarkManager.resetSelections()

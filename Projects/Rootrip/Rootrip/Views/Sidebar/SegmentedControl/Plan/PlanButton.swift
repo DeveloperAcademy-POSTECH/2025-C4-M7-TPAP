@@ -48,9 +48,6 @@ struct PlanButton: View {
                     )
             }
         }
-        .onAppear {
-            planManager.configure(with: locationManager)
-        }
         .onChange(of: isEditing) { _, newValue in
             if newValue {
                 planManager.resetSelections()

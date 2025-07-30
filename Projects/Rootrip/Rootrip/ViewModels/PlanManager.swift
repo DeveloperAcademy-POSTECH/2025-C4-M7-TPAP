@@ -11,27 +11,21 @@ import Foundation
 import MapKit
 
 // MARK: - 섹션 관리 매니저
-/// 모든 플랜 섹션 및 하위 장ㅅ버튼 동작처리를 관리하고, PlanA/B섹션을 기본 제공합니다.
+/// 모든 플랜 섹션 및 하위 장소 버튼 동작처리를 관리하고, PlanA/B섹션을 기본 제공합니다.
 class PlanManager: ObservableObject {
     @Published var selectedPlanID: String? = nil
-    //TODO: -샘플 훗날제거
-    //    @Published var plans: [Plan] = samplePlans
-    //    @Published var mapDetails: [MapDetail] = sampleMapDetails
-    
     @Published var plans: [Plan] = []
     @Published var mapDetails: [MapDetail] = []// 위도 경도
     @Published var annotations: [POIAnnotation] = [] // 장소 이름, 카테고리, 지도 검색 결과 기반
     @Published var selectedForDeletionPlaceIDs: [String] = []
     @Published var selectedPlanIDsForEdit: [String] = []
-
     
     private var locationManager: LocationManager?
     private let planRepository: PlanRepositoryProtocol = PlanRepository()
-    private let mapDetailRepository: MapDetailRepositoryProtocol =
-    MapDetailRepository()
+    private let mapDetailRepository: MapDetailRepositoryProtocol = MapDetailRepository()
     
     // MARK: - 초기화 및 구성
-    /// PlanManager 내부에 routeManager 객체를 주입 해주는 역할
+    /// PlanManager 내부에 locationManager 객체를 주입 해주는 역할
     func configure(with locationManager: LocationManager) {
         self.locationManager = locationManager
     }
@@ -75,8 +69,10 @@ class PlanManager: ObservableObject {
     ///마커/경로 제거
     private func clearMapView() {
         guard let mapView = locationManager?.mapView else { return }
-        mapView.removeAnnotations(mapView.annotations)
-        mapView.removeOverlays(mapView.overlays)
+        DispatchQueue.main.async {
+            mapView.removeAnnotations(mapView.annotations)
+            mapView.removeOverlays(mapView.overlays)
+        }
     }
     
     // MARK: - 선택 상태 초기화
@@ -87,6 +83,7 @@ class PlanManager: ObservableObject {
         
         clearMapView()
     }
+    
     // MARK: - 핀마커 어노테이션 추가
     private func addAnnotation(for detail: MapDetail, to mapView: MKMapView) {
         let annotation = MKPointAnnotation()
@@ -101,36 +98,41 @@ class PlanManager: ObservableObject {
     // MARK: - Plan버튼 선택(전체경로 표시함수)
     /// 섹션 선택 시 기존 상태 초기화 및 전체 경로 그리기
     func selectPlan(_ planID: String?) {
-        print("📍 selectPlan called with: \(String(describing: planID))")
         selectedPlanID = planID
         
         resetSelections()
         
         guard let locationManager = locationManager else { return }
+        
         guard let planID = planID,
               plans.first(where: { $0.id == planID }) != nil
         else { return }
         
-        let mapView = locationManager.mapView
+        guard let mapView = locationManager.mapView else { return }
+        
         let details = mapDetails(for: planID)
         let coordinates = details.map { $0.coordinate }
         
-        //선택한 Plan 섹션에 포함된 모든 장소를 지도에 마커로 표시
-        for detail in details {
-            addAnnotation(for: detail, to: mapView)
-        }
-        
-        //전체경로 표시
-        if coordinates.count >= 2 {
-            for i in 0..<coordinates.count - 1 {
-                locationManager.showRoute(
-                    from: coordinates[i],
-                    to: coordinates[i + 1],
-                    on: mapView
-                ) { _ in }
+        // 메인 스레드에서 UI 업데이트 보장
+        DispatchQueue.main.async {
+            //선택한 Plan 섹션에 포함된 모든 장소를 지도에 마커로 표시
+            for detail in details {
+                self.addAnnotation(for: detail, to: mapView)
             }
+            
+            //전체경로 표시
+            if coordinates.count >= 2 {
+                for i in 0..<coordinates.count - 1 {
+                    locationManager.showRoute(
+                        from: coordinates[i],
+                        to: coordinates[i + 1],
+                        on: mapView
+                    ) { _ in }
+                }
+            }
+            
+            locationManager.zoomToRegion(containing: coordinates)
         }
-        locationManager.zoomToRegion(containing: coordinates)
     }
     
     // MARK: - [Plan 섹션선택] 장소 선택 처리 (toggle): 내부로직1,2,3존재
@@ -158,8 +160,8 @@ class PlanManager: ObservableObject {
     // MARK: - 내부 로직1: 선택된 Plan과 다른 섹션의 장소 선택
     /// 기존 선택 상태와 선택된 섹션을 초기화하고, 해당 장소만 단독으로 지도에 표시합니다.
     private func selectPlaceOutsidePlan(_ placeID: String) {
-        guard let locationManager = locationManager else { return }
-        let mapView = locationManager.mapView
+        guard let locationManager = locationManager,
+              let mapView = locationManager.mapView else { return }
         
         resetSelections()
         
@@ -169,18 +171,19 @@ class PlanManager: ObservableObject {
         clearMapView()
         
         if let place = mapDetails.first(where: { $0.id == placeID }) {
-            addAnnotation(for: place, to: mapView)  //내부로직
-            locationManager.zoomToRegion(containing: [place.coordinate])
+            DispatchQueue.main.async {
+                self.addAnnotation(for: place, to: mapView)
+                locationManager.zoomToRegion(containing: [place.coordinate])
+            }
         }
     }
     
     // MARK: - 내부 로직2: 선택된 Plan 내에서 장소 선택할때
     /// Plan 버튼이 활성화된 상태에서 섹션 내 장소를 선택할 때 호출되는 함수입니다.
     /// 최대 2개의 장소까지 선택 가능하며, 선택된 장소 수에 따라 지도에 마커 또는 경로를 표시합니다.
-    
     private func selectPlaceInPlan(_ placeID: String, in details: [MapDetail]) {
-        guard let locationManager = locationManager else { return }
-        let mapView = locationManager.mapView
+        guard let locationManager = locationManager,
+              let mapView = locationManager.mapView else { return }
         
         // 경우1. 이미 선택된 장소를 다시 누른 경우: 선택 해제
         if selectedPlaceIDs.contains(placeID) {
@@ -203,43 +206,45 @@ class PlanManager: ObservableObject {
             selectedPlaceIDs.contains($0.id ?? "")
         }
         
-        if selectedDetails.count == 1 {
-            addAnnotation(for: selectedDetails[0], to: mapView)
-            locationManager.zoomToRegion(containing: [
-                selectedDetails[0].coordinate
-            ])
-        } else if selectedDetails.count == 2 {
-            let start = selectedDetails[0].coordinate
-            let end = selectedDetails[1].coordinate
-            locationManager.showRoute(from: start, to: end, on: mapView) { _ in }
-            addAnnotation(for: selectedDetails[0], to: mapView)
-            addAnnotation(for: selectedDetails[1], to: mapView)
-            locationManager.zoomToRegion(containing: [start, end])
-        }
-        //선택이 전부 해제된 경우 → 전체 Plan 경로 다시 표시
-        if selectedDetails.isEmpty {
-            for detail in details {
-                addAnnotation(for: detail, to: mapView)
+        DispatchQueue.main.async {
+            if selectedDetails.count == 1 {
+                self.addAnnotation(for: selectedDetails[0], to: mapView)
+                locationManager.zoomToRegion(containing: [
+                    selectedDetails[0].coordinate
+                ])
+            } else if selectedDetails.count == 2 {
+                let start = selectedDetails[0].coordinate
+                let end = selectedDetails[1].coordinate
+                locationManager.showRoute(from: start, to: end, on: mapView) { _ in }
+                self.addAnnotation(for: selectedDetails[0], to: mapView)
+                self.addAnnotation(for: selectedDetails[1], to: mapView)
+                locationManager.zoomToRegion(containing: [start, end])
             }
-            
-            let coordinates = details.map { $0.coordinate }
-            if coordinates.count >= 2 {
-                for i in 0..<coordinates.count - 1 {
-                    locationManager.showRoute(
-                        from: coordinates[i],
-                        to: coordinates[i + 1],
-                        on: mapView
-                    ) { _ in }
+            //선택이 전부 해제된 경우 → 전체 Plan 경로 다시 표시
+            if selectedDetails.isEmpty {
+                for detail in details {
+                    self.addAnnotation(for: detail, to: mapView)
                 }
+                
+                let coordinates = details.map { $0.coordinate }
+                if coordinates.count >= 2 {
+                    for i in 0..<coordinates.count - 1 {
+                        locationManager.showRoute(
+                            from: coordinates[i],
+                            to: coordinates[i + 1],
+                            on: mapView
+                        ) { _ in }
+                    }
+                }
+                locationManager.zoomToRegion(containing: coordinates)
             }
-            locationManager.zoomToRegion(containing: coordinates)
         }
     }
     
     // MARK: - 내부 로직3: [Plan 비활성 상태] 장소 단독 선택 처리
     private func selectPlaceSolo(_ placeID: String) {
-        guard let locationManager = locationManager else { return }
-        let mapView = locationManager.mapView
+        guard let locationManager = locationManager,
+              let mapView = locationManager.mapView else { return }
         
         if soloSelectedPlaceID == placeID {
             resetSelections()
@@ -250,8 +255,10 @@ class PlanManager: ObservableObject {
             clearMapView()
             
             if let place = mapDetails.first(where: { $0.id == placeID }) {
-                addAnnotation(for: place, to: mapView)
-                locationManager.zoomToRegion(containing: [place.coordinate])
+                DispatchQueue.main.async {
+                    self.addAnnotation(for: place, to: mapView)
+                    locationManager.zoomToRegion(containing: [place.coordinate])
+                }
             }
         }
     }
@@ -264,7 +271,6 @@ class PlanManager: ObservableObject {
         let search = MKLocalSearch(request: request)
         search.start { [weak self] response, error in
             guard let item = response?.mapItems.first else {
-                print("❌ 장소 검색 실패: \(error?.localizedDescription ?? "알 수 없음")")
                 let fallback = POIAnnotation(
                     mapItem: MKMapItem(placemark: MKPlacemark(coordinate: mapDetail.coordinate)),
                     keyword: "location"
@@ -274,11 +280,11 @@ class PlanManager: ObservableObject {
             }
             
             let rawKeyword = item.pointOfInterestCategory?.rawValue ?? "location"
-
+            
             // keyword 정제 로직 추가
             let keyword: String
             let lowered = rawKeyword.lowercased()
-
+            
             if lowered.contains("restaurant") || lowered.contains("food") {
                 keyword = "restaurant"
             } else if lowered.contains("cafe") || lowered.contains("coffee") || lowered.contains("bakery") {
@@ -299,7 +305,6 @@ class PlanManager: ObservableObject {
             selectedForDeletionPlaceIDs.append(placeID)
         }
     }
-    
     
     func toggleEditSelection(for planID: String) {
         if selectedPlanIDsForEdit.contains(planID) {
@@ -343,7 +348,6 @@ class PlanManager: ObservableObject {
             print("장소 삭제 실패: \(error)")
         }
     }
-    
     
     @MainActor
     func createNewPlan(projectID: String) async {

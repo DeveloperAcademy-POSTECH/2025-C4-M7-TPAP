@@ -19,13 +19,15 @@ struct SidebarToggleView: View {
     @Binding var isCanvasActive: Bool
     @Binding var undoTrigger: Bool
     @Binding var redoTrigger: Bool
+    @Binding var lineWidthTrigger: Bool
     
     var body: some View {
         ZStack(alignment: .topLeading) {
             MapCanvasToolPicker(
                 isUtilPen: $isUtilPen,
                 isCanvasActive: $isCanvasActive,
-                lineWidth: $lineWidth
+                lineWidth: $lineWidth,
+                lineWidthTrigger: $lineWidthTrigger
             )
                 .padding(.top, 50)
                 .shadow(color: .black.opacity(0.15), radius: 1, x: 0, y: 4)

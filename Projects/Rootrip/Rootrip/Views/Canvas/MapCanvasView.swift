@@ -11,6 +11,10 @@ import SwiftUI
 struct MapCanvasView: View {
     @ObservedObject var viewModel: MapViewModel
 
+    @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var planManager: PlanManager
+    @EnvironmentObject var bookmarkManager: BookmarkManager
+    
     @Binding var shouldCenterOnUser: Bool
     @Binding var isUtilPen: Bool
     @Binding var isCanvasActive: Bool
@@ -18,6 +22,8 @@ struct MapCanvasView: View {
     @Binding var redoTrigger: Bool
     @Binding var lineWidth: CGFloat
 
+    @Binding var lineWidthTrigger: Bool
+    
     @State var mapView = MKMapView()
     @State var drawing = PKDrawing()
     @State private var pageLock = false
@@ -44,7 +50,8 @@ struct MapCanvasView: View {
                     mapView: $mapView,
                     undoTrigger: $undoTrigger,
                     redoTrigger: $redoTrigger,
-                    lineWidth: $lineWidth
+                    lineWidth: $lineWidth,
+                    lineWidthTrigger: $lineWidthTrigger
                 )
                 .background(Color.clear)
                 .ignoresSafeArea()
@@ -87,6 +94,9 @@ struct MapCanvasView: View {
         )
         .onAppear {
             mapView.delegate = MapDelegate.shared
+            locationManager.setMapView(mapView)
+            planManager.configure(with: locationManager)
+            bookmarkManager.configure(with: locationManager)
         }
     }
 }
@@ -102,7 +112,7 @@ class MapDelegate: NSObject, MKMapViewDelegate {
             if let hex = polyline.title, let color = UIColor(hexString: hex) {
                 renderer.strokeColor = color
             } else {
-                renderer.strokeColor = .systemBlue  // 유틸펜의 기본색상 삽입
+                renderer.strokeColor = .accent1  // 유틸펜의 기본색상 삽입
             }
             renderer.lineWidth = 4  // 선굵기값 받아오기
             return renderer
