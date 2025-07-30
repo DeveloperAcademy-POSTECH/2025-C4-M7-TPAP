@@ -95,7 +95,7 @@ class MapDelegate: NSObject, MKMapViewDelegate {
             if let hex = polyline.title, let color = UIColor(hexString: hex) {
                 renderer.strokeColor = color
             } else {
-                renderer.strokeColor = .systemBlue  // 유틸펜의 기본색상 삽입
+                renderer.strokeColor = .accent1  // 유틸펜의 기본색상 삽입
             }
             renderer.lineWidth = 4  // 선굵기값 받아오기
             return renderer
