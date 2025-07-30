@@ -36,17 +36,27 @@ struct MapCanvasToolBar: View {
                         Image(systemName: "arrow.uturn.forward")
                     }
 
+//                    Button(action: {
+//                        withAnimation(.linear) {
+//                            isCanvasActive = false
+//                        }
+//                    }) {
+//                        Image(
+//                            systemName: isCanvasActive
+//                                ? "lock.open.fill" : "lock.fill"
+//                        )
+//                        .frame(width: 20)
+//                    }
                     Button(action: {
+                        pageLock.toggle()
                         withAnimation(.linear) {
                             isCanvasActive = false
                         }
                     }) {
-                        Image(
-                            systemName: isCanvasActive
-                                ? "lock.open.fill" : "lock.fill"
-                        )
-                        .frame(width: 20)
+                        Image(systemName: pageLock ? "lock.fill" : "lock.open.fill")
+                            .frame(width: 20)
                     }
+
 
                     Button(action: {
                         //저장 로직 여기에 입력

@@ -20,6 +20,7 @@ struct MapCanvasView: View {
 
     @State var mapView = MKMapView()
     @State var drawing = PKDrawing()
+    @State private var pageLock = false
 
 
     var body: some View {
