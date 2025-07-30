@@ -10,6 +10,9 @@ import SwiftUI
 
 struct MapCanvasView: View {
     @ObservedObject var viewModel: MapViewModel
+    @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var planManager: PlanManager
+    @EnvironmentObject var bookmarkManager: BookmarkManager
     
     @Binding var shouldCenterOnUser: Bool
     @Binding var isUtilPen: Bool
@@ -74,6 +77,9 @@ struct MapCanvasView: View {
         )
         .onAppear {
             mapView.delegate = MapDelegate.shared
+            locationManager.setMapView(mapView)
+            planManager.configure(with: locationManager)
+            bookmarkManager.configure(with: locationManager)
         }
     }
 }
