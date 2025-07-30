@@ -8,7 +8,7 @@
 import SwiftUI
 /// 상단 탭(일정, 보관함, 참여자)을 선택할 수 있는 세그먼트 뷰입니다.
 /// 선택된 탭에 따라 하위 콘텐츠 뷰가 전환됩니다.
-struct SegmentedControlView: View {
+struct SegmentedContolView: View {
     @Binding var selectedIndex: Int
     @Namespace private var animation
     private let segments = ["일정", "보관함", "참여자"]
