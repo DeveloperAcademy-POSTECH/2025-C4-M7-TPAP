@@ -8,12 +8,21 @@
 import SwiftUI
 
 struct MapCanvasToolPicker: View {
+    @Binding var isUtilPen: Bool
+    @Binding var isCanvasActive: Bool
+    @Binding var lineWidth: CGFloat
+    
     var body: some View {
         ZStack {
             HStack(spacing: 10){
                 Spacer()
                 
-                PenThicknessSlider()
+                //MARK: - 펜 굵기 확인하는 임시 뷰
+                Text("pen width: \(lineWidth)")
+                    .padding(.trailing, 10)
+                    .foregroundStyle(.gray)
+                
+                PenThicknessSlider(thickness: $lineWidth)
                     .padding(.trailing, 20)
                 
                 Button(action: {}) {
@@ -23,7 +32,10 @@ struct MapCanvasToolPicker: View {
 //                Button(action: {}) {
 //                    Image(systemName: "pencil.circle.fill")
 //                }
-                Button(action: {}) {
+                Button(action: {
+                    isCanvasActive.toggle()
+                    isUtilPen = false
+                }) {
                     Image(systemName: "pencil.tip.crop.circle.fill")
                 }
                 Button(action: {}) {
@@ -44,6 +56,6 @@ struct MapCanvasToolPicker: View {
 }
 
 
-#Preview {
-    MapCanvasToolPicker()
-}
+//#Preview {
+//    MapCanvasToolPicker()
+//}

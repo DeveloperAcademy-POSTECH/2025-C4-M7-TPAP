@@ -12,15 +12,30 @@ struct SidebarToggleView: View {
     let project: Project
     @State private var showSidebar = true
     @State private var searchText = ""
-
+    
+    @Binding var lineWidth: CGFloat
+    @Binding var isUtilPen: Bool
+    @Binding var isCanvasActive: Bool
+    @Binding var undoTrigger: Bool
+    @Binding var redoTrigger: Bool
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
-            MapCanvasToolPicker()
+            MapCanvasToolPicker(
+                isUtilPen: $isUtilPen,
+                isCanvasActive: $isCanvasActive,
+                lineWidth: $lineWidth
+            )
                 .padding(.top, 50)
             
             /// 사이드바
             VStack(alignment: .leading, spacing: 0) {
-                MapCanvasToolBar(project: project, isSidebarOpen: $showSidebar)
+                MapCanvasToolBar(
+                    project: project,
+                    isSidebarOpen: $showSidebar,
+                    isCanvasActive: $isCanvasActive,
+                    undoTrigger: $undoTrigger,
+                    redoTrigger: $redoTrigger)
 
                 HStack {
                     if showSidebar {

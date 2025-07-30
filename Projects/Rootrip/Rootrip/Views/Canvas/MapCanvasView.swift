@@ -10,12 +10,16 @@ import SwiftUI
 
 struct MapCanvasView: View {
     @ObservedObject var viewModel: MapViewModel
+    
     @Binding var shouldCenterOnUser: Bool
-
-    @State private var isCanvasActive = false
-    @State private var mapView = MKMapView()
-    @State private var drawing = PKDrawing()
-    @State private var isUtilPen = true
+    @Binding var isUtilPen: Bool
+    @Binding var isCanvasActive: Bool
+    @Binding var undoTrigger: Bool 
+    @Binding var redoTrigger: Bool
+    @Binding var lineWidth: CGFloat
+    
+    @State var mapView = MKMapView()
+    @State var drawing = PKDrawing()
 
     var body: some View {
         ZStack {
@@ -25,7 +29,8 @@ struct MapCanvasView: View {
             
             MapView(
                 viewModel: viewModel,
-                shouldCenterOnUser: $shouldCenterOnUser
+                shouldCenterOnUser: $shouldCenterOnUser,
+                mapView: $mapView
             )
             .ignoresSafeArea()
             
@@ -34,7 +39,11 @@ struct MapCanvasView: View {
                 CanvasView(
                     drawing: $drawing,
                     isUtilPen: $isUtilPen,
-                    mapView: mapView
+                    isCanvasActive: $isCanvasActive,
+                    mapView: $mapView,
+                    undoTrigger: $undoTrigger,
+                    redoTrigger: $redoTrigger,
+                    lineWidth: $lineWidth
                 )
                 .background(Color.clear)
                 .ignoresSafeArea()
@@ -44,16 +53,18 @@ struct MapCanvasView: View {
             VStack(spacing: -7) {
                 /// 드로잉펜-유틸펜 전환 버튼
                 Button(action: {
-                    if isCanvasActive {
+                    isCanvasActive.toggle()
+                    isUtilPen = false
+                    if isCanvasActive{
+                        isUtilPen = true
                         drawing = PKDrawing()
                     }
-                    isCanvasActive.toggle()
                 }) {
-                    Image(isCanvasActive ? "utilOn" : "utilOff")
+                    Image(isUtilPen && isCanvasActive ? "utilOn" : "utilOff")
                 }
                 /// 내위치로 가기 버튼
                 Button(action: {
-
+                    shouldCenterOnUser = true
                 }) {
                     Image("myLocation")
                 }

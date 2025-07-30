@@ -19,17 +19,35 @@ struct ProjectView: View {
     @State private var hasLoadedPlans = false
     @State private var shouldCenterOnUser = false
     
+    @State var isUtilPen = true
+    @State var isCanvasActive = false
+    @State var undoTrigger: Bool = false
+    @State var redoTrigger: Bool = false
+    @State var lineWidth:CGFloat = 8.0
 
     // MARK: - Body
     var body: some View {
         ZStack {
             MapCanvasView(
                 viewModel: viewModel,
-                shouldCenterOnUser: $shouldCenterOnUser
+                shouldCenterOnUser: $shouldCenterOnUser,
+                isUtilPen: $isUtilPen,
+                isCanvasActive: $isCanvasActive,
+                undoTrigger: $undoTrigger,
+                redoTrigger: $redoTrigger,
+                lineWidth: $lineWidth
             )
 
             // 사이드바 버튼 오버레이(추가함!)
-            SidebarToggleView(project: project).environmentObject(mapState)
+            SidebarToggleView(
+                project: project,
+                lineWidth: $lineWidth,
+                isUtilPen: $isUtilPen,
+                isCanvasActive: $isCanvasActive,
+                undoTrigger: $undoTrigger,
+                redoTrigger: $redoTrigger
+            )
+            .environmentObject(mapState)
         }
         .onAppear {
             guard !hasLoadedPlans else { return }
@@ -41,7 +59,7 @@ struct ProjectView: View {
                 await planManager.loadPlans(for: projectID)
             }
         }
-
+        .navigationBarBackButtonHidden(true)
         .edgesIgnoringSafeArea(.bottom)
     }
 }
