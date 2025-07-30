@@ -5,16 +5,6 @@ import Foundation
 import Contacts
 import Combine
 
-// UtilPen이 정상작동하는 세계관 (아무 기능이 없는 그냥 지도)
-//struct MapView: UIViewRepresentable {
-//    @Binding var mapView: MKMapView
-//
-//    func makeUIView(context: Context) -> MKMapView {
-//        mapView
-//    }
-//    func updateUIView(_ uiView: MKMapView, context: Context) {}
-//}
-
 /// UIViewRepresentable을 통해 UIKit의 MKMapView를 SwiftUI에서 사용하기 위한 구조체
 struct MapView: UIViewRepresentable {
     // MARK: - 속성

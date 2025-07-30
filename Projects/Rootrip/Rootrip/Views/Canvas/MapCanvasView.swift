@@ -30,10 +30,6 @@ struct MapCanvasView: View {
 
     var body: some View {
         ZStack {
-            // UtilPen이 정상작동하는 세계관
-            //            MapView(mapView: $mapView)
-            //                            .ignoresSafeArea()
-
             MapView(
                 viewModel: viewModel,
                 shouldCenterOnUser: $shouldCenterOnUser,

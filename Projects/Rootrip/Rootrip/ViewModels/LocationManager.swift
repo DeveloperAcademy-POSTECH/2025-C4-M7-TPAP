@@ -6,7 +6,7 @@ import SwiftUI
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     @Published var location: CLLocation?
-    
+
     weak var mapView: MKMapView?
 
     override init() {
@@ -16,19 +16,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
     }
-    
+
     func setMapView(_ mapView: MKMapView) {
         self.mapView = mapView
-    }
-    
-
-    // 내 위치 동의 및 받아오는 부분
-    override init() {
-        super.init()
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
     }
 
     func locationManager(
@@ -37,7 +27,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     ) {
         location = locations.first
     }
-    
+
     // MARK: - 지도 경로 랜더링 및 도보 소요시간 반환
     /// MapKit 경로를 지도에 표시하고 예상 도보 시간을 반환
     func showRoute(
@@ -50,7 +40,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             completion(nil)
             return
         }
-        
+
         let stt = MKPlacemark(coordinate: start)
         let end = MKPlacemark(coordinate: end)
         let sttItem = MKMapItem(placemark: stt)
@@ -60,46 +50,32 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         request.source = sttItem
         request.destination = endItem
         request.transportType = .walking
-      
+
         let directions = MKDirections(request: request)
         directions.calculate { response, error in
             guard let route = response?.routes.first else {
-                print("Route error: \(error?.localizedDescription ?? "unknown error on showRoute function")")
+                print(
+                    "Route error: \(error?.localizedDescription ?? "unknown error on showRoute function")"
+                )
                 completion(nil)
                 return
             }
 
-//             mapView.addOverlay(route.polyline)
-
-//             /// 중간 지점 계산
-//             let polylinePoints = route.polyline.points()
-//             let midPoint = polylinePoints[route.polyline.pointCount / 2]
-//                 .coordinate
-
-//             /// 소요시간 어노테이션 추가
-//             // TODO: - 도보 타이틀 제거 시킴으로써 RouteMapRepresentable에 불필요한 코드 삭제
-//             let annotation = MKPointAnnotation()
-//             annotation.coordinate = midPoint
-//             annotation.title = "도보 \(Int(route.expectedTravelTime / 60))분"
-//             //            annotation.title = "차량 \(Int(route.expectedTravelTime / 60))분"
-//             mapView.addAnnotation(annotation)
-
-
-            
             DispatchQueue.main.async {
                 targetMapView.addOverlay(route.polyline)
-                
+
                 // 중간 지점 계산
                 let polylinePoints = route.polyline.points()
-                let midPoint = polylinePoints[route.polyline.pointCount / 2].coordinate
-                
+                let midPoint = polylinePoints[route.polyline.pointCount / 2]
+                    .coordinate
+
                 // 소요시간 어노테이션 추가
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = midPoint
                 annotation.title = "도보 \(Int(route.expectedTravelTime / 60))분"
                 targetMapView.addAnnotation(annotation)
             }
-            
+
             completion(route.expectedTravelTime)
         }
     }
@@ -112,7 +88,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         guard !coordinates.isEmpty else { return }
 
         guard let mapView = self.mapView else { return }
-        
 
         var rect = MKMapRect.null
         for coordinate in coordinates {
@@ -122,15 +97,17 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             )
         }
 
-//         mapView.setVisibleMapRect(
-//             rect,
-//             edgePadding: UIEdgeInsets(top: 80, left: 40, bottom: 80, right: 40),
-//             animated: animated
-//         )
-
-        
         DispatchQueue.main.async {
-            mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 80, left: 40, bottom: 80, right: 40), animated: animated)
+            mapView.setVisibleMapRect(
+                rect,
+                edgePadding: UIEdgeInsets(
+                    top: 80,
+                    left: 40,
+                    bottom: 80,
+                    right: 40
+                ),
+                animated: animated
+            )
         }
 
     }
