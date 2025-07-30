@@ -219,7 +219,7 @@ class BookmarkManager: ObservableObject {
         do {
             // 기존 북마크 개수로 제목 생성
             let count = bookmarks.count
-            let newTitle = "Bookmark \(count + 1)"
+            let newTitle = "내 보관함 \(count + 1)"
             
             try await repository.createBookmark(
                 projectID: projectID,
