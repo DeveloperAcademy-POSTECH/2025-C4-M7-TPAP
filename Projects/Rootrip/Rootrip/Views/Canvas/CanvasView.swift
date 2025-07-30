@@ -47,7 +47,6 @@ struct CanvasView: UIViewControllerRepresentable {
         uiViewController.drawing = drawing
         uiViewController.isUtilPen = isUtilPen
         uiViewController.lineWidth = lineWidth
-//        print("[CanvasView] updateUIViewController: isUtilPen = \(isUtilPen)")
 
         if undoTrigger {
             uiViewController.undoTapped()

@@ -69,10 +69,3 @@ struct ProjectView: View {
         .edgesIgnoringSafeArea(.bottom)
     }
 }
-
-//#Preview(traits: .landscapeLeft) {
-//    ProjectView()
-//        .environmentObject(RouteManager())
-//        .environmentObject(PlanManager())
-//        .environmentObject(BookmarkManager())
-//}

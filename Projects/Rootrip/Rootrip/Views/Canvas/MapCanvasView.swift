@@ -30,10 +30,6 @@ struct MapCanvasView: View {
 
     var body: some View {
         ZStack {
-            // UtilPen이 정상작동하는 세계관
-            //            MapView(mapView: $mapView)
-            //                            .ignoresSafeArea()
-
             MapView(
                 viewModel: viewModel,
                 shouldCenterOnUser: $shouldCenterOnUser,
@@ -79,13 +75,15 @@ struct MapCanvasView: View {
                         break  // logic error
                     }
                 }) {
-                    Image(isUtilPen ? "utilOn" : "utilOff")
+                    Image(isCanvasActive && isUtilPen ? "utilOn" : "utilOff")
+                        .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 4)
                 }
                 /// 내위치로 가기 버튼
                 Button(action: {
                     shouldCenterOnUser = true
                 }) {
                     Image("myLocation")
+                        .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 4)
                 }
             }
             .padding(),

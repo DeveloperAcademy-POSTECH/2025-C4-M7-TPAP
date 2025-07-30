@@ -16,21 +16,22 @@ struct MapCanvasToolPicker: View {
     
     @State var isDrawing: Bool = false
     
+    // 지우개아이콘 적용을 위한 임시 변수
+    @State var isEraserActivate: Bool = false
+    
     var body: some View {
         ZStack {
-            HStack(spacing: 10) {
+            HStack(spacing: 15) {
                 Spacer()
-
-                //MARK: - 펜 굵기 확인하는 임시 뷰
-                Text("pen width: \(lineWidth)")
-                    .padding(.trailing, 10)
-                    .foregroundStyle(.gray)
-
+                
                 PenThicknessSlider(thickness: $lineWidth, lineWidthTrigger: $lineWidthTrigger)
-                    .padding(.trailing, 20)
+//                    .padding(.trailing, 20)
 
-                Button(action: {}) {
-                    Image(systemName: "eraser")
+                Button(action: {
+                    isEraserActivate.toggle()
+                }) {
+                    Image(isEraserActivate ? "eraserOn" : "eraserOff")
+                        .renderingMode(.original)
                 }
 
                 Button(action: {
@@ -48,16 +49,11 @@ struct MapCanvasToolPicker: View {
                 }) {
                     Image((isCanvasActive && !isUtilPen) ? "penOn" : "penOff")
                         .renderingMode(.original)
-//                     isDrawing.toggle()
-//                     isCanvasActive.toggle()
-//                     isUtilPen = false
-//                 }) {
-//                     Image(systemName: "pencil.tip.crop.circle.fill")
-//                         .foregroundStyle(isDrawing ? Color.green : Color.black)
                 }
 
                 Button(action: {}) {
-                    Image(systemName: "paintpalette")
+                    Image("colPic")
+                        .renderingMode(.original)
                 }
                 .padding(.trailing, 50)
             }

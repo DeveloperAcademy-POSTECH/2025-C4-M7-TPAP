@@ -50,10 +50,3 @@ struct SegmentedContolView: View {
         .padding(.bottom, 19)
     }
 }
-
-//
-//#Preview {
-//    SegmentedContolView()
-//        .environmentObject(PlanManager())
-//        .environmentObject(LocationManager())
-//}
