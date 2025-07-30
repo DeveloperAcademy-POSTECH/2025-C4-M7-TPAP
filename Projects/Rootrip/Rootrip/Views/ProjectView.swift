@@ -11,10 +11,11 @@ import SwiftUI
 
 struct ProjectView: View {
     let project: Project
-    @StateObject private var mapState = LocationManager()
+    @EnvironmentObject  var mapState: LocationManager
+    @EnvironmentObject var planManager: PlanManager
+
     @StateObject private var viewModel = MapViewModel()
     
-    @EnvironmentObject var planManager: PlanManager
 
     @State private var hasLoadedPlans = false
     @State private var shouldCenterOnUser = false
