@@ -15,22 +15,46 @@ struct PlanButton: View {
     @EnvironmentObject var locationManager: LocationManager
     @EnvironmentObject var planManager: PlanManager
     var plan: Plan
+    @Binding var isEditing: Bool
+    
     
     /// 버튼 클릭 시 섹션이 선택되면 지도에 해당 섹션의 장소를 핀으로 표시하고 경로를 보여줍니다.
     /// 이미 선택된 섹션을 다시 누르면 선택을 해제하고 지도에서 관련 요소를 제거합니다.
     var body: some View {
         Button(action: {
-            if planManager.selectedPlanID == plan.id {
-                planManager.selectPlan(nil)
+            guard let planID = plan.id else { return }
+            
+            if isEditing {
+                planManager.toggleEditSelection(for: planID)
             } else {
-                planManager.selectPlan(plan.id)
+                if planManager.selectedPlanID == planID {
+                    planManager.selectPlan(nil)
+                } else {
+                    planManager.selectPlan(planID)
+                }
             }
         }) {
-            Text(plan.title)
-                .sectionButtonLable(isSelected: planManager.selectedPlanID == plan.id)
-                    }
+            HStack(spacing: 8) {
+                if isEditing {
+                    Image(planManager.selectedPlanIDsForEdit.contains(plan.id ?? "")
+                          ? "purplebig"
+                          : "graybig")
+                    .foregroundColor(.accentColor)
+                }
+                
+                Text(plan.title)
+                    .sectionButtonLable(
+                        isSelected: !isEditing && planManager.selectedPlanID == plan.id
+                    )
+            }
+        }
         .onAppear {
             planManager.configure(with: locationManager)
+        }
+        .onChange(of: isEditing) { _, newValue in
+            if newValue {
+                planManager.resetSelections()
+            }
         }
     }
 }

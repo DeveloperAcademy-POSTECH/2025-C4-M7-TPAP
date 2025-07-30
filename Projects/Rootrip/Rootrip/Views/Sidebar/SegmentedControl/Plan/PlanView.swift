@@ -12,17 +12,18 @@ import SwiftUI
 struct PlanView: View {
     @EnvironmentObject var planManager: PlanManager
     @EnvironmentObject var mapState: LocationManager
+    @Binding var isEditing: Bool
     
     let projectID: String
-
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-
-                ForEach(planManager.plans) { plan in
+                
+                ForEach(planManager.plans, id: \.id) { plan in
                     VStack(alignment: .leading) {
                         // MARK: - 섹션별 Plan 버튼
-                        PlanButton(plan: plan)
+                        PlanButton(plan: plan, isEditing: $isEditing)
                             .environmentObject(planManager)
                             .environmentObject(mapState)
                             .padding(.leading, 22)
@@ -30,7 +31,8 @@ struct PlanView: View {
                         // MARK: - 장소 목록
                         PlanCard(
                             projectID: projectID,
-                            planID: plan.id ?? ""
+                            planID: plan.id ?? "",
+                            isEditing: $isEditing
                         )
                         .padding(.horizontal, 22)
                         .padding(.vertical, 15)
@@ -40,8 +42,15 @@ struct PlanView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, 8)
         }
+        .onChange(of: isEditing) { _, newValue in
+            if newValue {
+                planManager.resetSelections()
+            }
+        }
     }
 }
+
+
 
 //#Preview(traits: .landscapeLeft) {
 //    PlanView()

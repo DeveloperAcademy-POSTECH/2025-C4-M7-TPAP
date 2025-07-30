@@ -1,11 +1,13 @@
 import Foundation
 import FirebaseFirestore
+import UIKit
 
 @MainActor
 final class InviteViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var joinedProject: Project?
     @Published var isLoading: Bool = false
+    @Published var copiedCode: String? = nil
     
     private let projectRepository: ProjectRepositoryProtocol
     private let inviteRepository: ProjectInvitationProtocol
@@ -82,5 +84,25 @@ final class InviteViewModel: ObservableObject {
         errorMessage = nil
         joinedProject = nil
         isLoading = false
+    }
+    
+    func copyInviteCode(for projectID: String) async {
+        do {
+            let invitation = try await inviteRepository.createInvitation(for: projectID)
+            let code = invitation.id
+            UIPasteboard.general.string = code
+            
+            // 토스트 표시용으로 코드 설정
+            copiedCode = code
+
+            // 2초 후에 메시지 자동 삭제 (토스트 사라지게)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.copiedCode = nil
+            }
+            
+        } catch {
+            print("❌ 초대 코드 복사 실패: \(error.localizedDescription)")
+            self.errorMessage = "초대 코드 복사 실패"
+        }
     }
 }
