@@ -5,7 +5,7 @@ struct MapCanvasToolBar: View {
     @Binding var isSidebarOpen: Bool
     @Binding var isCanvasActive: Bool
     @Binding var undoTrigger: Bool
-    @Binding var redoTrigger: Bool 
+    @Binding var redoTrigger: Bool
     
     @Environment(\.dismiss) var dismiss
     
