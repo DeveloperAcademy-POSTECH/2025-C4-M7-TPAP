@@ -15,13 +15,13 @@ struct ProjectView: View {
     @EnvironmentObject var planManager: PlanManager
 
     @StateObject private var viewModel = MapViewModel()
-    
 
     @State private var hasLoadedPlans = false
     @State private var shouldCenterOnUser = false
     
     @State var isUtilPen = false
     @State var isCanvasActive = false
+    @State var isPageLocked: Bool = false
     @State var undoTrigger: Bool = false
     @State var redoTrigger: Bool = false
     @State var lineWidthTrigger: Bool = false
@@ -35,6 +35,7 @@ struct ProjectView: View {
                 shouldCenterOnUser: $shouldCenterOnUser,
                 isUtilPen: $isUtilPen,
                 isCanvasActive: $isCanvasActive,
+                isPageLocked: $isPageLocked,
                 undoTrigger: $undoTrigger,
                 redoTrigger: $redoTrigger,
                 lineWidth: $lineWidth,
@@ -47,6 +48,7 @@ struct ProjectView: View {
                 lineWidth: $lineWidth,
                 isUtilPen: $isUtilPen,
                 isCanvasActive: $isCanvasActive,
+                isPageLocked: $isPageLocked,
                 undoTrigger: $undoTrigger,
                 redoTrigger: $redoTrigger,
                 lineWidthTrigger: $lineWidthTrigger

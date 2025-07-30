@@ -28,9 +28,9 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
     var onDrawingChanged: ((PKDrawing) -> Void)?
     var onUtilPenInput: (([CLLocationCoordinate2D]) -> Void)?
     var onUtilPenToggled: ((Bool) -> Void)?
-    
+
     var tmpPolyline: [MKPolyline] = []
-    
+
     var lineWidth: CGFloat = 8.0
 
     override func viewDidLoad() {
@@ -110,7 +110,11 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
         if let selected = colorPicker.selectedColor {
             penColor = selected
             if !isUtilPen {
-                canvasView.tool = PKInkingTool(.pen, color: penColor, width: lineWidth)
+                canvasView.tool = PKInkingTool(
+                    .pen,
+                    color: penColor,
+                    width: lineWidth
+                )
             }
         }
     }
@@ -142,19 +146,24 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
     // 시작점과 끝점 거리가 가까운가
     func isClosedShape(points: [CGPoint]) -> Bool {
         let threshold: CGFloat = 100
-        guard let first = points.first, let last = points.last, points.count >= 3 else { return false }
+        guard let first = points.first, let last = points.last,
+            points.count >= 3
+        else { return false }
         let dx = first.x - last.x
         let dy = first.y - last.y
         print("--- distance between stt, end: \(sqrt(dx*dx + dy*dy)) ---")
-        return sqrt(dx*dx + dy*dy) < threshold
+        return sqrt(dx * dx + dy * dy) < threshold
     }
 
     // PencilKit Delegate
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
         guard let stroke = canvasView.drawing.strokes.last,
-              let mapView = mapView else { return }
+            let mapView = mapView
+        else { return }
         let cgPoints = stroke.path.map { $0.location }
-        let isArea = isClosedShape(points: cgPoints) /*|| hasOverlappingPoint(cgPoints)*/
+        let isArea = isClosedShape(
+            points: cgPoints
+        ) /*|| hasOverlappingPoint(cgPoints)*/
         let coords: [CLLocationCoordinate2D] = cgPoints.map { point in
             let mapPoint = mapView.convert(point, from: canvasView)
             return mapView.convert(mapPoint, toCoordinateFrom: mapView)
@@ -190,7 +199,6 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
         }
     }
 
-    
     func saveDrawing(_ drawing: PKDrawing) {
         /// 디버깅용 콘솔에 좌표찍기
         for (idx, stroke) in drawing.strokes.enumerated() {
@@ -199,19 +207,23 @@ class CanvasViewController: UIViewController, PKCanvasViewDelegate {
                 print("   [\(ptIdx)] x:\(pt.location.x), y:\(pt.location.y)")
             }
         }
-        
+
         // TODO: overlay 객체를 저장하는 데이터타입이 필요합니다.
         // Stack 혹은 배열 등 형태가 좋을듯합니다?
         // Attribute: PenType: 드로잉인지 유틸인지, ID: eraser의 target을 찾기 위해, UtilType: 유틸펜이면 Area? Route? 루트면 하나만 표시되면 되니까 이전걸 삭제, Color: 드로잉펜의 경우 색상 저장, Width: 드로잉이면 선굵기
         do {
             let data = drawing.dataRepresentation()
-            let url = getDocumentsDirectory().appendingPathComponent("drawing.data")
+            let url = getDocumentsDirectory().appendingPathComponent(
+                "drawing.data"
+            )
             try data.write(to: url)
         } catch {
             print("Error saving data: \(error)")
         }
     }
     private func getDocumentsDirectory() -> URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[
+            0
+        ]
     }
 }
