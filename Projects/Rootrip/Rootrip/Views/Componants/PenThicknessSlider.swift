@@ -2,9 +2,9 @@ import SwiftUI
 
 
 struct PenThicknessSlider: View {
-    //TODO: 굵기 관리하는 뷰에서 바인딩 필요
     // 기본(권장) 두께 '8.0'로 가신답니다
     @Binding var thickness: CGFloat
+    @Binding var lineWidthTrigger: Bool
     
 
     let minThickness: CGFloat = 1
@@ -36,6 +36,9 @@ struct PenThicknessSlider: View {
                 )
         }
         .frame(width: trackWidth, height: handleSize)
+        .onChange(of: thickness, {
+            lineWidthTrigger = true
+        })
     }
 
     private func handleOffset(for thickness: CGFloat) -> CGFloat {

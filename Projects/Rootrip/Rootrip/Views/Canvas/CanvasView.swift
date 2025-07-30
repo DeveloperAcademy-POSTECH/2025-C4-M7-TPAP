@@ -16,9 +16,11 @@ struct CanvasView: UIViewControllerRepresentable {
     @Binding var undoTrigger: Bool 
     @Binding var redoTrigger: Bool
     @Binding var lineWidth: CGFloat
+    @Binding var lineWidthTrigger: Bool
 
     func makeUIViewController(context: Context) -> CanvasViewController {
         let vc = CanvasViewController()
+        vc.lineWidth = lineWidth
         vc.drawing = drawing
         vc.isUtilPen = isUtilPen
         vc.mapView = mapView
@@ -45,13 +47,27 @@ struct CanvasView: UIViewControllerRepresentable {
         uiViewController.drawing = drawing
         uiViewController.isUtilPen = isUtilPen
         uiViewController.lineWidth = lineWidth
-        print("[CanvasView] updateUIViewController: isUtilPen = \(isUtilPen)")
+//        print("[CanvasView] updateUIViewController: isUtilPen = \(isUtilPen)")
 
-        // Trigger undo action
         if undoTrigger {
-            uiViewController.undoTapped() // Call the undo method in CanvasViewController
+            uiViewController.undoTapped()
             DispatchQueue.main.async {
                 self.undoTrigger = false // Reset the trigger
+            }
+        }
+        
+        if redoTrigger {
+            uiViewController.redoTapped()
+            DispatchQueue.main.async {
+                self.redoTrigger = false // Reset the trigger
+            }
+        }
+        
+        if lineWidthTrigger{
+            uiViewController.lineWidth = lineWidth
+            uiViewController.linewidthSliderValueChanged()
+            DispatchQueue.main.async {
+                self.lineWidthTrigger = false // Reset the trigger
             }
         }
         

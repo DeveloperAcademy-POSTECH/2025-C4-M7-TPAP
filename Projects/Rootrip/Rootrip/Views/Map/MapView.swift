@@ -19,7 +19,7 @@ import Combine
 struct MapView: UIViewRepresentable {
     // MARK: - 속성
     /// 위치 정보를 관리하는 매니저 (CoreLocation 사용)
-    @ObservedObject private var locationManager = LocationManager()
+    @EnvironmentObject var locationManager: LocationManager
     
     /// POI 어노테이션 및 지역 계산 로직을 가진 ViewModel
     var viewModel: MapViewModel

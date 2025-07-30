@@ -11,10 +11,10 @@ import SwiftUI
 
 struct ProjectView: View {
     let project: Project
-    @StateObject private var mapState = LocationManager()
-    @StateObject private var viewModel = MapViewModel()
-
+    @EnvironmentObject  var mapState: LocationManager
     @EnvironmentObject var planManager: PlanManager
+
+    @StateObject private var viewModel = MapViewModel()
 
     @State private var hasLoadedPlans = false
     @State private var shouldCenterOnUser = false
@@ -24,7 +24,8 @@ struct ProjectView: View {
     @State var isPageLocked: Bool = false
     @State var undoTrigger: Bool = false
     @State var redoTrigger: Bool = false
-    @State var lineWidth: CGFloat = 8.0
+    @State var lineWidthTrigger: Bool = false
+    @State var lineWidth:CGFloat = 8.0
 
     // MARK: - Body
     var body: some View {
@@ -37,7 +38,8 @@ struct ProjectView: View {
                 isPageLocked: $isPageLocked,
                 undoTrigger: $undoTrigger,
                 redoTrigger: $redoTrigger,
-                lineWidth: $lineWidth
+                lineWidth: $lineWidth,
+                lineWidthTrigger: $lineWidthTrigger
             )
 
             // 사이드바 버튼 오버레이(추가함!)
@@ -48,7 +50,8 @@ struct ProjectView: View {
                 isCanvasActive: $isCanvasActive,
                 isPageLocked: $isPageLocked,
                 undoTrigger: $undoTrigger,
-                redoTrigger: $redoTrigger
+                redoTrigger: $redoTrigger,
+                lineWidthTrigger: $lineWidthTrigger
             )
             .environmentObject(mapState)
         }
