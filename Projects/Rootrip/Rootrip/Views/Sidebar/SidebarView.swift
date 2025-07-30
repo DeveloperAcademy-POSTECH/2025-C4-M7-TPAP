@@ -102,15 +102,16 @@ struct SidebarView: View {
                     }
                 } else {
                     Spacer()
-                    
-                    Button("편집") {}
-                        .hidden()
+                }){
+                    Text("편집")
+                        .foregroundColor(.accent3)
                         .font(.premed16)
-                        .disabled(true)
                 }
             }
-            .padding(.top, 13)
-            .padding(.horizontal, 20)
+            .padding(.top, 10)
+            .padding(.bottom, 19)
+            .padding(.trailing, 19)
+
             
             /// segment control
             if isEditing {
@@ -180,7 +181,7 @@ struct SidebarView: View {
             }
             
         }
-        
+        .frame(width: 216)
         .frame(width: 259)
         .frame(maxHeight: .infinity)
         .background(.mainbackground)
