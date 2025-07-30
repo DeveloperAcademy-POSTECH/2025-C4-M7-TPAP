@@ -11,7 +11,11 @@ import MapKit
 struct CanvasView: UIViewControllerRepresentable {
     @Binding var drawing: PKDrawing
     @Binding var isUtilPen: Bool
-    var mapView: MKMapView
+    @Binding var isCanvasActive: Bool
+    @Binding var mapView: MKMapView
+    @Binding var undoTrigger: Bool 
+    @Binding var redoTrigger: Bool
+    @Binding var lineWidth: CGFloat
 
     func makeUIViewController(context: Context) -> CanvasViewController {
         let vc = CanvasViewController()
@@ -41,6 +45,21 @@ struct CanvasView: UIViewControllerRepresentable {
         uiViewController.drawing = drawing
         uiViewController.isUtilPen = isUtilPen
         uiViewController.updatePenModeButtons()
+        uiViewController.lineWidth = lineWidth
         print("[CanvasView] updateUIViewController: isUtilPen = \(isUtilPen)")
+
+        // Trigger undo action
+        if undoTrigger {
+            uiViewController.undoTapped() // Call the undo method in CanvasViewController
+            DispatchQueue.main.async {
+                self.undoTrigger = false // Reset the trigger
+            }
+        }
+        
+        if isCanvasActive{
+            uiViewController.clearCanvas()
+        }
     }
+    
+    // Removed the incorrect popPolyline() function from here
 }

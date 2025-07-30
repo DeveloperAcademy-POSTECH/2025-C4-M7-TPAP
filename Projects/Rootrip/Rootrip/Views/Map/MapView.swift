@@ -26,16 +26,17 @@ struct MapView: UIViewRepresentable {
     
     /// 사용자를 화면 중앙에 맞출지 여부를 결정하는 바인딩 값
     @Binding var shouldCenterOnUser: Bool
+    @Binding var mapView: MKMapView
 
     // MARK: - UIView 생성
     
     /// SwiftUI가 생성할 UIView 객체를 반환
     /// - 반환: 기본 설정된 MKMapView
     func makeUIView(context: Context) -> MKMapView {
-        let mapView = MKMapView()
         mapView.showsUserLocation = true              // 사용자 위치 표시
         mapView.delegate = context.coordinator         // Coordinator를 delegate로 지정
         mapView.pointOfInterestFilter = .excludingAll  // POI 기본 숨김
+        mapView.mapType = .mutedStandard // 맵 색조 낮춤
         
         return mapView
     }

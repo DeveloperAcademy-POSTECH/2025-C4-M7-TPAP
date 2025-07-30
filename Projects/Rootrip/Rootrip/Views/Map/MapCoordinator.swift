@@ -52,8 +52,8 @@ class MapCoordinator: NSObject, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let polyline = overlay as? MKPolyline {
             let renderer = MKPolylineRenderer(overlay: polyline)
-            renderer.strokeColor = .systemBlue
-            renderer.lineWidth = 7
+            renderer.strokeColor = .accent1
+            renderer.lineWidth = 8
             return renderer
         }
         
@@ -126,7 +126,7 @@ class MapCoordinator: NSObject, MKMapViewDelegate {
             // SwiftUI 말풍선을 어노테이션 중심에 위치시키되, Y축을 위로 30pt 이동시켜 선 위에 오도록 배치합니다.
             NSLayoutConstraint.activate([
                 hostingController.view.centerXAnchor.constraint(equalTo: annotationView.centerXAnchor),
-                hostingController.view.centerYAnchor.constraint(equalTo: annotationView.centerYAnchor, constant: -30)
+                hostingController.view.centerYAnchor.constraint(equalTo: annotationView.centerYAnchor)
             ])
             
             return annotationView
