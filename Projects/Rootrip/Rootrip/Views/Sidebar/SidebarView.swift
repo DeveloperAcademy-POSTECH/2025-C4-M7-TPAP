@@ -139,8 +139,6 @@ struct SidebarView: View {
                 }
             }
             .padding(.top, 10)
-            .padding(.bottom, 19)
-            .padding(.trailing, 19)
 
             /// segment control
             if isEditing {

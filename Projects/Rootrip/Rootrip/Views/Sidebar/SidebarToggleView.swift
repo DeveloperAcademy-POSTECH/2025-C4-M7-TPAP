@@ -51,7 +51,6 @@ struct SidebarToggleView: View {
                             .frame(width: 221)
                             .padding(.leading, 20)
                             .padding(.trailing, 19)
-                            .padding(.bottom, 86)
                             .background(
                                 Color(red: 0.96, green: 0.96, blue: 0.96)
                                     .shadow(
