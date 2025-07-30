@@ -36,17 +36,6 @@ struct MapCanvasToolBar: View {
                         Image(systemName: "arrow.uturn.forward")
                     }
 
-                    //                    Button(action: {
-                    //                        withAnimation(.linear) {
-                    //                            isCanvasActive = false
-                    //                        }
-                    //                    }) {
-                    //                        Image(
-                    //                            systemName: isCanvasActive
-                    //                                ? "lock.open.fill" : "lock.fill"
-                    //                        )
-                    //                        .frame(width: 20)
-                    //                    }
                     Button(action: {
                         withAnimation(.linear) {
                             isPageLocked.toggle()

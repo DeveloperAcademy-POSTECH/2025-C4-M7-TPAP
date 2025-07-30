@@ -23,10 +23,8 @@ struct MainViewToolBar: View {
                         .foregroundColor(.secondary4)
                 }
 
-                // 2. 버튼들 (오른쪽 정렬)
                 HStack(spacing: 36) {
                     Spacer()
-                    // 더미데이터개ㅕ 입력을 위한 dev view
                     NavigationLink(destination: WriteMapDetailView()) {
                         Rectangle()
                             .fill(Color.clear)
@@ -42,8 +40,6 @@ struct MainViewToolBar: View {
             }
             .frame(height: 50)  // 툴바 콘텐츠의 높이 지정
             .background(
-                // 3. 배경색을 ZStack의 background 수정자로 이동시킵니다.
-                //    이렇게 하면 배경에만 ignoresSafeArea가 적용됩니다.
                 Color.primary1
                     .ignoresSafeArea(.container, edges: .top)
             )
