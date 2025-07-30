@@ -8,10 +8,14 @@ struct LoginView: View {
             ZStack{
                 Color.primary1
                 Image("loginbackground")
+                    .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 4)
+                    
                 VStack {
                     Spacer()
-                    
                         Image("R")
+                        .frame(width: 127.27194, height: 97.66528)
+                        .padding(17)
+
                             
                         Text("ROOTRIP")
                             .font(.suereg24)
@@ -28,7 +32,7 @@ struct LoginView: View {
                     }) {
                         Image("applebutton")
                     }
-                    .padding(.bottom, 216)
+                    .padding(.bottom, 196)
                 }
             }
             .ignoresSafeArea(.all)

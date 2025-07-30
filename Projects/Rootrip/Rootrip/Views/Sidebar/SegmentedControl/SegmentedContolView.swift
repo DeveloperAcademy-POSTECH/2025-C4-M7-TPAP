@@ -47,6 +47,7 @@ struct SegmentedContolView: View {
         .background(Color.primary1)
         .clipShape(RoundedRectangle(cornerRadius: 13))
         .padding(.vertical, 11)
+        .padding(.bottom, 19)
     }
 }
 
